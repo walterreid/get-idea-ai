@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────
+   Design tokens — warm, professional, grounded
+   Light mode is the default. Dark mode is the room at evening.
+   ────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base surfaces */
+  --color-base:        #FAF9F7;
+  --color-surface:     #F3F1EE;
+  --color-border:      #E2DDD8;
+  --color-border-soft: #EDE9E4;
+
+  /* Text */
+  --color-text:        #2C2C2C;
+  --color-text-muted:  #6B6560;
+  --color-text-faint:  #9E9790;
+
+  /* Primary action — warm navy */
+  --color-primary:     #2A4B6F;
+  --color-primary-hover: #1E3851;
+
+  /* Agent identity colors — muted earth tones & jewel tones */
+  --agent-marketer:    #C9943E;
+  --agent-finance:     #5B7B8A;
+  --agent-creative:    #B85C38;
+  --agent-copywriter:  #7A8B6F;
+  --agent-designer:    #8B6F8A;
+  --agent-accountant:  #6B7B7B;
+  --agent-operations:  #A07855;
+  --agent-legal:       #5A5A5A;
+  --agent-cx:          #B07A7A;
+  --agent-realist:     #5C6B4E;
+
+  /* Typography */
+  --font-display: var(--font-lora);
+  --font-body:    var(--font-jakarta);
+  --font-mono:    var(--font-jetbrains);
+}
+
+/* Dark mode — same room, evening light */
+.dark {
+  --color-base:        #1C1B19;
+  --color-surface:     #252420;
+  --color-border:      #383530;
+  --color-border-soft: #302E2A;
+
+  --color-text:        #E8E6E1;
+  --color-text-muted:  #A8A49E;
+  --color-text-faint:  #6E6A63;
+
+  --color-primary:     #5B89B4;
+  --color-primary-hover: #7AA4CB;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-base:          var(--color-base);
+  --color-surface:       var(--color-surface);
+  --color-border:        var(--color-border);
+  --color-border-soft:   var(--color-border-soft);
+  --color-text:          var(--color-text);
+  --color-text-muted:    var(--color-text-muted);
+  --color-text-faint:    var(--color-text-faint);
+  --color-primary:       var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --font-display:        var(--font-display);
+  --font-body:           var(--font-body);
+  --font-mono:           var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-base);
+  color: var(--color-text);
+  font-family: var(--font-body), 'Nunito Sans', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display), 'Lora', Georgia, serif;
+  line-height: 1.25;
+}
+
+/* Smooth agent status transitions */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-message-in {
+  animation: message-in 220ms ease-out both;
+}
+
+.animate-status-pulse {
+  animation: status-pulse 1.8s ease-in-out infinite;
 }

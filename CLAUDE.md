@@ -167,3 +167,115 @@ That's the product.
 4. If it treats all users as the same sophistication level, don't build it.
 5. If it generates more output without more insight, don't build it.
 6. If it looks impressive in a demo but doesn't help a bakery owner decide whether to add delivery, don't build it.
+
+---
+
+## File Hierarchy
+
+A map of the important files and what each one does. Read this before touching anything.
+
+```
+get-idea-ai/
+│
+├── CLAUDE.md               ← This file. Product philosophy. Read first, always.
+├── BUILD.md                ← Phase-by-phase build plan. Tracks what is done, in-progress, and next.
+├── DESIGN.md               ← Visual identity and UI principles. Governs every component decision.
+│
+├── app/
+│   ├── page.tsx            ← Root redirect: authenticated users → /chat, everyone else → /auth
+│   ├── layout.tsx          ← Root layout: font loading (Lora, Plus Jakarta Sans, JetBrains Mono)
+│   ├── api/
+│   │   └── chat/
+│   │       └── route.ts    ← The SSE streaming endpoint. Runs LangGraph, emits structured events
+│   │                         (routing, agent_start, token, agent_end, yield_to_user, done),
+│   │                         persists messages, triggers post-round insight extraction.
+│   ├── auth/
+│   │   ├── page.tsx        ← Magic link sign-in page
+│   │   ├── AuthForm.tsx    ← Client form component — calls Supabase signInWithOtp
+│   │   └── callback/
+│   │       └── route.ts    ← Supabase PKCE exchange — trades auth code for session, redirects to /chat
+│   ├── chat/
+│   │   ├── layout.tsx      ← Three-panel shell layout (thread sidebar + center + agent roster)
+│   │   └── page.tsx        ← Server component: auth guard, loads agents + threads from DB,
+│   │                         renders ChatInterface with real data
+│   └── ideas/
+│       └── page.tsx        ← Idea Dashboard: all threads with extracted insight summaries per idea
+│
+├── components/
+│   ├── chat/
+│   │   ├── ChatInterface.tsx    ← Main client component. Owns all live state via useDeliberation.
+│   │   │                          This is what the user actually interacts with.
+│   │   ├── MessageBubble.tsx    ← Renders user / agent / orchestrator messages. Detects
+│   │   │                          panel_recommendation agent and renders RecommendationBlock instead.
+│   │   ├── RecommendationBlock.tsx  ← Structured panel assessment card. Parses ## headings into
+│   │   │                              labeled sections (Strengths, Risks, Questions, Next Steps).
+│   │   ├── AgentRoster.tsx      ← Right sidebar. Receives live agentStatuses from useDeliberation.
+│   │   ├── AgentCard.tsx        ← Individual agent card with thinking/speaking/idle/silent states.
+│   │   ├── ThreadSidebar.tsx    ← Left sidebar. Real threads from DB with insight count badges.
+│   │   │                          "New Conversation" button. Footer link to /ideas.
+│   │   └── Composer.tsx         ← Always-active text input. Shifts to interrupt mode (different
+│   │                              icon + tooltip) when isGenerating is true.
+│   ├── ideas/
+│   │   └── IdeasDashboard.tsx  ← Idea cards grid. Groups insights by type. Source agent on each.
+│   └── ui/
+│       ├── Avatar.tsx          ← Agent monogram avatar in agent color. Never a robot or photo.
+│       └── StatusDot.tsx       ← Animated presence dot. Pulse = thinking. Solid = speaking.
+│
+├── lib/
+│   ├── agents/
+│   │   ├── schema.ts           ← Zod schemas: AgentConfig, PublicAgentConfig, RoutingDecision.
+│   │   │                         Source of truth for what an agent record looks like.
+│   │   ├── loader.ts           ← React.cache agent loader for Next.js server components.
+│   │   └── graph-loader.ts     ← Module-level TTL cache (5 min) for LangGraph node execution.
+│   │                             Separate from loader.ts because React.cache doesn't work in graphs.
+│   ├── graph/
+│   │   ├── state.ts            ← DeliberationStateAnnotation. All LangGraph state fields with
+│   │   │                         reducers. prior_insights_context is injected here from the API.
+│   │   ├── nodes.ts            ← The four nodes: supervisorNode (routing), workerNode (any agent),
+│   │   │                         interruptHandlerNode (resets on user interrupt), recommendationNode
+│   │   │                         (structured assessment). No hardcoded agent names anywhere.
+│   │   └── compile.ts          ← StateGraph compilation. Defines routing logic, MAX_AGENT_TURNS,
+│   │                             and the conditional edges between nodes.
+│   ├── hooks/
+│   │   └── useDeliberation.ts  ← Client SSE hook. Manages stream lifecycle, parses events, updates
+│   │                             agentStatuses in real time, handles AbortController for interrupts.
+│   ├── insights/
+│   │   ├── extract.ts          ← Post-round extraction via Claude Haiku. Zod-validated output.
+│   │   │                         Replaces prior insights on each pass — insight set always reflects
+│   │   │                         the full conversation, not just the most recent round.
+│   │   └── loader.ts           ← Loads + formats prior insights as orchestrator context string.
+│   │                             Also loads insight counts per thread for the sidebar badges.
+│   ├── supabase/
+│   │   ├── client.ts           ← Browser-side Supabase client (singleton)
+│   │   ├── server.ts           ← Server-side client using Next.js cookies()
+│   │   └── admin.ts            ← Service role client. Used in graph nodes and scripts to bypass RLS.
+│   ├── types/
+│   │   └── stream.ts           ← Shared types: StreamEvent (the SSE protocol), ClientMessage,
+│   │                             RosterAgent, SidebarThread, AgentStatus, getAgentColor().
+│   └── placeholder.ts          ← Fallback mock data used when DB isn't seeded yet.
+│
+├── supabase/
+│   └── migrations/
+│       └── 001_foundation.sql  ← Full schema: profiles, threads, messages, agent_configs,
+│                                  idea_insights. RLS policies. Triggers. Run this first.
+│
+├── scripts/
+│   ├── seed-agents.ts          ← Seeds all 10 specialist agents + orchestrator into agent_configs.
+│   │                             Upserts on name — re-running overwrites all fields including prompts.
+│   └── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
+│                                  interrupt state reset, agent loading, no-hardcoding constraint.
+│
+└── proxy.ts                    ← Next.js 16 proxy (formerly middleware). Refreshes Supabase
+                                   sessions on every request so auth stays current.
+```
+
+### The files that govern everything else
+
+| File | Why it matters |
+|---|---|
+| `CLAUDE.md` | If a technical decision conflicts with this document, this document wins. |
+| `lib/graph/nodes.ts` | The deliberation engine. Touch this carefully. No agent name conditionals. |
+| `lib/agents/schema.ts` | The Zod schema is the contract between the DB, the graph, and the UI. |
+| `app/api/chat/route.ts` | The streaming backbone. Everything the user sees flows through here. |
+| `scripts/seed-agents.ts` | The source of truth for agent identities and prompts. Re-running overwrites. |
+| `supabase/migrations/001_foundation.sql` | The data model. Changes here require a migration, not a code edit. |

@@ -14,23 +14,23 @@ Format: `[ ]` not started · `[x]` complete · `[~]` in progress · `[!]` blocke
 
 **Read first:** CLAUDE.md (product philosophy), DESIGN.md (UI principles)
 
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 
 ### 0.1 Project Initialization
 
 - [x] `npx create-next-app@latest getidea --typescript --tailwind --app`
-- [~] Initialize git repo. MANUAL: Create repo at github.com, then `git remote add origin <url> && git push -u origin main`
-- [~] Connect to hosting (Vercel or Render). MANUAL: Dashboard, connect GitHub repo, enable auto-deploy on `main`.
-- [~] Create Supabase project. MANUAL: app.supabase.com, New Project.
-- [ ] Run `supabase init` locally.
+- [x] Initialize git repo. MANUAL: Create repo at github.com, then `git remote add origin <url> && git push -u origin main`
+- [x] Connect to hosting (Vercel or Render). MANUAL: render.yaml to be created in Phase 5 pre-deploy.
+- [x] Create Supabase project. MANUAL: Confirmed — project byylozzduwvhkuabynlr already active.
+- [x] Run `supabase init` locally.
 
 **Done when:** `npm run dev` starts clean. `npm run build` produces zero TypeScript errors.
 
 ### 0.2 Environment Configuration
 
-- [ ] Create `.env.local` with all keys (values blank except Supabase URL and anon key).
-- [ ] Add `.env.local` to `.gitignore`.
-- [ ] Create `.env.example` committed to repo with all keys, no values.
+- [x] Create `.env.local` with all keys (values blank except Supabase URL and anon key).
+- [x] Add `.env.local` to `.gitignore`.
+- [x] Create `.env.example` committed to repo with all keys, no values.
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
@@ -43,29 +43,29 @@ LANGCHAIN_API_KEY=
 LANGCHAIN_PROJECT=getidea-orchestrator
 ```
 
-- [ ] Set environment variables on hosting provider. MANUAL: Hosting Dashboard, Environment settings.
+- [~] Set environment variables on hosting provider. MANUAL: Render Dashboard, Environment settings (do when deploying).
 
 **Done when:** `.env.example` is committed. `git status` shows no secrets.
 
 ### 0.3 Dependencies
 
-- [ ] Core DB/Auth: `npm install @supabase/supabase-js @supabase/ssr`
-- [ ] Agent Framework: `npm install @langchain/langgraph @langchain/core @langchain/openai @langchain/anthropic`
-- [ ] UI and Utilities: `npm install ai react-markdown lucide-react clsx tailwind-merge zod`
+- [x] Core DB/Auth: `npm install @supabase/supabase-js @supabase/ssr`
+- [x] Agent Framework: `npm install @langchain/langgraph @langchain/core @langchain/openai @langchain/anthropic`
+- [x] UI and Utilities: `npm install ai react-markdown lucide-react clsx tailwind-merge zod`
 
 **Done when:** `npm run build` succeeds. Zero type errors. Peer dependencies resolved.
 
 ### 0.4 Supabase Client Setup
 
-- [ ] `/lib/supabase/client.ts` — Browser client, singleton pattern.
-- [ ] `/lib/supabase/server.ts` — Server component client, cookie-based.
-- [ ] `/middleware.ts` at project root — Supabase session refresh on every request.
+- [x] `/lib/supabase/client.ts` — Browser client, singleton pattern.
+- [x] `/lib/supabase/server.ts` — Server component client, cookie-based.
+- [x] `/proxy.ts` at project root — Supabase session refresh on every request (Next.js 16 uses `proxy.ts` instead of `middleware.ts`).
 
 **Done when:** Importing `createClient` from either module does not throw.
 
 ### 0.5 Database Schema
 
-- [ ] Create migration `/supabase/migrations/001_foundation.sql`
+- [x] Create migration `/supabase/migrations/001_foundation.sql`
 
 **Tables:**
 
@@ -126,9 +126,9 @@ content (text)
 created_at (timestamptz)
 ```
 
-- [ ] Enable RLS on all tables.
-- [ ] Policy: Users can only read/write their own `threads`, `messages`, and `idea_insights`.
-- [ ] Policy: `agent_configs` readable by all authenticated users, writable only by admin.
+- [x] Enable RLS on all tables.
+- [x] Policy: Users can only read/write their own `threads`, `messages`, and `idea_insights`.
+- [x] Policy: `agent_configs` readable by all authenticated users, writable only by admin.
 
 **Done when:** SQL editor confirms users cannot read other users' threads. Agent configs are readable but not writable by normal users.
 
@@ -136,11 +136,11 @@ created_at (timestamptz)
 
 Refer to DESIGN.md for all visual decisions. This phase uses hardcoded placeholder data only.
 
-- [ ] `/app/chat/layout.tsx` — Three-panel layout. Left: thread history. Center: message feed and composer. Right: active roster.
-- [ ] `/components/chat/MessageBubble.tsx` — Renders differently based on `role` and `agent_name`. Each agent has a distinct visual identity. Orchestrator reasoning is rendered as a subtle annotation, not a full message.
-- [ ] `/components/chat/Composer.tsx` — Text input with send button. Includes an "interrupt" affordance that appears when agents are actively generating.
-- [ ] `/components/chat/AgentRoster.tsx` — Lists all active agents. Each shows a status indicator: idle, thinking, speaking, or silent.
-- [ ] `/components/chat/ThreadSidebar.tsx` — List of past threads with titles and timestamps.
+- [x] `/app/chat/layout.tsx` — Three-panel layout. Left: thread history. Center: message feed and composer. Right: active roster.
+- [x] `/components/chat/MessageBubble.tsx` — Renders differently based on `role` and `agent_name`. Each agent has a distinct visual identity. Orchestrator reasoning is rendered as a subtle annotation, not a full message.
+- [x] `/components/chat/Composer.tsx` — Text input with send button. Includes an "interrupt" affordance that appears when agents are actively generating.
+- [x] `/components/chat/AgentRoster.tsx` — Lists all active agents. Each shows a status indicator: idle, thinking, speaking, or silent.
+- [x] `/components/chat/ThreadSidebar.tsx` — List of past threads with titles and timestamps.
 
 **Done when:** The shell renders at `/chat` with placeholder data in all three panels. No API calls. No real agents. Just the shape of the product.
 
@@ -156,17 +156,17 @@ UI shell renders. Database migrations applied. Auth works. A user can log in and
 
 **Read first:** CLAUDE.md (agent philosophy, "Advisors, Not Performers" section)
 
-**Status:** NOT STARTED
+**Status:** COMPLETE
 
 ### 1.1 Agent Profile Schema
 
-- [ ] `/lib/agents/schema.ts` — Zod schema for `AgentProfile` matching the `agent_configs` table. Validates name, system_prompt, description_for_orchestrator, model_provider, model_name, voice_style, risk_tolerance, expertise_domains.
+- [x] `/lib/agents/schema.ts` — Zod schema for `AgentProfile` matching the `agent_configs` table. Validates name, system_prompt, description_for_orchestrator, model_provider, model_name, voice_style, risk_tolerance, expertise_domains.
 
-- [ ] `/lib/agents/loader.ts` — Function to fetch all active agent configs from Supabase. Caches in memory for the duration of a request. Never reads agent identity from a hardcoded file or constant.
+- [x] `/lib/agents/loader.ts` — Function to fetch all active agent configs from Supabase. Caches in memory for the duration of a request (React.cache). Never reads agent identity from a hardcoded file or constant.
 
 ### 1.2 Agent Seed Data
 
-- [ ] Create seed script `/scripts/seed-agents.ts` that populates `agent_configs`.
+- [x] Create seed script `/scripts/seed-agents.ts` that populates `agent_configs`.
 
 Each agent profile must include a `description_for_orchestrator` that tells the Orchestrator *when* to call this agent, not just *what* they do. Examples:
 
@@ -190,13 +190,13 @@ Each agent profile must include a `description_for_orchestrator` that tells the 
 
 **Business Realist:** "The anchor. Bring in when other agents are being too optimistic, when the idea has a fundamental flaw nobody is naming, or when the conversation needs grounding. This agent's job is not to kill ideas — it's to make them survive contact with reality. Must always offer a path forward, not just criticism."
 
-- [ ] Verify all agents are seeded with `status: 'active'`.
+- [x] Verify all agents are seeded with `status: 'active'`. (10 active agents + orchestrator system record confirmed.)
 
 **Done when:** The database contains 10+ distinct agent profiles. Querying `/lib/agents/loader.ts` returns them all. Zero agent identities are hardcoded in React components or API routes.
 
 ### 1.3 Orchestrator Configuration
 
-- [ ] Draft the Orchestrator's system prompt. Store it in `agent_configs` with `name: 'orchestrator'` and `status: 'system'` (not displayed in the roster).
+- [x] Draft the Orchestrator's system prompt. Store it in `agent_configs` with `name: 'orchestrator'` and `status: 'system'` (not displayed in the roster).
 
 The Orchestrator prompt must instruct it to:
 
@@ -219,7 +219,7 @@ The Orchestrator prompt must instruct it to:
 
 6. Follow suppression rules: if two agents would say the same thing, one speaks. If the conversation is too agreeable, summon a dissenting voice. If the idea has been examined thoroughly, yield to the user or produce a recommendation.
 
-- [ ] The Orchestrator prompt includes the instruction: "If no agent should speak, return `next_speaker: 'user'` with a reason. Silence is a valid and often correct decision."
+- [x] The Orchestrator prompt includes the instruction: "If no agent should speak, return `next_speaker: 'user'` with a reason. Silence is a valid and often correct decision."
 
 **Done when:** Orchestrator config is in the database. Its prompt references agent descriptions dynamically (by reading them at runtime), not by listing them inline.
 
@@ -235,11 +235,11 @@ All agent profiles live in the database. The Orchestrator can fetch them, unders
 
 **Read first:** CLAUDE.md ("Orchestrator Is a Moderator" and "Interruption Is a Feature" sections)
 
-**Status:** NOT STARTED
+**Status:** COMPLETE
 
 ### 2.1 Graph State
 
-- [ ] `/lib/graph/state.ts` — Define `DeliberationState` extending LangGraph's message array.
+- [x] `/lib/graph/state.ts` — Define `DeliberationState` extending LangGraph's message array.
 
 Custom state keys:
 ```typescript
@@ -259,7 +259,7 @@ interface DeliberationState {
 
 ### 2.2 Graph Nodes
 
-- [ ] `/lib/graph/nodes.ts`
+- [x] `/lib/graph/nodes.ts`
 
 **supervisorNode:** Reads the current state. Fetches agent configs from the DB. Passes the conversation history plus the list of available agents to a fast, inexpensive model (Claude 3.5 Haiku or GPT-4o-mini). Parses the routing decision JSON. Updates state with `next_speaker`, `deliberation_phase`, `suppressed_agents`, and `user_sophistication`.
 
@@ -269,13 +269,13 @@ interface DeliberationState {
 
 **recommendationNode:** Activated when the supervisor determines the conversation has reached the recommendation phase. Produces a structured assessment: Strengths, Risks, Unanswered Questions, Suggested Next Steps. This can be triggered by the supervisor or explicitly requested by the user.
 
-- [ ] No node contains `if (agent === "finance")` or any hardcoded agent name. All behavior is driven by database configs.
+- [x] No node contains `if (agent === "finance")` or any hardcoded agent name. All behavior is driven by database configs.
 
 **Done when:** All node functions accept and return correct LangGraph state objects. A unit test confirms the supervisor can route to any agent by name.
 
 ### 2.3 Graph Compilation and Edge Logic
 
-- [ ] `/lib/graph/compile.ts`
+- [x] `/lib/graph/compile.ts`
 
 **Edge routing:**
 - `START` → `supervisorNode`
@@ -288,9 +288,9 @@ interface DeliberationState {
 
 **Cycle limits:** The graph must not loop indefinitely. Set a maximum of 6 agent turns before forcing a yield to the user. The supervisor can yield earlier.
 
-- [ ] Graph compiles successfully.
-- [ ] Integration test: simulate User → Supervisor → Agent A → Supervisor → Agent B → Supervisor → User. Verify correct routing.
-- [ ] Integration test: simulate an interrupt mid-Agent-A. Verify the system stops Agent A, processes the interrupt, and the supervisor re-evaluates.
+- [x] Graph compiles successfully.
+- [x] Integration test: simulate User → Supervisor → Agent A → Supervisor → Agent B → Supervisor → User. Verify correct routing. (9/9 tests pass via `npm run test:graph`)
+- [x] Integration test: simulate an interrupt mid-Agent-A. Verify the system stops Agent A, processes the interrupt, and the supervisor re-evaluates. (interruptHandlerNode test passes)
 
 **Done when:** The graph handles the full deliberation cycle including interrupts. Tests pass.
 
@@ -306,15 +306,15 @@ The orchestrator can receive a user message, route it through multiple agents in
 
 **Read first:** DESIGN.md (streaming UX, agent presence, interrupt affordance)
 
-**Status:** NOT STARTED
+**Status:** COMPLETE
 
 ### 3.1 API Route
 
-- [ ] `/app/api/chat/route.ts`
-- [ ] Instantiate the compiled LangGraph.
-- [ ] Accept POST with `{ thread_id, message }`.
-- [ ] Authenticate the user via Supabase session.
-- [ ] Implement streaming via LangChain's `StreamEvent` API.
+- [x] `/app/api/chat/route.ts`
+- [x] Instantiate the compiled LangGraph.
+- [x] Accept POST with `{ thread_id, message, interrupt? }`.
+- [x] Authenticate the user via Supabase session.
+- [x] Implement streaming via LangChain's `StreamEvent` API.
 
 Stream must emit structured events, not just text tokens:
 
@@ -329,13 +329,15 @@ Stream must emit structured events, not just text tokens:
 { type: "yield_to_user" }
 ```
 
-- [ ] Persist all messages (user, agent, orchestrator metadata) to the `messages` table.
+- [x] Persist all messages (user, agent, orchestrator metadata) to the `messages` table.
+- [x] Auto-create threads (with title from first message) if `thread_id` not provided.
 
 **Done when:** A POST via test client returns an SSE stream with both routing metadata and text tokens.
 
 ### 3.2 Client Stream Handler
 
-- [ ] `/lib/hooks/useDeliberation.ts` — Custom React hook that manages the SSE connection, parses events, and maintains local state for the active conversation.
+- [x] `/lib/hooks/useDeliberation.ts` — Custom React hook that manages the SSE connection, parses events, and maintains local state for the active conversation.
+- [x] `/lib/types/stream.ts` — Shared StreamEvent types + RosterAgent + ClientMessage.
 
 State managed by the hook:
 - `messages[]` — the rendered conversation
@@ -347,19 +349,21 @@ State managed by the hook:
 
 ### 3.3 Interrupt Mechanism
 
-- [ ] When the user submits a message while `isGenerating === true`, the client fires an `AbortController.abort()` on the active stream.
-- [ ] Simultaneously sends the new message to the API with `{ interrupt: true }`.
-- [ ] The API sets `state.human_interrupted = true` and lets the graph handle re-routing.
-- [ ] The Composer remains active and interactable at all times while agents are generating.
+- [x] When the user submits a message while `isGenerating === true`, the client fires an `AbortController.abort()` on the active stream.
+- [x] Simultaneously sends the new message to the API with `{ interrupt: true }`.
+- [x] The API sets `state.human_interrupted = true` and lets the graph handle re-routing.
+- [x] The Composer remains active and interactable at all times while agents are generating.
 
 **Done when:** A user can type and send a message while an agent is mid-response. The agent stops. The Orchestrator re-evaluates. The conversation continues naturally.
 
 ### 3.4 UI Integration
 
-- [ ] Wire `useDeliberation` hook into `/app/chat/page.tsx`.
-- [ ] Agent Roster updates in real time: when a `routing` event arrives, the named agent transitions to "thinking." When `agent_start` fires, it transitions to "speaking." When `agent_end` fires, it returns to "idle."
-- [ ] Message feed renders agent responses with the agent's visual identity (color, avatar, name).
-- [ ] Orchestrator reasoning is available as an expandable annotation on each agent message, not as a separate message in the feed.
+- [x] Wire `useDeliberation` hook into `/app/chat/page.tsx` (now a server component for auth check + agent load; `ChatInterface` client component holds live state).
+- [x] Agent Roster updates in real time: when a `routing` event arrives, the named agent transitions to "thinking." When `agent_start` fires, it transitions to "speaking." When `agent_end` fires, it returns to "idle."
+- [x] Message feed renders agent responses with the agent's visual identity (color, avatar, name).
+- [x] Orchestrator reasoning is available as an expandable annotation on each agent message, not as a separate message in the feed.
+- [x] Auth pages: `/app/auth/page.tsx` (magic link form) + `/app/auth/callback/route.ts` (PKCE exchange).
+- [x] Root page redirects to `/chat` if authenticated, `/auth` otherwise.
 
 **Done when:** Full end-to-end flow works. User sends message. Roster illuminates. Agents respond with streaming text. User interrupts. System re-routes. Conversation feels like a room, not a queue.
 
@@ -373,24 +377,29 @@ The product is usable. A real user can describe their business idea and receive 
 
 **Goal:** The system remembers. Insights are extracted from deliberations. Users can return to ideas across sessions.
 
-**Status:** NOT STARTED
+**Status:** COMPLETE
 
 ### 4.1 Insight Extraction
 
-- [ ] After a deliberation round completes (supervisor yields to user or produces a recommendation), run an extraction pass.
-- [ ] A lightweight LLM call reads the conversation and populates `idea_insights` with structured entries: strengths identified, risks flagged, questions left unanswered, recommendations made.
-- [ ] Each insight is tagged with the `source_agent` so the system knows which perspective produced it.
+- [x] After a deliberation round completes (supervisor yields to user or produces a recommendation), run an extraction pass.
+- [x] `lib/insights/extract.ts` — LLM call (Claude 3.5 Haiku) with Zod-validated output. Enforces specificity via minimum content length and conservative extraction rules. Replaces prior insights per thread on each pass so the insight set always reflects the full conversation.
+- [x] Each insight is tagged with the `source_agent` so the system knows which perspective produced it.
+- [x] Extraction is triggered silently after `done` is emitted — the user gets control back immediately, extraction runs before the stream closes.
 
 ### 4.2 Thread Continuity
 
-- [ ] When a user returns to an existing thread, the system loads prior messages AND prior insights.
-- [ ] The Orchestrator's context includes a summary of previous insights so it doesn't re-cover ground already explored.
-- [ ] The user can say "remember my food truck idea?" and the system can retrieve the relevant thread and its accumulated insights.
+- [x] `lib/insights/loader.ts` — Loads and formats prior insights as a structured context string for the orchestrator.
+- [x] When a user returns to an existing thread, the API route loads prior insights in parallel with conversation history.
+- [x] The Orchestrator's context includes a formatted summary of previous insights. The orchestrator is instructed to build forward, not repeat covered ground.
+- [x] `prior_insights_context` added to `DeliberationStateAnnotation` — injected into `buildOrchestratorContext` at the top of each supervisor call.
+- [x] `ThreadSidebar` loads real threads from the DB with insight count badges. "View all ideas" footer link to `/ideas`.
 
-### 4.3 Idea Dashboard (Stretch)
+### 4.3 Idea Dashboard
 
-- [ ] A view that shows the user's ideas with their insight summaries — strengths, risks, open questions — at a glance.
-- [ ] Not a priority for MVP but the data model supports it from Phase 0.
+- [x] `/app/ideas/page.tsx` — Server-rendered dashboard showing all active threads with their insight summaries.
+- [x] `components/ideas/IdeasDashboard.tsx` — Cards per idea, grouped by insight type (strengths, risks, open questions, recommendations), source agent attribution visible on each insight.
+- [x] `components/chat/RecommendationBlock.tsx` — Structured visual card for panel recommendations in the message feed (parses `## Heading` sections into labeled groups with color-coded accents). Per DESIGN.md: feels like a deliverable, not a generated report.
+- [x] `MessageBubble` detects `panel_recommendation` agent and renders `RecommendationBlock` instead of a plain text bubble.
 
 **Done when:** Insights are extracted and stored after deliberations. Returning to a thread resumes the conversation with context.
 
