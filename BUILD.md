@@ -614,7 +614,38 @@ Use after a Tier 2 run (any protocol):
 - **Friction:** The room is not endlessly agreeable — dissent or a hard question appears when the product philosophy calls for it.
 - **Stopping:** You ended the sample **on purpose** via protocol A/B/C — not because the system had nothing left to say.
 
-**Scenarios to reuse:** Bakery adding delivery, freelancer raising prices, food truck location, SaaS validation — tune prompts from real output; iterative and ongoing.
+**Scenarios to reuse:** Bakery adding delivery, freelancer raising prices, food truck location, SaaS validation — tune prompts from real output; iterative and ongoing. For nuanced coverage also rotate: **vague vent** (no URL, no numbers), **zero budget** (solo, $0/mo), **sophisticated but wrong diagnosis** (fluent jargon, misidentified problem), **legal-adjacent** (regulated trade not named), **URL trap** (shares a URL, later disowns it).
+
+#### Multi-round persona protocol (Tier 2, nuanced)
+
+Happy-path scenarios test the best lane. Use a **nuanced persona** (from the list above) at least once per release to stress calibration, friction, and research epistemics. **Default presumption: the panel is failing until it proves otherwise.** Advisor prose that "feels acceptable" is the most common failure mode — polished tone without specific judgment is genericness wearing a tie. Grade against the golden rules, not vibes.
+
+**Persona probe map:**
+
+- **Vague vent** → Act 1 discipline and GR#4 (anti-generic).
+- **Zero budget** → listening to Act 3 constraints; an advisor who recommends spend has failed to listen.
+- **Sophisticated but wrong diagnosis** → calibration without flattery; does anyone correct the diagnosis, or does the room validate fluent jargon?
+- **Legal-adjacent** → whether Legal Awareness is summoned by situation, not keyword.
+- **URL trap** → GR#5. After the user disowns research in a later round, does the panel defer?
+
+**Pacing (sync-in-POST research):** research runs inside the chat POST. Before sending the next round, wait for the SSE `done` event, a fully rendered final bubble, and (if expected) the orchestrator `yield_to_user` bubble. Research annotations add 5–20s latency. Respect Phase 5.8 caps (3 URL / 2 search / 10 total per thread). Log per round: send → first_token, send → done, research calls, yield_to_user fired.
+
+**Round structure (4 minimum):** R1 intake (vague opener, no extras) · R2 depth (answer one question + URL or named constraint) · R3 **friction stress** (plausibly-wrong assertion the panel should push back on) · R4 **user-truth / constraint reveal** (contradict research or invalidate prior advice) · R5 optional closure (request recommendation; check `## Strengths` / `## Risks` / `## Questions` / `## Next Steps` sections tie to *this* persona).
+
+**Hard-fail checks (one strike = document, two strikes across rounds = early stop):**
+
+- Advice could be pasted into any other thread unchanged → GR#1, GR#4.
+- Uncontextualized smoke-signal phrases ("clarify positioning", "content strategy", "thought leadership", "optimize social", "build a strong brand") → GR#4.
+- Research cited as ground truth after the user contradicts it in R4 → GR#5.
+- Tool voice ("I'll generate", "your deliverable", "the report will show") → GR#2.
+- All agents agree with the R3 wrong claim; no dissent summoned → CLAUDE.md "Friction".
+- Hallucinated specifics about the business not traceable to research or user turns → reference-quality failure.
+
+**Calibration reviewer discipline:** a turn that sounds like something a decent consultant *could* say is not a pass. The bar is **specific enough to forward to a friend**. If you catch yourself scoring Pass because the advisor sounded professional, re-read the turn and ask: what did it commit to that a generic template wouldn't? If the answer is nothing, it is a Fail.
+
+**Stopping:** end at R4 (or R5). Early-stop on two repeated hard-fail checks — exit and document. Do not chase the panel for more turns.
+
+**Artifacts per session** (local `test/results/<date>_<persona>/`, gitignored): exact opener, `npm run capture:bundle` output, pacing table, hard-fail scorecard with one-line evidence (quote ≤15 words), one-sentence verdict from {*reference quality*, *correct but generic*, *failed calibration*, *hallucinated*, *tool voice*, *no friction*, *ignored user truth*}. Triangulate by running `npm run grade:file` on the exported messages and comparing human verdict vs tripwire `overall_pass` — disagreement is the signal worth acting on.
 
 #### Future automated tripwires (optional)
 
@@ -632,6 +663,112 @@ Not required for Tier 2: banned boilerplate phrases, minimum user-specific refer
  Production deploy checklist: environment variables, RLS verification, CORS, rate limits.
  LangSmith integration for debugging orchestrator decisions in production.
 
+---
+
+## PHASE 7 — Advisor Instrument Tuning
+
+**Goal:** Specialists speak with lived-in specificity. The Orchestrator already sings — this phase tunes the **instruments**, not the conductor. Output quality moves from "correct but generic" (current observed state) to "reference quality" (CLAUDE.md standard).
+
+**Read first:** CLAUDE.md (Reference quality, Golden rules — especially #1, #4, #6). [BUILD.md §6.2](#62-conversation-quality-and-testing) (multi-round persona protocol). This phase does **not** touch the Orchestrator prompt or routing logic.
+
+**Status:** NOT STARTED
+
+**Primary falsifiability case:** the Walter Reid / `ai_consultant` persona (see local `test/personas/zansei-reference.md`). Same opener, before and after each subphase. If advisor turns do not visibly change on the dimension the subphase addresses, the subphase did not land — revert and rethink.
+
+**Source material:** prompt and harness patterns transplanted from the ad101 / Zansei project. Reference files live locally under `test/external-references/zansei/` (gitignored — the get-idea-ai repo is standalone, not dependent on any sibling). See `test/personas/zansei-reference.md` for the map of what was copied and why. See [CLAUDE.md §6](CLAUDE.md) for the philosophical rule this operationalizes.
+
+### 7.1 Specialist voice rewrite
+
+Lift the voice-discipline structure from the ad101/Zansei `conversation_system.md` prompt. Apply per specialist in [scripts/seed-agents.ts](scripts/seed-agents.ts):
+
+- Identity opener: *"You are the [role] on a small business advisory panel. You have [years] of watching [specific failure modes this specialist has seen]."* Not a job description — a history.
+- Explicit tool-voice ban list: `generate`, `output`, `results`, `deliverable`. Specialists talk **to** the owner, not **about** deliverables.
+- Anti-sycophancy: no "Great question," no "That's really helpful."
+- Anti-jargon: no acronyms or frameworks unless the conversation has earned them.
+- Sentence cap: 2–3 sentences default. Earn any fourth.
+- **Versioning:** block comment above each specialist tracking prompt versions + the evidence that drove each revision (*"v2 (YYYY-MM-DD): Tightened specificity. Driven by ai_consultant persona — advisor produced 'thought-leadership engine' on R2."*).
+
+- [ ] Rewrite each active specialist prompt using this structure.
+- [ ] Add prompt version + changelog comment per specialist.
+- [ ] `npm run seed` to apply. Verify roster unchanged in `/chat`.
+
+**Done when:** re-run on the primary persona shows advisor turns averaging ≤3 sentences with zero banned phrases from [lib/test/grade-deliberation.ts](lib/test/grade-deliberation.ts).
+
+### 7.2 Divergence, budget signal hierarchy, evidence binding
+
+Three generative constraints, lifted from ad101/Zansei `plan_generation.md`. These are not phrase bans — they shape what a specialist is allowed to say in the first place.
+
+- **Divergence rule** (all specialists): *"When your expertise leads you to a recommendation the conversation didn't surface, name the bridge. The owner should never be surprised by a recommendation they didn't see coming."* Prevents unacknowledged leaps from conversation to playbook.
+- **Budget signal hierarchy** (Finance agent specifically):
+  1. **STATED** — owner explicitly said they can/will spend $X → use directly.
+  2. **CURRENT** — owner currently spending $X → floor, not ceiling.
+  3. **HISTORICAL** — owner spent $X on past efforts they described negatively → this is **pain evidence, not willingness to spend again.**
+  4. **INFERRED** — no explicit signal → default conservative; name the inference.
+- **Evidence-bound rule** (all specialists): *"Every recommendation must reference either something the owner said OR something from research. If it can't be tied to evidence, cut it."*
+
+- [ ] Add divergence rule to all specialist prompts.
+- [ ] Add budget signal hierarchy as a dedicated section in the Finance agent prompt.
+- [ ] Add evidence-bound rule to all specialist prompts.
+- [ ] Extend [lib/test/grade-deliberation.ts](lib/test/grade-deliberation.ts) with a tripwire: advisor turn >80 words containing no user-quote or research-reference = suspect.
+
+**Done when:** primary persona transcript shows at least one specialist naming a bridge, and the Finance turn handles regretted LinkedIn boost spend as HISTORICAL pain rather than willingness.
+
+### 7.3 Hand-curated case library
+
+The structural move that gets from "performed history" to "lived-in history." Retrieval-backed reference material each specialist reaches into before speaking.
+
+- New directory: `lib/agents/cases/` with per-specialist JSON files. 10–20 cases each.
+- Index key: `business_type_category` (Orchestrator already infers this). Diagnosis-pattern indexing deferred to a possible Phase 8.
+- Case shape: `{ business_type, challenge_pattern, observation, what_worked, what_wasted_money, one_line_lesson }`.
+- Seed from: CLAUDE.md reference cases (Iron & Flow, Slate Psychology, Walter Reid), curated industry patterns, any real deliberations that produced reference-quality insight.
+- Worker node ([lib/graph/nodes.ts](lib/graph/nodes.ts)) pulls 2–3 relevant cases and injects into the specialist system prompt before generation.
+- **Discipline: use the case, don't cite it.** The insight lands; *"I once worked with..."* does not appear in output. The case is evidence; the turn is the argument the evidence supports.
+
+- [ ] Create `lib/agents/cases/` layout + JSON schema.
+- [ ] Seed 10–20 cases per active specialist.
+- [ ] Extend worker path to retrieve by `business_type_category` and inject.
+- [ ] Add "use the case, don't cite it" rule to specialist prompts.
+
+**Done when:** primary persona run produces at least one specialist turn whose specificity clearly comes from a case in the library, without naming the source.
+
+### 7.4 Length compression as consequence
+
+With cases carrying specificity, prose can shrink structurally. Brevity stops being an aspiration and becomes a budget.
+
+- Cap worker-node `max_tokens` per specialist (~200 default; ~350 for Finance and Business Realist when a quantified argument is warranted). Configurable via `agent_configs`.
+- Grader warning (not rejection): any advisor turn >80 words without a named user-quote, research fact, or case-derived specific = suspect. Log for review.
+
+- [ ] Add `max_tokens` cap in [lib/graph/nodes.ts](lib/graph/nodes.ts) worker path (configurable per specialist via `agent_configs`).
+- [ ] Add length+specificity tripwire to grader.
+
+**Done when:** average advisor turn across the primary persona drops below 150 words AND the grader's length-without-specificity tripwire does not fire.
+
+### 7.5 Test harness upgrades
+
+Absorb harness patterns from the Zansei `run_test_suite.py` reference (local copy at `test/external-references/zansei/run_test_suite.py` — gitignored; see `test/personas/zansei-reference.md` for provenance):
+
+- **Typing delay** between user rounds in the multi-round protocol: answer-length-aware (short <30 chars → MIN, long >150 chars → MAX, linear interp). Default 2–6s. For sync-in-POST research this is hedge on top of the `done` event wait — not a replacement.
+- **Response length bands by personality** in persona files: `terse` 10–30w, `adversarial` 15–40w, `skeptical` 25–60w, `scattered` 40–80w, `verbose` 40–80w, `enthusiastic` 30–60w. Hard ceiling: >80 words = out of character.
+- **Role-player as a separate Claude instance** (no shared context with the system under test). Pattern for a future automated multi-round runner — see [BUILD.md §6.2](#62-conversation-quality-and-testing) Rung E.
+- Adapt the `ai_consultant` persona into the local `test/personas/` registry as the Phase 7 primary.
+
+- [ ] Extend persona JSON schema with `response_length_band` and `conversational_behaviors[]`.
+- [ ] Document typing-delay pacing in [docs/testing.md](docs/testing.md).
+- [ ] Add a before/after transcript pair for the primary persona under `test/fixtures/` and wire it into `test/fixtures/registry.json`.
+
+**Done when:** registry contains a before/after pair for the Walter Reid case; tripwires fire on "before" and pass on "after."
+
+### Phase 7 Complete When:
+
+The same opener (*"nobody really knows about my AI consultancy — I'm competing against people who watched a few YouTube videos"*) produces a visibly different advisor turn after all subphases.
+
+**Before:** *"You should clarify your positioning and build a thought-leadership engine to differentiate in a crowded market."*
+
+**After:** something tied to Walter's stated constraint and regretted spend — naming what's **at risk** (invisibility in a market where differentiation itself is invisible) and what not to do (another LinkedIn boost treating past pain as willingness), before naming what to do. Specific enough to forward to a friend who would say: *"they heard you."*
+
+**Deferred to a potential Phase 8 (only if Phase 7 does not close the gap):** Orchestrator running-diagnosis schema (stated vs observed problem, plan_readiness flag), diagnosis-pattern case indexing, stop-list tracked across turns. See the multi-round / lived-in-role discussion thread for the architecture. Do not pre-build these — the Orchestrator already reads the room well; adding metadata layers risks complicating what sings.
+
+---
 
 Principles That Apply to Every Phase
 These are not suggestions. They are constraints.

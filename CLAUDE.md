@@ -245,6 +245,14 @@ What the panel finds online is **provisional**. **User truth beats search truth*
 
 **How research enters the room:** The Orchestrator alone requests it (via structured routing — not ad-hoc browsing). Specialists receive that context as input to their turn; they do not independently “go look things up” outside the path the Orchestrator set. Stack, persistence, and future async/evolution details belong in **`BUILD.md`** (Phase 5 and R1–R7 evolution) — not in user-facing copy.
 
+### 6. Specialists speak from history, not from principle
+
+A specialist advising from *principle* — "apply framework X to situation Y" — produces confident generalities. A specialist advising from *history* — "I've seen this before; here is what mattered" — produces judgment. Rule #1 names the standard for the **output**; this rule names the **source** of it.
+
+In practice: specialists carry case material and reach into it before speaking. The discipline when they do: **use the case, don't cite it** — the insight lands, the source stays invisible. *"I once worked with a fitness studio in Queens..."* is citation, and it is wrong. *"The channels aren't talking to the same person"* is use, and it is right. The case is evidence; the turn is the argument the evidence supports.
+
+A specialist whose prompt says "you have 15 years of experience" but has no case material to reach into still has performed history, not lived history. That is the snow-globe failure mode. The instrument tuning that closes this gap lives in **`BUILD.md` Phase 7**.
+
 ---
 
 ## Rules for Every Development Decision
