@@ -1,0 +1,51 @@
+{
+  "_comment": "Shape written as full_result.json by lib/test/write-result-bundle.ts (bundle v2). See docs/testing.md.",
+  "bundle": "getidea-persona-result",
+  "version": 2,
+  "meta": {
+    "bundle": "getidea-persona-result",
+    "version": 2,
+    "captured_at": "2026-04-17T12:00:00.000Z",
+    "thread_id": "00000000-0000-4000-8000-000000000000",
+    "persona_file": "test/personas/ai_consultant.json",
+    "persona_id": "ai_consultant",
+    "case_id": "ai_consultant_sample",
+    "source": "fixture",
+    "message_count": 2,
+    "overall_pass": true,
+    "grades_summary": "6/6"
+  },
+  "conversation_transcript": {
+    "thread_id": "00000000-0000-4000-8000-000000000000",
+    "title": "Example",
+    "exported_at": "2026-04-17T12:00:00.000Z",
+    "persona_id": "ai_consultant",
+    "messages": []
+  },
+  "research_data": {
+    "rows": [],
+    "count": 0,
+    "note": "No system rows with metadata.type === \"research\" in this transcript."
+  },
+  "grades": {
+    "checks_total": 6,
+    "checks_passed": 6,
+    "overall_pass": true,
+    "anti_generic": { "pass": true, "banned_phrases_found": [] },
+    "voice": { "pass": true, "violations": [] },
+    "structure": { "pass": true, "sections_found": [], "sections_missing": [] },
+    "word_count": { "pass": true, "ideal": true, "count": 0, "min_ideal": 120, "max_ideal": 4500 },
+    "mentions_business_context": true,
+    "mentions_business_context_required": true,
+    "research_followthrough": { "applicable": false, "pass": true, "detail": "no research rows in transcript" }
+  },
+  "token_usage": {
+    "recorded": false,
+    "detail": "GetIdea does not attach token or cost fields to messages yet. Use provider dashboards or a future automated runner."
+  },
+  "timing": {
+    "recorded": false,
+    "detail": "Per-round wall time is not persisted with the transcript yet. Optional: log from browser devtools or API logs."
+  },
+  "_notes": "See docs/testing.md and BUILD.md §6.2 for bundle layout and quality ladder."
+}

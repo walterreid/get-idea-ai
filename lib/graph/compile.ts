@@ -5,6 +5,7 @@ import {
   workerNode,
   interruptHandlerNode,
   recommendationNode,
+  researchNode,
 } from './nodes'
 
 /**
@@ -24,7 +25,8 @@ export const MAX_AGENT_TURNS = 6
  * 1. Human interrupted → interruptHandler (clears flag, re-evaluates)
  * 2. Phase = recommendation → recommendationNode
  * 3. next_speaker = "user" or null → END (yield to user)
- * 4. next_speaker = known agent name → worker
+ * 4. research_needed is set → researchNode (runs before the worker)
+ * 5. next_speaker = known agent name → worker
  */
 function routeFromSupervisor(state: DeliberationState): string {
   if (state.human_interrupted) {
@@ -37,6 +39,11 @@ function routeFromSupervisor(state: DeliberationState): string {
 
   if (!state.next_speaker || state.next_speaker === 'user') {
     return END
+  }
+
+  // Research runs as a sub-step before the agent speaks — doesn't increment turn_count
+  if (state.research_needed) {
+    return 'research'
   }
 
   return 'worker'
@@ -72,10 +79,12 @@ function buildGraph() {
     .addNode('worker', workerNode)
     .addNode('interrupt_handler', interruptHandlerNode)
     .addNode('recommendation', recommendationNode)
+    .addNode('research', researchNode)
     .addEdge(START, 'supervisor')
     .addConditionalEdges('supervisor', routeFromSupervisor, {
       interrupt_handler: 'interrupt_handler',
       recommendation: 'recommendation',
+      research: 'research',
       worker: 'worker',
       [END]: END,
     })
@@ -86,6 +95,8 @@ function buildGraph() {
     })
     .addEdge('interrupt_handler', 'supervisor')
     .addEdge('recommendation', END)
+    // Research always proceeds to the worker — it is a sub-step, not a turn
+    .addEdge('research', 'worker')
     .compile()
 }
 

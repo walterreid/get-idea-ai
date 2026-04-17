@@ -21,6 +21,24 @@ export type StreamEvent =
   | { type: 'token'; agent: string; content: string }
   | { type: 'agent_end'; agent: string }
   | { type: 'yield_to_user'; reason: string; phase: string }
+  | {
+      type: 'research_start'
+      researchType: 'fetch_url' | 'web_search'
+      target: string
+    }
+  | {
+      type: 'research_complete'
+      researchType: 'fetch_url' | 'web_search'
+      target: string
+      /** Short summary for the feed annotation — not the full content */
+      summary: string
+    }
+  | {
+      type: 'research_failed'
+      researchType: 'fetch_url' | 'web_search'
+      target: string
+      error: string
+    }
   | { type: 'error'; message: string }
   | { type: 'done' }
 
@@ -28,7 +46,7 @@ export type StreamEvent =
  * A message as rendered on the client.
  * Extends the DB message shape with streaming-specific fields.
  */
-export type ClientMessageRole = 'user' | 'agent' | 'orchestrator' | 'system'
+export type ClientMessageRole = 'user' | 'agent' | 'orchestrator' | 'system' | 'research'
 
 export interface ClientMessage {
   id: string
@@ -44,6 +62,10 @@ export interface ClientMessage {
   routingReason?: string
   routingObjective?: string
   deliberationPhase?: string
+  /** Research metadata — present when role === 'research' */
+  researchType?: 'fetch_url' | 'web_search'
+  researchTarget?: string
+  researchSuccess?: boolean
   createdAt: Date
 }
 

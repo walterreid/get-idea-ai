@@ -1,4 +1,5 @@
 import { Annotation, MessagesAnnotation } from '@langchain/langgraph'
+import type { AccumulatedResearch, ResearchEntry } from '@/lib/agents/schema'
 
 /**
  * Full state for one deliberation run.
@@ -89,6 +90,39 @@ export const DeliberationStateAnnotation = Annotation.Root({
   prior_insights_context: Annotation<string>({
     reducer: (_, next) => next,
     default: () => '',
+  }),
+
+  /**
+   * Research the orchestrator has requested before routing to the next agent.
+   * Set by supervisorNode, consumed and cleared by researchNode.
+   * Null means no research is pending.
+   */
+  research_needed: Annotation<{
+    type: 'fetch_url' | 'web_search'
+    target: string
+    reason: string
+  } | null>({
+    reducer: (_, next) => next,
+    default: () => null,
+  }),
+
+  /**
+   * Accumulated research results for this deliberation run.
+   * Each entry is appended by researchNode and stays visible to all subsequent agents.
+   * Reducers append rather than replace so multiple research calls accumulate.
+   */
+  research_context: Annotation<ResearchEntry[]>({
+    reducer: (prev, next) => [...prev, ...next],
+    default: () => [],
+  }),
+
+  /**
+   * Merge-friendly snapshot of research for this thread (observations, provenance,
+   * queries, primary URL). Hydrated from DB on load; updated by researchNode each step.
+   */
+  accumulated_research: Annotation<AccumulatedResearch | null>({
+    reducer: (prev, next) => (next === undefined ? prev ?? null : next),
+    default: () => null,
   }),
 })
 

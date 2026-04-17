@@ -85,6 +85,8 @@ Conversations are not free-form chaos. They move through phases, even if the use
 
 The user can interrupt at any phase. The user can redirect the conversation at any time. The system respects that because the user is a peer, not an audience.
 
+For how trust is *earned* inside those phases — intake, depth with proof of homework, constraints — see **Conversational arc: three acts** below. It is dramatic structure, not a replacement for the phases.
+
 ---
 
 ## Interruption Is a Feature
@@ -156,6 +158,92 @@ A small business owner finishes a session and thinks:
 They don't think about AI. They don't think about agents. They think about their idea, which is now sharper than when they walked in.
 
 That's the product.
+
+---
+
+## Reference quality: what “good” actually is
+
+Nuance is not decoration. **Good** here means *judgment the owner could forward to a friend and the friend would say: they really heard you.* If the friend would say “yeah, that’s pretty standard advice,” the output failed.
+
+These are canonical reference cases — not copy for the product, but the bar the system should aim for when inferring *this* business, *this* market, *this* moment.
+
+### Iron & Flow (fitness studio, Queens)
+
+A solo studio owner spending ~$800/month across four platforms. The useful move wasn’t “post more” or “optimize social.” It was a **judgment call**: your channels aren’t talking to the same person — consolidate to Google Local Services, tight radius, two search phrases, stop competing with Planet Fitness on Instagram. Specific, opinionated, actionable.
+
+### Slate Psychology (practice adding clinicians, Riverside area)
+
+The threat wasn’t “brand awareness” in the abstract — it was **empty chair time** in a therapist-dense zip code. Wrong fight: ranking for “therapist near me.” Right fight: own specialty searches (“ADHD testing Greenwich CT”), invest in Google Business Profile, fix directory fallout after a move. The system named **what was actually at risk**, not what sounds like marketing.
+
+### Walter Reid (person — illustrative)
+
+You might hear a marketing problem where the evidence points to a **pre-marketing** problem: spending on channels right now would accelerate traffic into a funnel with no bottom. The owner’s instinct may be to try Reddit, LinkedIn, or ads — credentials many consultants would envy — and the easy advisor conclusion is “wrong channel; find the right one.” That can miss the terrain.
+
+Someone who has seen this before looks at the **actual surface area**: two navigable pages (homepage and an articles list), no services page, no visible contact path, no testimonials or case outcomes, no client logos — and a primary CTA framed like “view all essays & insights” that sends a ready buyer **deeper into a reading rabbit hole** instead of toward a conversation. The judgment is not “pick TikTok over Reddit” first; it is whether **traffic is the lever** before the offer and paths are legible. That is advisor-grade specificity, not a channel cheat sheet.
+
+### What separates “correct” from “reference quality”
+
+The system infers from the **combination** of:
+
+- **What the user said when asked** — business type, location, budget, challenge.
+- **What the user didn’t say** — and what that omission often implies (e.g., a practice adding clinicians may have a volume problem, not a “brand” problem).
+- **What the system knows about this business type** — which levers actually convert, which spend is wasted, what owners usually try that doesn’t move the needle.
+- **What a seasoned practitioner would tell this specific owner today** — the judgment call, the thing to ignore, the one thing that matters right now.
+
+The gap between “correct in general” and “reference quality” is **whether the system commits to a specific judgment** instead of defaulting to general truths. When it fails, it is almost always because it stayed generic (often because it skipped research or didn’t tie evidence to a named constraint).
+
+---
+
+## Conversational arc: three acts (inside deliberation)
+
+Deliberation phases (exploration → critique → synthesis → recommendation) still apply. **This** is the *dramatic* shape of the room — how trust is earned — even when labels stay invisible.
+
+**Act 1 — Intake (roughly early turns):** Identity, challenge, ideal outcome. The panel is **listening**, not performing advice. Research is queued when it will change what you ask next — often after enough context exists to fetch or search *for* something.
+
+**Act 2 — Depth:** Research-informed questions. Questions should prove homework: cite something specific from the site or market (“I noticed X — is that intentional?”), not a generic questionnaire. Conditional branching by business type. This is where advisors earn trust.
+
+**Act 3 — Constraints:** Budget, capacity, how they’ll measure success, whether they need to be heard or need tactics. An advisor who recommends spend that ignores stated budget hasn’t failed on math — they’ve failed to **listen**. The transition from Act 1 to Act 2 is the hinge: the research window is where the product stops being “another chat tool” and starts being grounded in **their** business.
+
+**Depth ≠ volume.** Meaningful can be succinct; a wall of text is not nuance.
+
+---
+
+## Competitive posture (informs tone — never pasted into user-facing copy)
+
+These distinctions guide *how* advisors behave, not slogans to recite.
+
+- **Anti-agency:** Agencies can optimize for retainer hours. This room optimizes for **judgment** — what matters for this owner now.
+- **Anti–approval engines:** Tools that optimize for agreement produce comfort. This product produces **discriminating questions** and pushback when the evidence warrants it — behavioral difference, not feature marketing.
+- **Anti-template:** Competitors sell plans as products. Here, the conversation is the **relationship to the work** — the recommendation is a door, not a deliverable to “download.”
+
+---
+
+## Golden rules (inviolable)
+
+Violating these produces meaningfully wrong output — not “weaker style,” wrong.
+
+### 1. Reference quality standard
+
+Output must be **specific enough to forward**: the owner’s friend should feel the panel *heard this person*, not a category.
+
+### 2. Advisor voice — never “tool voice”
+
+- Do not frame the experience as **generating outputs**, **deliverables**, or **reports** as the hero. Recommendations read as **from advisors**, not as artifacts from a machine.
+- Questions sound like a **senior strategist** clarifying what they need — not a form collecting fields.
+
+### 3. Trust stack (for product / marketing surfaces — not for cold-delivered chat turns)
+
+For **cold** audiences: **institution → human → advisors** — credibility before mechanics. Do not open with “the AI” or the panel as the first hook; that collapses *advisor* positioning into *tool* positioning. **Warm** audiences (returning, referred) can move faster to advisors. (Implementation lives in onboarding and marketing; the deliberation room still speaks as advisors.)
+
+### 4. Anti-generic guardrail
+
+If advice could apply to **any** business in **any** industry unchanged, it fails. Treat phrases like “clarify your positioning,” “build a thought-leadership engine,” “optimize your social presence,” “develop a strong brand identity,” or “create a content strategy” as **smoke signals** — too generic to be sufficient unless immediately tightened to *this* owner, *this* constraint, *this* proof.
+
+### 5. Research is evidence, not ground truth
+
+What the panel finds online is **provisional**. **User truth beats search truth** — if the owner says “that’s not my site” or “we changed that,” advisors defer and adjust. Name uncertainty: “Here’s what we saw; if that isn’t you, say so.” Never treat scraped content as overriding what the owner states about their own business.
+
+**How research enters the room:** The Orchestrator alone requests it (via structured routing — not ad-hoc browsing). Specialists receive that context as input to their turn; they do not independently “go look things up” outside the path the Orchestrator set. Stack, persistence, and future async/evolution details belong in **`BUILD.md`** (Phase 5 and R1–R7 evolution) — not in user-facing copy.
 
 ---
 
@@ -252,7 +340,16 @@ get-idea-ai/
 │   ├── types/
 │   │   └── stream.ts           ← Shared types: StreamEvent (the SSE protocol), ClientMessage,
 │   │                             RosterAgent, SidebarThread, AgentStatus, getAgentColor().
+│   ├── test/
+│   │   └── grade-deliberation.ts ← Tripwire grader: banned generic phrases, tool-voice patterns,
+│   │                               recommendation `##` sections when present, persona hint coverage,
+│   │                               research follow-through heuristics. Not an LLM judge.
 │   └── placeholder.ts          ← Fallback mock data used when DB isn't seeded yet.
+│
+├── test/                       ← **gitignored** — personas, fixtures, registry, local `results/` (see docs/testing.md).
+│
+├── docs/
+│   └── testing.md              ← Published testing guide (fixtures themselves stay local / private).
 │
 ├── supabase/
 │   └── migrations/
@@ -262,8 +359,10 @@ get-idea-ai/
 ├── scripts/
 │   ├── seed-agents.ts          ← Seeds all 10 specialist agents + orchestrator into agent_configs.
 │   │                             Upserts on name — re-running overwrites all fields including prompts.
-│   └── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
-│                                  interrupt state reset, agent loading, no-hardcoding constraint.
+│   ├── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
+│   │                             interrupt state reset, agent loading, no-hardcoding constraint.
+│   ├── run-fixture-grades.ts   ← Runs tripwire grader on all `test/fixtures/registry.json` cases (no DB).
+│   └── grade-transcript-file.ts ← Grade a single exported messages file; used by capture bundle + manual QA.
 │
 └── proxy.ts                    ← Next.js 16 proxy (formerly middleware). Refreshes Supabase
                                    sessions on every request so auth stays current.
@@ -279,3 +378,5 @@ get-idea-ai/
 | `app/api/chat/route.ts` | The streaming backbone. Everything the user sees flows through here. |
 | `scripts/seed-agents.ts` | The source of truth for agent identities and prompts. Re-running overwrites. |
 | `supabase/migrations/001_foundation.sql` | The data model. Changes here require a migration, not a code edit. |
+| `lib/test/grade-deliberation.ts` | Cheap automated checks on transcripts (tripwires aligned with **Reference quality** above). See `docs/testing.md` and `BUILD.md` §6.2. |
+| `docs/testing.md` | How to run persona + fixture grading, capture bundles, and the combined `test:quality` gate (local `test/` is gitignored). |

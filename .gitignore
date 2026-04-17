@@ -12,6 +12,12 @@
 
 # testing
 /coverage
+# Personas, fixtures, bundle template, local results — not published (keep a private copy or sync elsewhere)
+/test/
+
+# Playwright / future E2E artifacts (if added)
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -30,8 +36,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — keep `.env.example` committed as the key template
 .env*
+!.env.example
 
 # Cursor IDE
 .cursor/

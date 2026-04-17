@@ -14,8 +14,67 @@ import {
   fetchOrchestratorConfig,
   buildAgentContext,
 } from '@/lib/agents/graph-loader'
-import { RoutingDecisionSchema } from '@/lib/agents/schema'
+import {
+  RoutingDecisionSchema,
+  mergeAccumulatedResearch,
+  formatAccumulatedResearchBrief,
+} from '@/lib/agents/schema'
+import type { AccumulatedResearch, ResearchEntry } from '@/lib/agents/schema'
+import { fetchUrl, webSearch, formatResearchForContext } from '@/lib/tools/web-research'
+import type { ResearchResult } from '@/lib/tools/web-research'
 import type { DeliberationState } from './state'
+
+/** Injected when any web research is present; complements agent_configs (R5 epistemics). */
+const WORKER_RESEARCH_EPISTEMICS = `## How to treat web research
+Research is provisional evidence, not ground truth. **If the user says something that contradicts a page or search result, trust the user** and say so plainly. If a name or URL might be ambiguous, ask one clarifying question before treating search hits as being about them. Brief acknowledgements help: e.g. "Here's what we found online—if that isn't your business, tell us."
+`
+
+/**
+ * Maps a tool result into a merge patch for `accumulated_research`.
+ */
+function buildResearchAccumulatedPatch(
+  req: { type: 'fetch_url' | 'web_search'; target: string },
+  result: ResearchResult
+): Partial<AccumulatedResearch> {
+  const patch: Partial<AccumulatedResearch> = {
+    tool_rounds: { batches_run: 1 },
+  }
+
+  if (result.type === 'fetch_url') {
+    patch.provenance = [
+      {
+        kind: 'fetch_url' as const,
+        ref: result.url,
+        fetched_at: result.fetched_at,
+        success: result.success,
+        title: result.title,
+      },
+    ]
+    if (result.success) {
+      patch.primary_url = result.url
+      patch.flags = { primary_url_fetched: true, needs_confirmation: [] }
+      const excerpt = (result.content ?? '').slice(0, 500).trim()
+      if (excerpt) patch.observations = [excerpt]
+    }
+  } else {
+    patch.provenance = [
+      {
+        kind: 'web_search' as const,
+        ref: result.query,
+        fetched_at: result.fetched_at,
+        success: result.success,
+      },
+    ]
+    patch.queries_used = [result.query]
+    if (result.success && result.results?.length) {
+      patch.observations = result.results
+        .map((r) => `${r.title}: ${r.snippet}`)
+        .slice(0, 6)
+    }
+  }
+
+  return patch
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -60,6 +119,22 @@ function buildOrchestratorContext(state: DeliberationState): string {
   lines.push(
     `- Previously suppressed: [${state.suppressed_agents.join(', ')}]`
   )
+
+  // Summarize what has already been researched so the orchestrator avoids duplicates
+  if (state.research_context.length > 0) {
+    lines.push('\n## Research already completed this session')
+    for (const r of state.research_context) {
+      const status = r.success ? 'fetched' : 'failed'
+      lines.push(`- [${r.type}] ${r.target} (${status})`)
+    }
+    lines.push('Do NOT request research on targets already listed above.')
+  }
+
+  if (state.accumulated_research) {
+    lines.push('\n## Accumulated research memory (this thread)')
+    lines.push(formatAccumulatedResearchBrief(state.accumulated_research))
+  }
+
   lines.push(
     '\nBased on the full conversation, what is your routing decision? Respond only with JSON.'
   )
@@ -204,6 +279,8 @@ export async function supervisorNode(
     routing_reason: decision.reason,
     routing_objective: decision.objective,
     current_speaker: nextSpeaker,
+    // Passes research request to compile.ts edge logic → researchNode if non-null
+    research_needed: decision.research_needed ?? null,
   }
 }
 
@@ -235,10 +312,24 @@ export async function workerNode(
 
   const conversationHistory = buildAgentConversation(state)
 
+  // Inject any research results gathered this round so the agent can reference them.
+  // Each research entry is already formatted as a compact LLM-readable block.
+  const researchBlock = state.research_context.length > 0
+    ? [
+        '---',
+        '## Context gathered by the panel before this turn',
+        WORKER_RESEARCH_EPISTEMICS,
+        ...state.research_context.map((r) => r.formatted),
+        '---',
+        '',
+      ].join('\n')
+    : ''
+
   // Build agent's view of the conversation:
   // System: agent's own identity + calibration instructions
-  // Human: the full conversation so far, with the agent's objective
+  // Human: research context (if any) + conversation + agent's objective
   const userPrompt = [
+    researchBlock,
     conversationHistory,
     '',
     `---`,
@@ -309,6 +400,115 @@ export async function interruptHandlerNode(
     turn_count: 0,
     current_speaker: null,
     next_speaker: null,
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// researchNode
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Runs when the supervisor sets research_needed in the routing decision.
+ * Executes the requested tool (fetchUrl or webSearch), appends the formatted
+ * result to state.research_context, then clears research_needed so the graph
+ * proceeds to the worker.
+ *
+ * Research failure is non-fatal — if the tool errors, we log and continue.
+ * The subsequent agent will simply lack that specific context but will still respond.
+ *
+ * Research does NOT increment turn_count — it is a sub-step, not a full turn.
+ */
+export async function researchNode(
+  state: DeliberationState
+): Promise<Partial<DeliberationState>> {
+  const req = state.research_needed
+  if (!req) {
+    console.warn('[researchNode] Called without research_needed. Skipping.')
+    return { research_needed: null }
+  }
+
+  // ── Rate limits ──────────────────────────────────────────────────────────
+  // These are per-thread limits checked against the accumulated research_context.
+  const MAX_FETCHES = 3
+  const MAX_SEARCHES = 2
+  const MAX_TOTAL = 10
+
+  const totalCount = state.research_context.length
+  const fetchCount = state.research_context.filter((r) => r.type === 'fetch_url').length
+  const searchCount = state.research_context.filter((r) => r.type === 'web_search').length
+
+  if (totalCount >= MAX_TOTAL) {
+    console.warn(`[researchNode] Total research limit (${MAX_TOTAL}) reached. Skipping.`)
+    return { research_needed: null }
+  }
+  if (req.type === 'fetch_url' && fetchCount >= MAX_FETCHES) {
+    console.warn(`[researchNode] URL fetch limit (${MAX_FETCHES}) reached. Skipping.`)
+    return { research_needed: null }
+  }
+  if (req.type === 'web_search' && searchCount >= MAX_SEARCHES) {
+    console.warn(`[researchNode] Web search limit (${MAX_SEARCHES}) reached. Skipping.`)
+    return { research_needed: null }
+  }
+  if (totalCount >= Math.floor(MAX_TOTAL * 0.8)) {
+    console.warn(`[researchNode] Approaching research limit (${totalCount}/${MAX_TOTAL} actions used).`)
+  }
+
+  // Guard against duplicate fetches in the same thread
+  const alreadyFetched = state.research_context.some((r) => r.target === req.target)
+  if (alreadyFetched) {
+    console.log(`[researchNode] ${req.target} already researched this session. Skipping.`)
+    return { research_needed: null }
+  }
+
+  console.log(`[researchNode] Running ${req.type}: ${req.target}`)
+
+  let result: ResearchResult
+  try {
+    result = req.type === 'fetch_url'
+      ? await fetchUrl(req.target)
+      : await webSearch(req.target)
+  } catch (err) {
+    console.error('[researchNode] Tool call threw unexpectedly:', err)
+    const errAt = new Date().toISOString()
+    result =
+      req.type === 'fetch_url'
+        ? {
+            type: 'fetch_url',
+            url: req.target,
+            success: false,
+            error: 'unexpected error',
+            fetched_at: errAt,
+          }
+        : {
+            type: 'web_search',
+            query: req.target,
+            success: false,
+            error: 'unexpected error',
+            fetched_at: errAt,
+          }
+  }
+
+  const entry: ResearchEntry = {
+    type: req.type,
+    target: req.target,
+    formatted: formatResearchForContext(result),
+    success: result.success,
+    fetched_at: result.fetched_at,
+  }
+
+  const accPatch = buildResearchAccumulatedPatch(req, result)
+  const merged = mergeAccumulatedResearch(state.accumulated_research ?? null, accPatch)
+
+  if (result.success) {
+    console.log(`[researchNode] Success: ${req.target} (${entry.formatted.length} chars)`)
+  } else {
+    console.warn(`[researchNode] Failed: ${req.target} — ${'error' in result ? result.error : 'unknown error'}`)
+  }
+
+  return {
+    research_needed: null,
+    research_context: [entry],
+    accumulated_research: merged,
   }
 }
 

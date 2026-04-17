@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import type { ClientMessage, RosterAgent } from '@/lib/types/stream'
 import { getAgentColor } from '@/lib/types/stream'
@@ -85,9 +86,87 @@ function SystemMessage({ content }: { content: string }) {
   )
 }
 
+function ResearchAnnotation({ message }: { message: ClientMessage }) {
+  const [expanded, setExpanded] = useState(false)
+  const isPending = message.streaming
+  const isUrl = message.researchType === 'fetch_url'
+  const icon = isUrl ? '📄' : '🔍'
+
+  // Friendly label shown in the feed
+  let label: string
+  if (isPending) {
+    label = isUrl
+      ? `Panel is reviewing ${message.researchTarget}`
+      : `Panel is searching for "${message.researchTarget}"`
+  } else if (message.researchSuccess) {
+    label = isUrl
+      ? `Panel reviewed ${message.researchTarget}`
+      : `Panel searched for "${message.researchTarget}"`
+  } else {
+    label = isUrl
+      ? `Could not load ${message.researchTarget}`
+      : `Search failed for "${message.researchTarget}"`
+  }
+
+  return (
+    <div className="flex items-start gap-1.5 my-1 px-1 group">
+      <div
+        className="w-px self-stretch flex-shrink-0 mt-1"
+        style={{ backgroundColor: 'var(--color-border)' }}
+      />
+      <div className="min-w-0 flex-1">
+        <button
+          onClick={() => !isPending && message.content && setExpanded((v) => !v)}
+          className="flex items-center gap-1.5 text-left"
+          style={{ cursor: isPending || !message.content ? 'default' : 'pointer' }}
+        >
+          <span className="text-[11px]">{icon}</span>
+          <span
+            className={`text-xs ${isPending ? 'animate-status-pulse' : ''}`}
+            style={{
+              color: message.researchSuccess === false
+                ? 'var(--color-text-faint)'
+                : 'var(--color-text-muted)',
+              fontFamily: 'var(--font-body)',
+              fontStyle: 'italic',
+            }}
+          >
+            {label}
+          </span>
+          {!isPending && message.content && (
+            <span
+              className="text-[10px] opacity-0 group-hover:opacity-70 transition-opacity"
+              style={{ color: 'var(--color-text-faint)' }}
+            >
+              {expanded ? '▲' : '▼'}
+            </span>
+          )}
+        </button>
+
+        {expanded && message.content && (
+          <p
+            className="mt-1 text-xs leading-relaxed"
+            style={{
+              color: 'var(--color-text-faint)',
+              fontFamily: 'var(--font-body)',
+              maxWidth: '480px',
+            }}
+          >
+            {message.content}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function MessageBubble({ message, agents }: MessageBubbleProps) {
   if (message.role === 'system') {
     return <SystemMessage content={message.content} />
+  }
+
+  if (message.role === 'research') {
+    return <ResearchAnnotation message={message} />
   }
 
   if (message.role === 'orchestrator') {
@@ -201,12 +280,45 @@ export function MessageBubble({ message, agents }: MessageBubbleProps) {
             }}
           >
             {message.content ? (
-              <p
-                className="text-[15px] leading-relaxed whitespace-pre-wrap"
-                style={{ color: 'var(--color-text)', fontFamily: 'var(--font-body)' }}
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => (
+                    <p
+                      className="text-[15px] leading-relaxed mb-2 last:mb-0"
+                      style={{ color: 'var(--color-text)', fontFamily: 'var(--font-body)' }}
+                    >
+                      {children}
+                    </p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="font-semibold" style={{ color: 'var(--color-text)' }}>
+                      {children}
+                    </strong>
+                  ),
+                  em: ({ children }) => (
+                    <em className="italic" style={{ color: 'var(--color-text)' }}>
+                      {children}
+                    </em>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="list-disc list-outside pl-4 space-y-1 mb-2 last:mb-0" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-body)' }}>
+                      {children}
+                    </ul>
+                  ),
+                  ol: ({ children }) => (
+                    <ol className="list-decimal list-outside pl-4 space-y-1 mb-2 last:mb-0" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-body)' }}>
+                      {children}
+                    </ol>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-[15px] leading-relaxed" style={{ fontFamily: 'var(--font-body)' }}>
+                      {children}
+                    </li>
+                  ),
+                }}
               >
                 {message.content}
-              </p>
+              </ReactMarkdown>
             ) : (
               // Waiting for first token — show the agent name in a thinking state
               <p

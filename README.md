@@ -16,6 +16,7 @@ The panel is powered by LangGraph. The deliberation is real.
 - The user can **interrupt at any point** to redirect; the system re-evaluates
 - After each deliberation round, insights are **extracted and stored** — strengths, risks, open questions, recommendations — attributed to the agent who surfaced them
 - Returning to a thread, the Orchestrator is briefed on what was already covered and builds forward rather than repeating
+- When it helps, the Orchestrator can request **web research** (read a URL or run a search) before an advisor speaks; findings are **provisional** — the owner’s account of their own business always wins over scraped content (see `CLAUDE.md`)
 
 The product is the **idea record**: the accumulated, attributable findings from multiple deliberation sessions on a single idea.
 
@@ -30,6 +31,7 @@ The product is the **idea record**: the accumulated, attributable findings from 
 | LLM providers | Anthropic (Claude 3.5 Haiku, Claude 3.5 Sonnet) + OpenAI (GPT-4o) |
 | Database + Auth | Supabase (PostgreSQL, Row Level Security, magic link auth) |
 | Streaming | Server-Sent Events (SSE) via `ReadableStream` in Next.js API route |
+| Web research | Orchestrator-triggered URL read (Jina Reader) + search (Serper); sync inside each chat request (see `BUILD.md` evolution for async roadmap) |
 | Styling | Tailwind CSS v4, custom CSS variables, Google Fonts (Lora, Plus Jakarta Sans) |
 
 ---
@@ -64,7 +66,7 @@ get-idea-ai/
 │   │   └── graph-loader.ts      # Module-level TTL cache for LangGraph node execution
 │   ├── graph/
 │   │   ├── state.ts             # DeliberationStateAnnotation — all LangGraph state fields
-│   │   ├── nodes.ts             # supervisorNode, workerNode, interruptHandlerNode, recommendationNode
+│   │   ├── nodes.ts             # supervisorNode, researchNode, workerNode, interruptHandlerNode, recommendationNode
 │   │   └── compile.ts           # StateGraph compilation with routing logic and MAX_AGENT_TURNS
 │   ├── hooks/
 │   │   └── useDeliberation.ts   # Client hook — SSE stream management, interrupt, local state
@@ -75,6 +77,8 @@ get-idea-ai/
 │   │   ├── client.ts            # Browser-side Supabase client
 │   │   ├── server.ts            # Server-side client (uses cookies)
 │   │   └── admin.ts             # Service role client for graph nodes and scripts
+│   ├── test/
+│   │   └── grade-deliberation.ts  # Tripwire grader (anti-generic, structure, persona specificity)
 │   └── types/
 │       └── stream.ts            # Shared StreamEvent types, ClientMessage, RosterAgent, SidebarThread
 │
@@ -84,7 +88,15 @@ get-idea-ai/
 │
 ├── scripts/
 │   ├── seed-agents.ts           # Seeds all 10 specialist agents + orchestrator into agent_configs
-│   └── test-graph.ts            # Integration tests for graph compilation, routing, and constraints
+│   ├── test-graph.ts            # Integration tests for graph compilation, routing, and constraints
+│   ├── run-fixture-grades.ts    # Runs tripwire grader on all registered message fixtures (no DB)
+│   ├── grade-transcript-file.ts
+│   ├── capture-review-bundle.ts
+│   └── export-thread-transcript.ts
+│
+├── docs/
+│   ├── testing.md               # Published QA guide (local `test/` tree is gitignored)
+│   └── full-result.example.json # Example full_result.json shape for bundles
 │
 ├── proxy.ts                     # Next.js 16 proxy (formerly middleware) — refreshes Supabase sessions
 ├── CLAUDE.md                    # Product philosophy — read before any development decision
@@ -130,6 +142,11 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 # LLM providers
 ANTHROPIC_API_KEY=sk-ant-...
 OPENAI_API_KEY=sk-...
+
+# Web research (URL read + search — required for orchestrator-requested research)
+# See https://serper.dev and https://jina.ai/reader
+SERPER_API_KEY=
+JINA_API_KEY=
 
 # Optional — LangSmith tracing
 LANGCHAIN_TRACING_V2=true
@@ -177,7 +194,29 @@ Run the integration test suite to confirm LangGraph compilation, agent loading, 
 npm run test:graph
 ```
 
-All 9 tests should pass.
+All tests should pass (graph suite includes compilation, schema, merge helpers, and DB checks when seeded).
+
+### 8. Persona + transcript smoke (no DB)
+
+To confirm the **tripwire grader** and a persona JSON work together on a frozen fixture (same path `capture:bundle` uses for grading):
+
+```bash
+npm run grade:file -- test/fixtures/messages_ai_consultant_sample.json --persona test/personas/ai_consultant.json
+```
+
+You should see `overall_pass: true` in the JSON output. To run **all** registered fixture + persona pairs:
+
+```bash
+npm run test:fixtures
+```
+
+For the full **local quality gate** (graph + grader units + fixtures — requires `.env.local` and seeded DB for the graph step):
+
+```bash
+npm run test:quality
+```
+
+**Details, personas, registry format, and Tier-2 capture workflow:** [docs/testing.md](docs/testing.md). **Methodology and CI split:** [BUILD.md §6.2](BUILD.md#62-conversation-quality-and-testing). The **`test/`** directory (fixtures, personas, local results) is **not** in git — maintain it locally.
 
 ---
 
@@ -188,12 +227,13 @@ User message
      │
      ▼
 supervisorNode  ─── reads conversation + prior insights ──► routing decision (JSON)
-     │                                                        (next_speaker, phase, reason, suppress[])
+     │                                                        (next_speaker, phase, reason, suppress[],
+     │                                                         optional research_needed)
      ▼
 routeFromSupervisor
-     ├── "user"         ──► yield_to_user event ──► stream ends
-     ├── "recommendation" ──► recommendationNode ──► structured assessment
-     └── <agent name>   ──► workerNode
+     ├── "user"            ──► yield_to_user event ──► stream ends
+     ├── "recommendation"  ──► recommendationNode ──► structured assessment
+     └── <agent name>      ──► researchNode when research_needed (URL / search), then workerNode
                                   │
                                   ▼
                          agent's LLM call (Anthropic or OpenAI, from DB config)
@@ -204,6 +244,8 @@ routeFromSupervisor
                                   ▼
                          back to supervisorNode (next turn)
 ```
+
+Research runs **inside the same POST** as the chat round (synchronous for the HTTP request). Roadmap for providers, accumulation, async research, and epistemics is in **`BUILD.md`** (Phase 5 and **Phase 5 evolution — R1–R7**).
 
 The orchestrator's routing decision — which agent, why, and with what objective — is surfaced to the user as a collapsible annotation on each message. It is product surface, not a log.
 
@@ -230,7 +272,14 @@ These are enforced throughout the codebase and reflected in the Cursor rules (`.
 | `npm run dev` | Start Next.js development server |
 | `npm run build` | Production build (TypeScript + Turbopack) |
 | `npm run seed` | Seed agent configs into Supabase |
-| `npm run test:graph` | Run LangGraph integration tests |
+| `npm run test:graph` | LangGraph integration tests (needs `.env.local` + seeded DB) |
+| `npm run test:grade` | Unit tests for the tripwire grader |
+| `npm run test:fixtures` | All registry cases in `test/fixtures/` — no DB, no LLM |
+| `npm run test:fixtures:write` | Same as `test:fixtures`, plus writes `test/results/…` bundle folders |
+| `npm run test:quality` | `test:graph` + `test:grade` + `test:fixtures` |
+| `npm run grade:file` | Grade one exported `messages` JSON; add `--write` for a `test/results/…` folder |
+| `npm run capture:bundle` | Save a real thread + manifest + grades under `test/results/` (gitignored) |
+| `npm run export:thread` | Export thread messages to JSON or Markdown |
 
 ---
 
@@ -239,5 +288,6 @@ These are enforced throughout the codebase and reflected in the Cursor rules (`.
 | File | Purpose |
 |---|---|
 | `CLAUDE.md` | Product philosophy. Read before any development decision. If a technical decision conflicts with this document, this document wins. |
-| `BUILD.md` | Phase-by-phase build plan. Tracks what is complete, in-progress, and pending. |
+| `BUILD.md` | Phase-by-phase build plan. Tracks what is complete, in-progress, and pending — including **Phase 5 evolution** (research providers, accumulation, future async work) and **§6.2** conversation quality / testing ladder. |
 | `DESIGN.md` | Visual identity and UI principles. What this product must never look like, and what it should feel like. |
+| `docs/testing.md` | **Testing entry point:** personas, fixtures, `test:fixtures`, capture bundles, `grade:file` (local `test/` is gitignored). |

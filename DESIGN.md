@@ -12,6 +12,14 @@ The biggest trap in AI product design is making it look like an AI product. Glow
 
 The user should feel like they are in a working session with smart people who care about their business. The interface should feel **warm, professional, grounded, and alive** — the way a good meeting room feels when the right people are in it.
 
+### One argument: advisors, not a tool
+
+Every layout and typographic choice should reinforce a single claim: **these are your advisors**, not a generator, not a dashboard, not a “get your plan” button with a loading spinner. The feeling target is walking into a **well-appointed office** and sitting across from people who have done this many times — unhurried, confident, specific.
+
+Borrow sensibility from **editorial persuasion**, not feature marketing: the narrative can run drowning in generic tips (or starved for guidance) → what you need is *judgment* → here is what that judgment looks like in practice → here is who is in the room with you → are you ready to continue? That story may live on marketing surfaces; the **chat** should still feel like a **letter from an advisor**, not a generated report. Intake should feel like a first conversation that earns the next exchange — not a data-collection step.
+
+**Depth is not a wall of text.** Meaningful can be concise; density without insight is noise. See **Reference quality** and **Conversational arc** in `CLAUDE.md`.
+
 ---
 
 ## Core Visual Identity
@@ -133,6 +141,12 @@ The left and right sidebars should feel contained and organized. The center pane
 - Expandable on click for the full routing reasoning.
 - Visually quieter than everything else. Use smaller text, lighter color, perhaps italic.
 - The user should be able to ignore these entirely or lean into them. Their choice.
+
+**Web research annotations (URL read, search):**
+- Same visual register as orchestrator annotations: **quiet**, smaller type, muted color — evidence that the panel did homework, not a second product feature.
+- Copy is **short and human** (e.g. reviewed a hostname, searched a query). No “AI is searching…”, no pulsing loaders, no bouncing dots. Research is not an agent in the roster; the roster does not light up for it.
+- **Expandable** for a bit more detail if the user cares; skippable if they don’t.
+- Must never feel like a separate “tool run” interrupting the room — it is a footnote to the next advisor message.
 
 **System messages (phase transitions, recommendations):**
 - Centered, full-width, with a subtle horizontal rule or background shift.
@@ -359,3 +373,9 @@ The user opens the app and thinks: "Let me bring this to the room."
 Not: "Let me ask the AI."
 
 That's the design.
+
+---
+
+## Related documentation
+
+**RecommendationBlock** and the panel assessment flow use the same markdown section contract (`## Strengths`, `## Risks`, and so on) that the graph produces and that automated transcript checks validate. When you change heading labels or structure in the UI, keep **graph output**, **grader expectations** (`lib/test/grade-deliberation.ts`), and **design** aligned. For the full testing ladder and persona workflows, see **`BUILD.md` §6.2** and **`docs/testing.md`**.

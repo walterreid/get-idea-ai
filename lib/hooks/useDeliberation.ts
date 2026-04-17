@@ -90,15 +90,27 @@ export function useDeliberation({
 
         setMessages(
           data
-            // Orchestrator rows are routing metadata — not rendered as messages.
-            // Their content lives on the agent message via metadata.routing_reason.
-            .filter((r) => r.role !== 'orchestrator')
+            // Orchestrator routing-annotation rows have empty content — skip them.
+            // Their info lives on the agent message via metadata.routing_reason.
+            .filter((r) => !(r.role === 'orchestrator' && !r.content))
             .map((r) => {
               const meta = (r.metadata ?? {}) as Record<string, unknown>
-              // Recommendation messages are stored with agent_name='orchestrator' +
-              // metadata.message_type='recommendation'. Re-map so MessageBubble renders
-              // the RecommendationBlock instead of a plain bubble.
               const isRecommendation = meta.message_type === 'recommendation'
+              const isResearch = r.role === 'system' && meta.type === 'research'
+
+              if (isResearch) {
+                return {
+                  id: r.id,
+                  role: 'research' as ClientMessageRole,
+                  researchType: meta.research_type as 'fetch_url' | 'web_search',
+                  researchTarget: meta.target as string,
+                  researchSuccess: meta.success as boolean,
+                  content: r.content,
+                  streaming: false,
+                  createdAt: new Date(r.created_at),
+                }
+              }
+
               return {
                 id: r.id,
                 role: r.role as ClientMessageRole,
@@ -214,6 +226,62 @@ export function useDeliberation({
             ...prev,
             [event.agent]: 'idle',
           }))
+          break
+        }
+
+        case 'research_start': {
+          // Show a subtle "gathering context" annotation in the feed
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `research-${event.researchType}-${Date.now()}`,
+              role: 'research',
+              researchType: event.researchType,
+              researchTarget: event.target,
+              researchSuccess: undefined, // pending
+              content: '',
+              streaming: true,
+              createdAt: new Date(),
+            },
+          ])
+          break
+        }
+
+        case 'research_complete': {
+          // Update the pending research annotation to show completion
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.role === 'research' &&
+              m.researchTarget === event.target &&
+              m.streaming
+                ? {
+                    ...m,
+                    streaming: false,
+                    researchSuccess: true,
+                    content: event.summary,
+                  }
+                : m
+            )
+          )
+          break
+        }
+
+        case 'research_failed': {
+          // Update the pending research annotation to show failure
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.role === 'research' &&
+              m.researchTarget === event.target &&
+              m.streaming
+                ? {
+                    ...m,
+                    streaming: false,
+                    researchSuccess: false,
+                    content: event.error,
+                  }
+                : m
+            )
+          )
           break
         }
 

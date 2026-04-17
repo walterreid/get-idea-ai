@@ -6,6 +6,10 @@ import { fetchAgentByName } from '@/lib/agents/graph-loader'
 import { loadThreadInsights } from '@/lib/insights/loader'
 import { extractAndStoreInsights } from '@/lib/insights/extract'
 import type { StreamEvent } from '@/lib/types/stream'
+import {
+  AccumulatedResearchSchema,
+  type AccumulatedResearch,
+} from '@/lib/agents/schema'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -46,10 +50,26 @@ function dbRowsToLangChain(
   rows: Array<{ role: string; agent_name: string | null; content: string; metadata: Record<string, unknown> | null }>
 ) {
   return rows
-    .filter((r) => r.role === 'user' || r.role === 'agent')
+    .filter(
+      (r) =>
+        r.role === 'user' ||
+        r.role === 'agent' ||
+        (r.role === 'orchestrator' && !!r.content?.trim())
+    )
     .map((r) => {
       if (r.role === 'user') {
         return new HumanMessage(r.content)
+      }
+      if (r.role === 'orchestrator') {
+        const meta = r.metadata ?? {}
+        return new AIMessage({
+          content: r.content,
+          name: 'orchestrator',
+          additional_kwargs: {
+            display_name: 'Orchestrator',
+            ...meta,
+          },
+        })
       }
       return new AIMessage({
         content: r.content,
@@ -60,6 +80,20 @@ function dbRowsToLangChain(
         },
       })
     })
+}
+
+/** Latest persisted accumulated research snapshot for this thread (system research rows). */
+function latestAccumulatedResearchFromRows(
+  rows: Array<{ role: string; metadata: Record<string, unknown> | null }>
+): AccumulatedResearch | null {
+  let latest: AccumulatedResearch | null = null
+  for (const r of rows) {
+    const m = r.metadata
+    if (!m || m.type !== 'research' || m.accumulated_research === undefined) continue
+    const parsed = AccumulatedResearchSchema.safeParse(m.accumulated_research)
+    if (parsed.success) latest = parsed.data
+  }
+  return latest
 }
 
 /** Truncate a string to the last word boundary before maxLen chars. */
@@ -191,6 +225,12 @@ export async function POST(request: Request) {
           human_interrupted: interrupt,
           turn_count: 0,
           prior_insights_context: insightSummary.formatted,
+          accumulated_research: latestAccumulatedResearchFromRows(
+            allRows.map((r) => ({
+              role: r.role,
+              metadata: (r.metadata as Record<string, unknown>) ?? null,
+            }))
+          ),
         }
 
         // ── Run graph with streaming ──
@@ -238,6 +278,24 @@ export async function POST(request: Request) {
                   reason: pendingRoutingReason,
                   phase: pendingPhase,
                 })
+                // Persist the orchestrator's direct address to the user so reloads match the live feed.
+                if (pendingRoutingReason.trim()) {
+                  const { error: yieldPersistError } = await adminClient
+                    .from('messages')
+                    .insert({
+                      thread_id: threadId,
+                      role: 'orchestrator',
+                      agent_name: null,
+                      content: pendingRoutingReason,
+                      metadata: {
+                        message_type: 'yield_to_user',
+                        deliberation_phase: pendingPhase,
+                      },
+                    })
+                  if (yieldPersistError) {
+                    console.error('[/api/chat] Failed to persist yield_to_user message:', yieldPersistError)
+                  }
+                }
               } else {
                 currentAgent = output.next_speaker
 
@@ -262,6 +320,89 @@ export async function POST(request: Request) {
                   suppress,
                 })
               }
+            }
+          }
+
+          // ── Research node started ──
+          if (event.event === 'on_chain_start' && event.name === 'research') {
+            const researchNeeded = event.data?.input?.research_needed as {
+              type: 'fetch_url' | 'web_search'
+              target: string
+            } | null | undefined
+
+            if (researchNeeded?.type && researchNeeded?.target) {
+              console.log(`[/api/chat] Research start: ${researchNeeded.type} → ${researchNeeded.target}`)
+              emit({
+                type: 'research_start',
+                researchType: researchNeeded.type,
+                target: researchNeeded.target,
+              })
+            }
+          }
+
+          // ── Research node completed ──
+          if (event.event === 'on_chain_end' && event.name === 'research') {
+            const output = event.data?.output as Record<string, unknown> | undefined
+            const entries = output?.research_context as Array<{
+              type: 'fetch_url' | 'web_search'
+              target: string
+              formatted: string
+              success: boolean
+              fetched_at: string
+            }> | undefined
+            const accumulated = AccumulatedResearchSchema.safeParse(
+              output?.accumulated_research
+            )
+
+            if (entries && entries.length > 0) {
+              const entry = entries[entries.length - 1]
+              let summary: string
+              try {
+                summary =
+                  entry.type === 'fetch_url'
+                    ? `Reviewed ${new URL(entry.target.startsWith('http') ? entry.target : `https://${entry.target}`).hostname}`
+                    : `Searched for "${entry.target}"`
+              } catch {
+                summary =
+                  entry.type === 'fetch_url'
+                    ? `Reviewed ${entry.target}`
+                    : `Searched for "${entry.target}"`
+              }
+
+              if (entry.success) {
+                emit({
+                  type: 'research_complete',
+                  researchType: entry.type,
+                  target: entry.target,
+                  summary,
+                })
+              } else {
+                emit({
+                  type: 'research_failed',
+                  researchType: entry.type,
+                  target: entry.target,
+                  error: 'Could not retrieve this resource.',
+                })
+              }
+
+              const meta: Record<string, unknown> = {
+                type: 'research',
+                research_type: entry.type,
+                target: entry.target,
+                success: entry.success,
+                fetched_at: entry.fetched_at,
+              }
+              if (accumulated.success) {
+                meta.accumulated_research = accumulated.data
+              }
+
+              agentMessagesToPersist.push({
+                thread_id: threadId,
+                role: 'system',
+                agent_name: null,
+                content: entry.success ? summary : `Research did not complete: ${entry.target}`,
+                metadata: meta,
+              })
             }
           }
 

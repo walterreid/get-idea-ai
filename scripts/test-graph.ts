@@ -25,6 +25,7 @@ test('Graph compiles successfully', async () => {
   assert.ok(nodeNames.includes('worker'), 'Graph should have workerNode')
   assert.ok(nodeNames.includes('interrupt_handler'), 'Graph should have interruptHandlerNode')
   assert.ok(nodeNames.includes('recommendation'), 'Graph should have recommendationNode')
+  assert.ok(nodeNames.includes('research'), 'Graph should have researchNode')
 
   console.log('  ✓ Nodes:', nodeNames.filter(n => !['__start__','__end__'].includes(n)).join(', '))
 })
@@ -52,21 +53,21 @@ test('RoutingDecisionSchema accepts valid routing JSON', async () => {
   console.log('  ✓ Valid routing decision parses correctly')
 })
 
-test('RoutingDecisionSchema rejects invalid objective', async () => {
+test('RoutingDecisionSchema rejects invalid deliberation_phase', async () => {
   const { RoutingDecisionSchema } = await import('../lib/agents/schema.js')
 
   const invalid = {
     next_speaker: 'finance',
     reason: 'Test',
-    objective: 'make_it_up', // not a valid enum value
-    deliberation_phase: 'exploration',
+    objective: 'quantify', // free-form string is allowed
+    deliberation_phase: 'invalid_phase', // not in enum
     suppress: [],
     user_sophistication: 'novice',
   }
 
   const result = RoutingDecisionSchema.safeParse(invalid)
-  assert.ok(!result.success, 'Schema should reject invalid objective')
-  console.log('  ✓ Invalid objective correctly rejected')
+  assert.ok(!result.success, 'Schema should reject invalid deliberation_phase')
+  console.log('  ✓ Invalid deliberation_phase correctly rejected')
 })
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -92,6 +93,9 @@ test('interruptHandlerNode resets interrupt flag and turn count', async () => {
     routing_reason: 'previous reason',
     routing_objective: 'expand',
     prior_insights_context: '',
+    research_needed: null,
+    research_context: [],
+    accumulated_research: null,
   }
 
   const result = await interruptHandlerNode(fakeState)
@@ -227,6 +231,50 @@ test('nodes.ts contains no hardcoded agent name conditionals', async () => {
     )
   }
   console.log('  ✓ No hardcoded agent name conditionals found in nodes.ts')
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Test 9: mergeAccumulatedResearch merges patches without dropping arrays
+// ─────────────────────────────────────────────────────────────────────────────
+
+test('mergeAccumulatedResearch appends provenance and increments batches', async () => {
+  const { mergeAccumulatedResearch, emptyAccumulatedResearch } =
+    await import('../lib/agents/schema.js')
+
+  const a = emptyAccumulatedResearch()
+  const m1 = mergeAccumulatedResearch(a, {
+    tool_rounds: { batches_run: 1 },
+    queries_used: ['coffee shop delivery'],
+    provenance: [
+      {
+        kind: 'web_search',
+        ref: 'coffee shop delivery',
+        fetched_at: '2026-01-01T00:00:00Z',
+        success: true,
+      },
+    ],
+  })
+  assert.equal(m1.tool_rounds?.batches_run, 1)
+  assert.equal(m1.queries_used?.length, 1)
+
+  const m2 = mergeAccumulatedResearch(m1, {
+    tool_rounds: { batches_run: 1 },
+    primary_url: 'https://example.com',
+    flags: { primary_url_fetched: true, needs_confirmation: [] },
+    provenance: [
+      {
+        kind: 'fetch_url',
+        ref: 'https://example.com',
+        fetched_at: '2026-01-01T00:00:01Z',
+        success: true,
+        title: 'Ex',
+      },
+    ],
+  })
+  assert.equal(m2.tool_rounds?.batches_run, 2)
+  assert.equal(m2.primary_url, 'https://example.com')
+  assert.equal(m2.provenance?.length, 2)
+  console.log('  ✓ mergeAccumulatedResearch merges as expected')
 })
 
 console.log('\nRunning deliberation graph tests...\n')
