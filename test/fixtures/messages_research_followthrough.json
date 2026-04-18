@@ -1,0 +1,39 @@
+{
+  "thread_id": "00000000-0000-4000-8000-000000000015",
+  "title": "Fixture: research row + advisor follow-through",
+  "exported_at": "2026-04-17T12:00:00.000Z",
+  "messages": [
+    {
+      "id": "m0",
+      "role": "system",
+      "agent_name": null,
+      "content": "Research snapshot: competitor home page mentions a $99 starter tier (fetched 2026-04-17).",
+      "metadata": { "type": "research" },
+      "created_at": "2026-04-17T12:00:00.500Z"
+    },
+    {
+      "id": "m1",
+      "role": "user",
+      "agent_name": null,
+      "content": "BenchMetrics pricing page still says 'contact sales' — did you find anything concrete on the web about how rivals position under $100?",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:01.000Z"
+    },
+    {
+      "id": "m2",
+      "role": "orchestrator",
+      "agent_name": null,
+      "content": "Priya asked for online evidence; finance should treat the research snapshot as provisional and cite what we actually saw.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:05.000Z"
+    },
+    {
+      "id": "m3",
+      "role": "agent",
+      "agent_name": "finance",
+      "content": "Priya, I poked at a public competitor page and saw a $99 starter tier called out in the hero — if that isn't your segment, tell me and I'll ignore it. For BenchMetrics, the takeaway isn't the exact number alone; it's that some rivals anchor under three digits to reduce friction. Use that as a provisional comp when you stress-test your own entry price, and correct me if your positioning is enterprise-only.",
+      "metadata": { "display_name": "Finance", "deliberation_phase": "critique" },
+      "created_at": "2026-04-17T12:00:15.000Z"
+    }
+  ]
+}

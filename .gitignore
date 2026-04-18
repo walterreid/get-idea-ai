@@ -12,8 +12,14 @@
 
 # testing
 /coverage
-# Personas, fixtures, bundle template, local results — not published (keep a private copy or sync elsewhere)
-/test/
+# Test playbook (personas, fixtures, registry, external references) is tracked.
+# Only the ephemeral run outputs are gitignored.
+/test/results/
+
+# External reference dump provided for 2026-04 R4/async-research planning — not
+# intended for public repo. The smaller, curated test/external-references/zansei/
+# bundle IS tracked for in-repo provenance.
+/relevant-zansei-materials/
 
 # Playwright / future E2E artifacts (if added)
 /test-results/

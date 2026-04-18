@@ -1,0 +1,29 @@
+{
+  "persona_id": "landscaper_idk",
+  "business_name": "Morlock Landscape and Design",
+  "location": "Naperville, IL",
+  "business_type": "residential and commercial landscaping",
+  "website": "https://morlocklandscape.com",
+  "challenge": "Seasonal revenue swings — packed April through October, dead November through March",
+  "budget_range": "I don't know, whatever makes sense",
+  "team_size": "not sure how to answer that — it depends on the season",
+  "personality": "terse",
+  "backstory": "Keith Morlock runs Morlock Landscape and Design, a family-owned business in Naperville with over 35 years of experience. They do everything from mowing and maintenance to full design-build projects — outdoor kitchens, hardscaping, patios, fire pits. He's good at the work but has never thought strategically about marketing. He gives genuinely vague answers to budget and team questions — not articulate uncertainty, but actual 'I don't know' with no elaboration. He hasn't quantified these things and doesn't try to.",
+  "conversational_behaviors": [
+    "Answers budget/team questions with genuine shrugs — 'I don't know' without explanation",
+    "Doesn't elaborate unless pressed — short sentences, no storytelling",
+    "Will sometimes answer with just a few words",
+    "Comfortable with silence — doesn't fill space with words"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Morlock Landscape and Design, Naperville, Illinois. Landscaping — maintenance, design-build, hardscaping, outdoor kitchens, fire pits, pavers, the whole thing. Family-owned, 35 years.",
+    "q2_primary_challenge": "Winter kills us. We're booked solid April through October, turning down work. November to March I'm barely covering overhead. We do fall cleanup but that only stretches to early December.",
+    "q3_ideal_customer": "Homeowner, nice property, Naperville or Aurora or Wheaton area. Wants quality, not the cheapest bid. Hires us for maintenance first, then the bigger projects come — the patio, the outdoor kitchen, the fire pit. Those design-build jobs are $15,000-50,000.",
+    "q4_website_observation": "Yeah, I know. It needs work.",
+    "q5_failed_attempts": "Door hangers, once. 2,000 of them. Got maybe 5 calls. That's about it.",
+    "q6_channel_economics": "Repeat customers. Referrals. Some Google. Nextdoor helps — people ask for landscaper recommendations and our name comes up. A couple real estate agents send us stuff.",
+    "q7_budget_or_retention": "I don't know. What do businesses like mine usually spend?",
+    "q8_execution_capacity": "Depends on the season. I don't know, a couple hours a week maybe.",
+    "q9_success_definition": "Fill the winter. Get to $15,000-20,000 a month November through March instead of $5,000-8,000."
+  }
+}

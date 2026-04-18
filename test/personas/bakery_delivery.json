@@ -1,0 +1,29 @@
+{
+  "persona_id": "bakery_delivery",
+  "profile": {
+    "name": "Maria",
+    "location": "Portland, OR",
+    "business_type": "Neighborhood bakery (retail + wholesale)"
+  },
+  "business_name": "Rise & Knead Bakery",
+  "goal": "Decide whether to add delivery without losing the walk-in feel",
+  "constraints": {
+    "budget": "$400/month marketing max",
+    "team": "4 employees including owner"
+  },
+  "personality": "practical, warm, slightly overwhelmed by options",
+  "backstory": "Third-generation baker took over from parents. Foot traffic is steady but Postmates keeps asking to list the shop. She is not sure margins work.",
+  "response_length_band": "scattered",
+  "r3_wrong_claim": "You know what — maybe I should just run a Grubhub promotion. 20 percent off for the first week, get some volume, see what happens. Delivery's delivery, right? Everyone's doing it.",
+  "r4_contradiction": "Wait — I should have said this earlier. We actually tried DoorDash for three weeks last summer. It was a mess — half the orders came in during morning rush when we were already slammed. We stopped. So it's not that I'm new to this; it's that the last attempt broke us.",
+  "conversational_behaviors": [
+    "Uses plain language; may not know unit economics vocabulary",
+    "Asks 'what would you do?' when stressed",
+    "Mentions health permit and morning prep as real constraints"
+  ],
+  "expected_answer_style": {
+    "opening": "Mentions the bakery by neighborhood or name, asks one clarifying question about delivery radius or hours",
+    "followup": "Willing to share rough weekly sales if prompted gently"
+  },
+  "grading_hints": ["Rise & Knead", "Portland", "bakery"]
+}

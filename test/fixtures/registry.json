@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "id": "ai_consultant_sample",
+      "messages": "messages_ai_consultant_sample.json",
+      "persona": "ai_consultant"
+    },
+    {
+      "id": "opening_greeting",
+      "messages": "messages_opening_greeting.json",
+      "persona": "opening_greeting"
+    },
+    {
+      "id": "vague_thought",
+      "messages": "messages_vague_thought.json",
+      "persona": "vague_thought"
+    },
+    {
+      "id": "fluent_operator",
+      "messages": "messages_fluent_operator.json",
+      "persona": "fluent_operator"
+    },
+    {
+      "id": "legal_sensitive",
+      "messages": "messages_legal_sensitive.json",
+      "persona": "legal_sensitive"
+    },
+    {
+      "id": "zero_budget",
+      "messages": "messages_zero_budget.json",
+      "persona": "zero_budget"
+    },
+    {
+      "id": "research_followthrough",
+      "messages": "messages_research_followthrough.json",
+      "persona": "fluent_operator"
+    }
+  ]
+}

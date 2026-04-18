@@ -1,0 +1,19 @@
+{
+  "persona_id": "fluent_operator",
+  "test_focus": "Advanced owner — expects precision; tests calibration upward (no dumbing down).",
+  "profile": {
+    "name": "Priya",
+    "business_type": "B2B SaaS (SMB)"
+  },
+  "business_name": "BenchMetrics Inc",
+  "challenge": "Whether to cut paid spend given CAC moving opposite to LTV trend",
+  "personality": "direct, metric-literate",
+  "backstory": "Former finance; uses CAC/LTV/payback language correctly. Panel should match fluency.",
+  "grading_hints": ["CAC", "LTV", "BenchMetrics"],
+  "response_length_band": "terse",
+  "r3_wrong_claim": "Our CAC payback is around 14 months right now. I'm thinking: shift 40 percent of paid into content — content compounds, paid doesn't. We ride out the LTV dip that way.",
+  "r4_contradiction": "To be honest — the LTV number I gave you was SMB-only. We've been selling into an enterprise segment too; I'm separating them out next quarter. The blended LTV is probably materially higher. Probably changes the calc.",
+  "expected_answer_style": {
+    "opening": "References unit economics by name; no 'what is CAC' tutorials unless asked"
+  }
+}

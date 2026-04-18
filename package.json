@@ -14,6 +14,7 @@
     "test:graph": "tsx --env-file .env.local --experimental-vm-modules scripts/test-graph.ts",
     "export:thread": "tsx --env-file .env.local scripts/export-thread-transcript.ts",
     "capture:bundle": "tsx --env-file .env.local scripts/capture-review-bundle.ts",
+    "test:persona": "tsx scripts/run-persona-session.ts",
     "grade:file": "tsx scripts/grade-transcript-file.ts",
     "test:grade": "tsx --experimental-vm-modules scripts/test-grade.ts"
   },

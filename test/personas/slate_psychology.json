@@ -1,0 +1,32 @@
+{
+  "persona_id": "slate_psychology",
+  "profile": {
+    "name": "Dr. Carly Tocco (PhD)",
+    "business_name": "Slate Psychology",
+    "location": "Old Greenwich, CT",
+    "business_type": "group therapy practice"
+  },
+  "business_name": "Slate Psychology",
+  "website": "https://slate-psychology.com",
+  "challenge": "Two new associate therapists' schedules are only 40% full — need to fill empty chairs without compromising clinical ethics",
+  "budget_range": "$1000-2000/month",
+  "team_size": "1 PhD (owner/lead clinician), 1 LCSW (teens and young adults), 1 PMHNP (adults and families)",
+  "personality": "thoughtful, careful, ethics-conscious",
+  "backstory": "Dr. Carly Tocco built Slate from a solo practice over 6 years. She recently brought on two associate therapists to handle waitlist overflow, but the pipeline dried up as soon as capacity grew. She thinks through implications before speaking, pauses before answering, and navigates real ethical tension around anything that feels 'salesy' — therapy is deeply personal. Doesn't take insurance; private-pay clients.",
+  "response_length_band": "skeptical",
+  "r3_wrong_claim": "Maybe we should have the associates do Instagram content — anxiety wellness tips, short transformation posts. Other therapists seem to get clients from it. I could give them HIPAA guidance to keep it clinically sound.",
+  "r4_contradiction": "I should clarify — when I said Psychology Today brings in 3-4 inquiries a month for me, that's been trending down over the last six months. Used to be 8-10. I don't know if my profile is getting buried or if it's a broader platform shift.",
+  "conversational_behaviors": [
+    "Pauses before answering — considered, measured responses",
+    "Pushes back on anything that could compromise client privacy or clinical ethics",
+    "Asks clarifying questions before committing to an answer",
+    "References HIPAA / client confidentiality when discussing reviews or testimonials",
+    "Speaks precisely about clinical matters but less certain about business decisions",
+    "Skeptical of therapist Instagram content — 'it just feels off to me'"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "We're Slate Psychology in Old Greenwich, Connecticut. Group therapy practice — I'm the owner and lead clinician, with two associates who joined about eight months ago. We specialize in anxiety, depression, and relationship issues. My associates also see teens and young adults. We don't take insurance — most clients are private-pay.",
+    "q2_primary_challenge": "When it was just me, I had a three-week waitlist. That's why I brought on two associates. But as soon as I added capacity, the waitlist evaporated and their schedules are only about 40% full. Mine is still full because I have the established reputation, but they're sitting with empty hours and I'm paying them regardless. I need to fill their schedules."
+  },
+  "grading_hints": ["Slate Psychology", "Old Greenwich", "therapy", "therapist", "Carly", "HIPAA"]
+}

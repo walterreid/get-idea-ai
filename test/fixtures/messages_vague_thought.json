@@ -1,0 +1,31 @@
+{
+  "thread_id": "00000000-0000-4000-8000-000000000011",
+  "title": "Fixture: vague emotional vent",
+  "exported_at": "2026-04-17T12:00:00.000Z",
+  "messages": [
+    {
+      "id": "m1",
+      "role": "user",
+      "agent_name": null,
+      "content": "I don't even know if I have a business question today. Corner Cafe in Reno has been eating me alive — I'm tired of pretending I have energy for another marketing plan.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:01.000Z"
+    },
+    {
+      "id": "m2",
+      "role": "orchestrator",
+      "agent_name": null,
+      "content": "Jordan sounds drained more than undecided; I'll keep finance quiet for a beat and let someone acknowledge the weight before we optimize anything.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:06.000Z"
+    },
+    {
+      "id": "m3",
+      "role": "agent",
+      "agent_name": "business_realist",
+      "content": "Jordan, what you described about Corner Cafe and Reno is real fatigue, not a failure to prioritize. I'd rather name that than jump to five tactics. Before we touch hours, staffing, or a promo calendar, what's the one thing that would make tomorrow feel 10% lighter — even if it isn't 'business' in the spreadsheet sense? Once we know that, we can decide whether Jordan's Corner Cafe needs a sharper offer or simply fewer promises on your own shoulders this month.",
+      "metadata": { "display_name": "Business Realist", "deliberation_phase": "exploration" },
+      "created_at": "2026-04-17T12:00:14.000Z"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+    "persona_id": "ai_consultant",
+    "business_name": "GG Solutions LLC",
+    "location": "Greenwich, CT (serves NYC area, online-only delivery)",
+    "business_type": "AI consultancy blending AI, product management, and technology",
+    "website": "https://www.walterreid.com",
+    "challenge": "Nobody knows the business exists — struggling to differentiate in a crowded AI consultancy market where prospects believe they can do it themselves",
+    "budget_range": "$300-1,000 (cautious — burned by unsuccessful LinkedIn boosts, willing to reinvest if ROI is clear)",
+    "team_size": "Solo operator",
+    "personality": "reflective, self-aware, tangential — thinks out loud and circles back (INTP)",
+    "backstory": "Walter is a Gen-X professional who recently launched an AI consultancy after years in product management and technology. He's genuinely skilled — he can extract exceptional value from AI tools and has a proven track record including a P2/S2 bug report accepted by Google for Gemini — but he's struggling with the classic expert's dilemma: he knows the work but not how to sell it. He's self-deprecatingly 'old school' about marketing despite being in a cutting-edge field. He has ideas (McKinsey as a Service, library workshops, leveraging LinkedIn) but lacks the confidence and structure to execute consistently. He's honest about what hasn't worked and open to guidance, but needs someone to help him prioritize and commit.",
+    "expected_answer_style": {
+      "q1_business_identity": "Hi, I'm Walter Reid. I've started a new business around AI consultancy — well, technically I do a blend of AI, product management and technology, but I try to offer that service and move to AI full time when possible. The company is GG Solutions. I work with clients mainly in New York City, but I live in Greenwich, Connecticut. It's mostly online — no storefront or anything, unless you count my house as a place I work.",
+      "q2_primary_challenge": "Honestly, nobody really knows about me. Because AI consultancy is so new and EVERYONE thinks they can do it themselves, I find it very difficult to stand out. I'm competing against people who watched a few YouTube videos and now call themselves AI consultants. The biggest thing I have going for me is that my AI prompts are different — when I talk to an AI, I probably get 70% of the effort compared to what most people get. I know how to treat nuance as a feature, not noise. But I don't know how to communicate that to people who don't even know they need me yet.",
+      "q3_ideal_customer": "Small and medium businesses. Usually business owners who are squarely in the Gen-X range — those professionals who know AI is important but don't know how to leverage it, or the tools that embed it, as well as they might. They've heard the buzzwords, maybe tried ChatGPT a few times, but they haven't figured out how to actually make it work for their business. They need someone to bridge that gap.",
+      "q4_website_observation": "I'm VERY old school despite my AI direction. My approach has been — write an AI article for thought leadership, point to my newsletter, point to my website, and then maybe they reach out? I was dabbling in formless.ai, like a Typeform thing, for collecting information. But I originally did thought leadership and a newsletter and I found it hard to keep up with it. So the whole funnel is kind of broken right now.",
+      "q5_failed_attempts": "I did some work with ads on LinkedIn — I think they're called boosts — a few months ago, and they didn't go well. I spent maybe 300-500 dollars on that. I have personal Instagram and a very old Facebook account, but they're definitely not for business. I'm open to using them, but I'd need help understanding how to do it well. I also tried the newsletter and thought leadership articles but couldn't maintain consistency.",
+      "q6_channel_economics": "I don't really have a proper sales cycle yet, to be honest. I've been pushing this idea of 'McKinsey as a Service' — providing monthly updates on growth plans, marketing plans, SWOT analysis, but instead of months it's twice a month, and doing it for $200-400 a month. In theory if I could get 2-3 clients from my marketing spend, that would justify the investment. But right now the pipeline is basically nonexistent.",
+      "q7_budget_or_retention": "I'd probably try LinkedIn again if I thought it would actually work this time. I have around 1,200 first-party connections on there but I'm not really sure what to do with them. I was also thinking of teaching a session at the local library — might get me in front of the right people in Greenwich. I guess I'd split it between trying to leverage what I already have on LinkedIn and doing something local and in-person.",
+      "q8_execution_capacity": "It's just me. I have the skills — I mean, I literally consult on this stuff for other people — but prioritization and consistency have been the problem. I know what I should be doing, I just haven't been able to keep it up. The newsletter died, the thought leadership articles tapered off. I need someone to help me build a plan I can actually stick to.",
+      "q9_success_definition": "Getting in front of people and gaining confidence, honestly. I was thinking if I could land 2-3 steady clients from my marketing efforts, that would change everything. Consistent visibility — people knowing I exist and what I do — that's the real goal. Right now I feel invisible in a market where everyone thinks they don't need what I'm offering."
+    },
+    "conversational_behaviors": [
+      "Opens casually — introduces himself by first name before getting into business details",
+      "Blends multiple topics together — answers about his business model while simultaneously explaining his differentiation",
+      "Self-deprecating about the irony of being 'old school' while running an AI consultancy",
+      "Goes on passionate tangents when discussing AI prompt engineering or his unique value proposition",
+      "Gives emotional or philosophical framing before practical details ('treat nuance as a feature, not noise')",
+      "Circles back to LinkedIn repeatedly across different questions — it's clearly top of mind but also a source of frustration",
+      "Hedges budget answers with qualifiers ('maybe', 'in theory', 'if I thought it would work')",
+      "Volunteers new ideas mid-conversation (library workshops, McKinsey as a Service) as if thinking out loud",
+      "Occasionally unsure if he already mentioned something ('Not sure if I said that')",
+      "Open and honest about what hasn't worked — doesn't try to spin failures"
+    ]
+  }

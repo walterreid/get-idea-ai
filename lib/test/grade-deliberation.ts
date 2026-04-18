@@ -63,6 +63,56 @@ export interface GradesResult {
     pass: boolean
     detail: string
   }
+  /**
+   * Instruments — numeric observations, NOT pass/fail.
+   *
+   * Grader-as-instrument, not grader-as-judge. These numbers surface patterns
+   * worth watching across runs (the cross-run ledger aggregates them). A number
+   * being high or low is information; whether it's "bad" depends on context.
+   *
+   * See docs/testing.md and the Zansei 2050-word-cap discussion in BUILD.md §6.2.
+   */
+  instruments: {
+    routing: {
+      /** Orchestrator emitted an agent name supervisorNode could not resolve. */
+      unknown_agent_yields: number
+      /** Orchestrator output could not be parsed as valid routing JSON. */
+      could_not_parse_yields: number
+      /**
+       * Orchestrator yielded to user with any "error" phrase in routing_reason
+       * (e.g., "Routing model unavailable"). Catches graceful-failure paths.
+       */
+      error_yields: number
+    }
+    research: {
+      /** URL fetches attempted this session. */
+      fetch_calls: number
+      /** Web searches attempted this session. */
+      search_calls: number
+      /** Successful fetches (metadata.success === true). */
+      successful_fetches: number
+      /** Successful searches. */
+      successful_searches: number
+      /** Failed attempts (timeout, bad key, 4xx/5xx). */
+      failed_calls: number
+    }
+    advisor_turns: {
+      /** Number of agent messages in the session. */
+      count: number
+      /** Per-turn word counts, in order. */
+      word_counts: number[]
+      avg_words: number
+      max_words: number
+      /**
+       * Turns above a rough per-turn ceiling (150 words). Distinct from the
+       * whole-session word_count check. A high number suggests specialists
+       * drifting long — relevant to Phase 7.4 length compression.
+       */
+      over_150_words: number
+      /** Turns below a rough per-turn floor (8 words). Suggests thin advisor turns. */
+      under_8_words: number
+    }
+  }
 }
 
 function normalize(s: string): string {
@@ -186,6 +236,9 @@ export function gradeDeliberation(
 
   const structureCheckOk = !recMsg || structPass
 
+  // ── Instruments (observations, not pass/fail) ─────────────────────────────
+  const instruments = computeInstruments(messages)
+
   const checks = [
     antiPass,
     voicePass,
@@ -222,7 +275,92 @@ export function gradeDeliberation(
       pass: researchPass,
       detail: researchDetail,
     },
+    instruments,
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Instruments — observations, not pass/fail
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Phrases that indicate the supervisor hit a graceful-failure path. */
+const ROUTING_ERROR_PHRASES: Record<string, keyof GradesResult['instruments']['routing']> = {
+  'unknown agent': 'unknown_agent_yields',
+  'could not parse': 'could_not_parse_yields',
+  'routing model unavailable': 'error_yields',
+  'encountered an issue': 'error_yields',
+}
+
+function computeInstruments(messages: MessageRow[]): GradesResult['instruments'] {
+  const routing = {
+    unknown_agent_yields: 0,
+    could_not_parse_yields: 0,
+    error_yields: 0,
+  }
+
+  // Scan orchestrator messages and agent metadata for routing_reason fields
+  // that match known error paths.
+  for (const m of messages) {
+    const meta = m.metadata as Record<string, unknown> | undefined
+    if (!meta) continue
+    const reason = typeof meta.routing_reason === 'string' ? meta.routing_reason.toLowerCase() : ''
+    if (!reason) continue
+    for (const [phrase, key] of Object.entries(ROUTING_ERROR_PHRASES)) {
+      if (reason.includes(phrase)) {
+        routing[key] += 1
+      }
+    }
+  }
+  // Also scan orchestrator-role messages (yield-to-user rows) whose content itself is the reason
+  for (const m of messages) {
+    if (m.role !== 'orchestrator') continue
+    const content = (m.content ?? '').toLowerCase()
+    for (const [phrase, key] of Object.entries(ROUTING_ERROR_PHRASES)) {
+      if (content.includes(phrase)) {
+        routing[key] += 1
+      }
+    }
+  }
+
+  const research = {
+    fetch_calls: 0,
+    search_calls: 0,
+    successful_fetches: 0,
+    successful_searches: 0,
+    failed_calls: 0,
+  }
+  for (const m of messages) {
+    const meta = m.metadata as Record<string, unknown> | undefined
+    if (m.role !== 'system' || meta?.type !== 'research') continue
+    const kind = meta.research_type as string | undefined
+    const success = meta.success === true
+    if (kind === 'fetch_url') {
+      research.fetch_calls += 1
+      if (success) research.successful_fetches += 1
+      else research.failed_calls += 1
+    } else if (kind === 'web_search') {
+      research.search_calls += 1
+      if (success) research.successful_searches += 1
+      else research.failed_calls += 1
+    }
+  }
+
+  const agentTurns = messages.filter((m) => m.role === 'agent' && m.content)
+  const wordCounts = agentTurns.map(
+    (m) => m.content.split(/\s+/).filter(Boolean).length
+  )
+  const advisor_turns = {
+    count: agentTurns.length,
+    word_counts: wordCounts,
+    avg_words: wordCounts.length
+      ? Math.round(wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length)
+      : 0,
+    max_words: wordCounts.length ? Math.max(...wordCounts) : 0,
+    over_150_words: wordCounts.filter((w) => w > 150).length,
+    under_8_words: wordCounts.filter((w) => w < 8).length,
+  }
+
+  return { routing, research, advisor_turns }
 }
 
 /**

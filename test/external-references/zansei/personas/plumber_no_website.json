@@ -1,0 +1,29 @@
+{
+  "persona_id": "plumber_no_website",
+  "business_name": "Steve Scillieri Plumbing & Heating",
+  "location": "Toms River, NJ",
+  "business_type": "plumbing and heating company",
+  "website": null,
+  "challenge": "Getting consistent work beyond emergency calls — want more remodel and new construction jobs",
+  "budget_range": "$500-1000/month",
+  "team_size": "Owner-operated, all work done by owner",
+  "personality": "terse",
+  "backstory": "Steve Scillieri is a U.S. Navy veteran with over 40 years of plumbing and heating experience in Ocean County and Monmouth County. He runs his own shop out of Toms River. He's great at his job — multiple Angi Super Service Awards — but marketing feels like a foreign language. Has a website but doesn't think about it, runs his business off his phone. Gets work through word of mouth and Angi but wants to level up to bigger remodel and construction jobs.",
+  "conversational_behaviors": [
+    "Answers directly but doesn't elaborate unless prompted",
+    "Frames everything in terms of job types and dollar amounts, not marketing concepts",
+    "Comfortable saying 'I don't really know' about marketing strategy",
+    "Practical — wants to know what to do Monday, not the theory behind it"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Steve Scillieri Plumbing & Heating, Toms River, New Jersey. Residential plumbing and heating — repairs, water heaters, gas piping, kitchen and bathroom renovations. I cover Ocean County and Monmouth County. Just me, I do all the work myself.",
+    "q2_primary_challenge": "I get plenty of emergency calls — burst pipes, water heater replacements, whatever. But those are $200-500 jobs. I want the $5,000-15,000 kitchen and bathroom renovation contracts. That's where the real money is but I don't know how to get those jobs consistently. I've been doing this 40 years, I know the work, I just need the right customers finding me.",
+    "q3_ideal_customer": "A homeowner doing a kitchen or bathroom remodel. They've already decided to spend the money, they just need a plumber they trust. Usually 40-60, owns their home in Toms River or Brick or Point Pleasant, wants it done right and doesn't want the cheapest bid.",
+    "q4_website_observation": "I technically have a site but I don't do anything with it. Everything's on my Google page and Angi. People call me, I show up, I do good work, they tell their friends. I've got a 4.9 rating and five years of Super Service Awards. It's worked so far but I know it's not enough if I want the bigger renovation jobs.",
+    "q5_failed_attempts": "I paid for Angi leads for years. Won some Super Service Awards which was nice, but a lot of the leads were price shoppers looking for the cheapest quote. I'd drive 30 minutes for an estimate and lose to someone charging half what I charge. The emergency calls are fine through Angi but the remodel leads are hit or miss.",
+    "q6_channel_economics": "Word of mouth, mostly. My Google listing gets some calls. Angi brings in the emergency stuff. Sometimes a general contractor I know throws me a renovation job. It's not consistent though — some months are great, some are dead.",
+    "q7_budget_or_retention": "Honestly? I'd probably throw it at Google because that's where people search when their pipe bursts. But I don't know if that's how you get remodel jobs. Maybe $500-700 on Google and put the rest toward something else? I don't really know.",
+    "q8_execution_capacity": "I'm on the truck from 7 to 5 most days. I handle the books at night. Marketing time? Maybe an hour a week if I'm being honest. I've been a one-man operation for decades — whatever we do has to be low-maintenance or it won't happen.",
+    "q9_success_definition": "Two renovation jobs a month — kitchen or bathroom remodels. That's an extra $10,000-30,000 in revenue and it's the kind of work I actually enjoy doing. Right now I get maybe one every two months if I'm lucky."
+  }
+}

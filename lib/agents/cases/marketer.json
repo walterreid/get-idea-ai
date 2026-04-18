@@ -1,0 +1,133 @@
+{
+  "_note": "Per-specialist case material for the Marketer. Used at workerNode (per specialty turn), not at recommendation. The specialist retrieves 2-3 cases whose `business_type_category` matches the inferred category for the thread, and weaves their insight into the turn without naming them — per CLAUDE.md GR#6 (\"use the case, don't cite it\").",
+  "specialist": "marketer",
+  "version": 1,
+  "cases": [
+    {
+      "id": "fitness_studio_channel_fragmentation",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "spreading a small budget across multiple channels that don't reach the same customer",
+      "observation": "Solo fitness studio, ~$800/month across Instagram, Facebook, Meta ads, and a local directory. Audiences didn't overlap. Discovery journey was fragmented — someone who saw the Instagram never hit the ad, and vice versa.",
+      "what_worked": "Consolidation to a single intent-based channel (Google Local Services with a tight 3-mile radius, two search phrases) produced measurable booked sessions within four weeks. Stopping the Planet-Fitness-adjacent Instagram work freed both budget and attention.",
+      "what_wasted_money": "Multi-channel presence without shared targeting — each platform reached different people, none of whom were the right ones.",
+      "one_line_lesson": "If three channels don't talk to the same person, they are not a strategy — they are three separate under-funded campaigns."
+    },
+    {
+      "id": "therapy_practice_specialty_vs_generic",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "competing for the generic local search term in a saturated market",
+      "observation": "Therapy practice adding clinicians in a therapist-dense suburb. Owner wanted to rank for 'therapist near me' — a term with 1,000+ competitors locally. Empty-chair time was the actual threat, not brand awareness.",
+      "what_worked": "Pivoting to specialty-plus-location searches ('ADHD testing [suburb]', 'postpartum therapy [suburb]') — terms with three real competitors, not a thousand. Google Business Profile optimization and directory cleanup filled the pipeline faster than any new channel would have.",
+      "what_wasted_money": "Spending on 'therapist near me' SEO and ads was a tax — they were paying to compete against Psychology Today, WebMD, and established practices they couldn't outrank in 18 months of work.",
+      "one_line_lesson": "Own the specialty + location combinations where three competitors exist. Ignore the generic category term."
+    },
+    {
+      "id": "pre_marketing_funnel_gap",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "owner thinks they have a visibility problem; the evidence points to an offer/funnel problem",
+      "observation": "Solo consultant with strong credentials and a real edge. Website had two navigable pages — homepage and an articles list. No services page, no visible contact path, no testimonials or outcome studies. Primary CTA pushed visitors into a reading rabbit hole rather than toward a conversation.",
+      "what_worked": "Building the services page and making the contact path the primary CTA before spending on traffic. The invisible funnel was the real bottleneck; traffic would have amplified leakage.",
+      "what_wasted_money": "Prior LinkedIn boost spend ($300-500) drove clicks into a destination that could not convert. The channel was fine; the destination was broken.",
+      "one_line_lesson": "When traffic enters a funnel with no bottom, more traffic makes the problem worse. Fix the offer before amplifying reach."
+    },
+    {
+      "id": "home_services_channel_spread",
+      "business_type_category": "local_services",
+      "challenge_pattern": "small monthly budget spread across five directory services",
+      "observation": "HVAC contractor spending $200/month each on Google, Facebook, Yelp, Thumbtack, and Angi. No channel had enough budget to saturate its cheapest lead tier. Emergency calls were the only consistent source; renovation and install work was sporadic.",
+      "what_worked": "Consolidating onto Google Local Services Ads only. Within two months, qualified leads jumped 3x at the same spend. The Google Guaranteed badge closed the trust gap Angi and Yelp couldn't.",
+      "what_wasted_money": "Yelp Ads specifically — they surfaced the business above itself on Yelp, where good organic results already ranked it. Paying to appear above your own free listing is the clearest example of budget waste in local services.",
+      "one_line_lesson": "One channel funded to saturation beats five starved."
+    },
+    {
+      "id": "plumber_angi_price_shopper_trap",
+      "business_type_category": "local_services",
+      "challenge_pattern": "Angi leads drive emergency work fine but remodel/renovation leads convert poorly",
+      "observation": "Owner-operator plumber with four decades of experience. Angi emergency calls converted well — homeowner with a burst pipe has no time to price-shop. Angi renovation leads did not — homeowner planning a $10K kitchen remodel solicits three quotes and hires the lowest bidder.",
+      "what_worked": "Segmenting channels by job type. LSAs + GBP for emergency and repair (where speed and trust win). Referral partnerships with interior designers and general contractors for renovation (where pre-trust is the entire sale). Asking every satisfied remodel customer for a Google review within 48 hours doubled the GBP review velocity.",
+      "what_wasted_money": "Angi premium tier — did not change the channel's economics for renovation leads. Paying more to compete with the same price-shoppers produced the same result at a higher CAC.",
+      "one_line_lesson": "Angi is a speed channel, not a trust channel. Upgrading tier does not convert the wrong audience."
+    },
+    {
+      "id": "boutique_retail_social_to_shopify_gap",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "strong Instagram audience, no path to purchase for out-of-market followers",
+      "observation": "Curated vintage boutique with a loyal Instagram following across multiple states. 5-10 DMs per week asking about shipping and online purchase. Owner was turning revenue away because she did not have a commerce system. Every piece was one-of-a-kind — product pages felt untenable.",
+      "what_worked": "Instagram Shopping on existing posts. One-off drops marketed as 'Wednesday 6pm release — five pieces' with direct shipping. Shopify Lite (just payment + inventory, no full site) sidestepped the product-page problem by treating inventory as scheduled releases. Pinterest-linked product tags extended reach to visual searchers outside the existing follower base.",
+      "what_wasted_money": "Instagram Reels posted without a commerce hook. High view counts, zero attributable revenue. View count is not demand signal.",
+      "one_line_lesson": "When the audience is already asking to buy, the job is the commerce path, not more reach."
+    },
+    {
+      "id": "retail_foot_traffic_local_dependency",
+      "business_type_category": "local_services",
+      "challenge_pattern": "all revenue depends on a narrow geographic and temporal window",
+      "observation": "Small retail shop downtown. Weekend tourist foot traffic was solid; Monday-Thursday was dead. Rain on a Saturday could collapse the week. Instagram following was loyal but had no conversion path for customers outside the city.",
+      "what_worked": "Google Business Profile built out as the #1 channel — hours, service area, weekly posts with fresh product photos. The local 3-pack for the business category started producing walk-ins from people already in Savannah who didn't know the shop existed. Added a 'what's in the window right now' weekly email to the loyalty list, doubling weekday visits.",
+      "what_wasted_money": "Instagram geo-ads targeting tourists — tourists already found the shop through guidebooks and travel posts. Paying to reach them didn't change conversion.",
+      "one_line_lesson": "When weekday traffic is the problem, the solution is visibility to people already in your city, not more tourists."
+    },
+    {
+      "id": "restaurant_google_over_social",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "owner invests in Instagram for new customers; search is where they actually come from",
+      "observation": "Neighborhood restaurant with 15K Instagram followers and minimal Google Business Profile engagement. Owner thought Instagram drove visits. Google Analytics and reservation data showed most new covers came from Google Maps and 'best [cuisine] near me' searches.",
+      "what_worked": "Reinvesting social time into GBP. Weekly updates with photos of the week's specials. Responding to every review within 24 hours. Updating menus and hours in real-time. Instagram became a retention channel for existing customers; GBP became the acquisition channel.",
+      "what_wasted_money": "Instagram ads targeting people 'interested in food' — the audience was too broad and the click-to-reservation path had too many steps.",
+      "one_line_lesson": "Social retains; search acquires. When the owner conflates them, they underinvest in the acquisition channel."
+    },
+    {
+      "id": "ecommerce_discount_dependency",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "each 'promotion' erodes margin and trains customers to wait for the next sale",
+      "observation": "DTC skincare brand running monthly 20% off promos via email. Revenue looked fine. Unit economics were degrading — full-price conversion rate had dropped from 60% to 22% over 14 months as customers learned the promo cadence.",
+      "what_worked": "Killing the monthly promo entirely. Replacing with a loyalty program (3rd purchase = free sample, 5th purchase = full-size free product). Bundle discounts tied to higher AOV, not percentage-off sitewide. First 90 days revenue dipped 8%; margin jumped 19%.",
+      "what_wasted_money": "The discount itself, once it became predictable. A discount is a surprise tax; a scheduled discount is a price cut.",
+      "one_line_lesson": "A promo you run every month is not a promo — it is your real price, plus a lie."
+    },
+    {
+      "id": "saas_content_without_distribution",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "publishing content without a plan for who sees it",
+      "observation": "B2B consultant writing one thoughtful article per week. Total reads: ~30 per post, mostly existing LinkedIn connections. No new client came through content in 18 months of publishing. Article library grew; pipeline did not.",
+      "what_worked": "Stopping the newsletter. Repurposing one article per month into a short LinkedIn post and a direct outreach template. The outreach variant — 3-5 sentences with a named observation about the prospect's business — produced a meeting rate of 12% (vs. 0% for broadcast).",
+      "what_wasted_money": "Writing hours spent on articles no one read. The content was fine; the distribution model (hope someone shares it) was not.",
+      "one_line_lesson": "Content without a named distribution path is a hobby. Outreach with specificity is a channel."
+    },
+    {
+      "id": "undefined_category_before_distribution",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "owner offers a service whose category is not yet well-defined in the buyer's mind",
+      "observation": "Recurring across several emerging-service owners — fractional CFO in year one of the category's public awareness, growth marketer before the title had SEO weight, operations-as-a-service consultant whose prospects couldn't describe what they were buying. Each owner reported 'nobody knows I exist' and reached for distribution fixes. Each had the same underlying issue: buyers who didn't know the category couldn't search for it, refer it, or recognize they needed it.",
+      "what_worked": "Stopping channel work until the offer named a problem the buyer would recognize in their own words. Concrete: replacing 'AI consulting' with 'I help your team cut 20 hours of repetitive reporting per week using tools you already pay for.' Replacing 'fractional CFO' with 'I build the monthly financial picture a founder needs before a board meeting, without hiring.' The category stayed the same; the offer description changed. Referrals immediately became easier because the buyer had language to describe what their friend should call about.",
+      "what_wasted_money": "Paid acquisition into an undefined category — every dollar taught the buyer less than nothing about what they were clicking toward. Content about 'what is X' for a category buyers weren't searching for was building a library nobody was reading.",
+      "one_line_lesson": "When the category is new or fuzzy, the problem is never distribution. Define the outcome in the buyer's language first; distribution becomes possible after."
+    },
+    {
+      "id": "fitness_free_trial_conversion",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "free-trial conversion rate is the bottleneck, not lead volume",
+      "observation": "Yoga studio running Meta ads to a free first-class offer. 200 free-trial sign-ups per month, 8% converting to members. Owner thought she needed more leads. The math said: doubling free trials at 8% conversion added 16 members; lifting conversion from 8% to 20% at current volume added 24.",
+      "what_worked": "Redirecting ad spend toward a post-trial nurture sequence (SMS follow-up within 2 hours, second-class discount valid 5 days, owner-personal welcome call for members who attended twice). Conversion jumped to 23% in six weeks. Ad volume stayed flat.",
+      "what_wasted_money": "Increased Meta ad spend earlier in the year — added leads that leaked through the same broken funnel.",
+      "one_line_lesson": "When conversion is the bottleneck, more leads is just more waste."
+    },
+    {
+      "id": "legal_practice_directory_drift",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "online listings diverged after a move; conversion dropped without a clear cause",
+      "observation": "Law practice moved offices. Website updated the next day. Avvo, Martindale, Psychology Today (spouse's practice), Google Business Profile, and a state bar directory all had the old address for months. Phone calls to the old address were dropping; the office manager didn't know why.",
+      "what_worked": "A directory audit — listing by listing, updating address, phone, hours, and service areas. Free. Three weeks of work. Inquiry volume recovered to pre-move levels within six weeks. The single highest-ROI action of the year required zero paid media.",
+      "what_wasted_money": "SEO agency retainer during the months when the underlying NAP (name-address-phone) data was fragmented. SEO cannot fix a directory consistency problem.",
+      "one_line_lesson": "When a practice moves, the listings are the hidden bleed. Find them, fix them, before spending a dollar on ads."
+    },
+    {
+      "id": "restaurant_delivery_margin_math",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "adding delivery platforms as revenue, not as a margin tradeoff",
+      "observation": "Bakery owner considering DoorDash, UberEats, Grubhub. Each took 20-30% commission. The owner's gross margin before delivery was 55%. After commission + delivery packaging + order error refunds, net margin on delivery orders was 12-15%. Dine-in stayed at 42%.",
+      "what_worked": "Listing on ONE platform only (DoorDash, for highest local reach), capped at 20 orders/day to preserve in-store execution. Reserved a Uber-style pickup-only discount for loyalty customers — same customer base, better margin. Rejected two of the three platforms.",
+      "what_wasted_money": "Running all three simultaneously in the first quarter. Morning-rush orders through delivery broke kitchen flow; the shop lost dine-in revenue to handle low-margin delivery tickets.",
+      "one_line_lesson": "Delivery is not new revenue — it is a margin swap. Pick one platform, cap volume, protect the margin engine."
+    }
+  ]
+}

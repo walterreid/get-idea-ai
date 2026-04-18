@@ -22,6 +22,9 @@ import {
 import type { AccumulatedResearch, ResearchEntry } from '@/lib/agents/schema'
 import { fetchUrl, webSearch, formatResearchForContext } from '@/lib/tools/web-research'
 import type { ResearchResult } from '@/lib/tools/web-research'
+import { buildKnowledgeContext } from '@/lib/knowledge/loader'
+import { buildCaseContext } from '@/lib/agents/case-loader'
+import { getMaxTokensFor } from '@/lib/agents/token-budgets'
 import type { DeliberationState } from './state'
 
 /** Injected when any web research is present; complements agent_configs (R5 epistemics). */
@@ -165,20 +168,26 @@ function buildAgentConversation(state: DeliberationState): string {
 /**
  * Build an LLM client from an agent's model_provider and model_name.
  * Single function — no branching on agent name, only on provider type.
+ *
+ * `maxTokens` comes from lib/agents/token-budgets.ts and is optional — callers
+ * that don't pass it (e.g., the supervisor) keep the provider default.
  */
 function buildLLMClient(
   modelProvider: 'openai' | 'anthropic',
-  modelName: string
+  modelName: string,
+  maxTokens?: number
 ) {
   if (modelProvider === 'anthropic') {
     return new ChatAnthropic({
       model: modelName,
       temperature: 0.7,
+      ...(maxTokens !== undefined ? { maxTokens } : {}),
     })
   }
   return new ChatOpenAI({
     model: modelName,
     temperature: 0.7,
+    ...(maxTokens !== undefined ? { maxTokens } : {}),
   })
 }
 
@@ -325,11 +334,23 @@ export async function workerNode(
       ].join('\n')
     : ''
 
+  // Retrieve per-specialist cases relevant to the inferred business type.
+  // This is the Phase 7.3 "specialist speaks from history" mechanism —
+  // cases are voice-level reference material the specialist reaches into.
+  // User-message corpus is used for inference (not agent messages, to avoid
+  // echo-matching on advisor vocabulary).
+  const userCorpus = state.messages
+    .filter((m) => m._getType() === 'human')
+    .map((m) => (typeof m.content === 'string' ? m.content : JSON.stringify(m.content)))
+    .join('\n\n')
+  const caseBlock = buildCaseContext(agentConfig.name, userCorpus, 3)
+
   // Build agent's view of the conversation:
   // System: agent's own identity + calibration instructions
-  // Human: research context (if any) + conversation + agent's objective
+  // Human: research context (if any) + cases (if any) + conversation + objective
   const userPrompt = [
     researchBlock,
+    caseBlock,
     conversationHistory,
     '',
     `---`,
@@ -339,7 +360,10 @@ export async function workerNode(
     `Respond as ${agentConfig.display_name}. Be direct and substantive. Do not summarize what others said — add your specific perspective.`,
   ].join('\n')
 
-  const llm = buildLLMClient(agentConfig.model_provider, agentConfig.model_name)
+  // Per-specialist token budget (Phase 7.4 length compression). Missing agents
+  // fall through to the module's DEFAULT_MAX_TOKENS; no hardcoded branching here.
+  const maxTokens = getMaxTokensFor(agentConfig.name)
+  const llm = buildLLMClient(agentConfig.model_provider, agentConfig.model_name, maxTokens)
 
   let responseContent: string
   try {
@@ -532,35 +556,83 @@ export async function recommendationNode(
 ): Promise<Partial<DeliberationState>> {
   const conversationHistory = buildAgentConversation(state)
 
+  // Build a short text corpus for business-type inference — the user's own
+  // words from the human messages, where business identity actually lives.
+  // Agent messages are excluded to avoid echo-matching on advisor vocabulary.
+  const userCorpus = state.messages
+    .filter((m) => m._getType() === 'human')
+    .map((m) => (typeof m.content === 'string' ? m.content : JSON.stringify(m.content)))
+    .join('\n\n')
+
+  const knowledgeContext = buildKnowledgeContext(userCorpus)
+
   const systemPrompt = `You are producing the final structured recommendation from a multi-advisor deliberation for a small business owner.
 
 Your job is to synthesize the full conversation into a clear, structured assessment. Be honest, nuanced, and actionable.
 
-**Format your response exactly like this:**
+## Before you write — the assumption check
+
+Treat nuance as a feature, not noise. Before writing the recommendation, answer these privately (do not include them in the output):
+
+1. What is the most comfortable conclusion the evidence supports — the one that requires the least commitment from the owner?
+2. What conclusion does the evidence actually support if you follow it all the way to its logical end?
+3. If those two conclusions differ, name the assumption that makes the comfortable version feel safe.
+
+The recommendation must address conclusion #2, not #1.
+
+## Divergence rule
+
+If your expert knowledge (from the playbook and channel guides below) leads you to a recommendation the conversation did not surface — something the owner did not ask for or did not hint at — name that bridge explicitly. The owner should never be surprised by a recommendation they did not see coming. Tell them what the conversation pointed toward, then tell them what you see beyond it and why.
+
+If the owner explicitly named a channel or approach they believe in, respect that signal — even if the playbook says it is usually wrong for this vertical. The owner knows their business; you know the industry. When those conflict, acknowledge both and explain your reasoning.
+
+## Budget signal hierarchy
+
+Every Next Step that involves spending money must respect this hierarchy (strongest to weakest):
+
+1. **STATED:** the owner explicitly said they can or will spend $X — use directly.
+2. **CURRENT:** the owner is currently spending $X on marketing — treat as a floor, not a ceiling.
+3. **HISTORICAL:** the owner spent $X on past efforts they described negatively — this is **pain evidence, not willingness to spend again.** Never treat regretted past spend as current budget.
+4. **INFERRED:** no explicit signal — default conservative; name the inference.
+
+Never recommend spend that ignores the stated budget. Never treat a hypothetical (like an advisor asking "if you had $1,000 where would you put it") as a budget commitment.
+
+## Evidence rule
+
+Every recommendation must reference EITHER something the owner said OR something found in research / prior advisor turns. Playbook and channel knowledge enrich those recommendations — they do not originate them. If a recommendation cannot be tied to evidence from this specific deliberation, cut it.
+
+## Format
+
+${knowledgeContext ? 'Use the playbook and channel guides below as background expertise. Do not cite them; use them.' : 'No vertical playbook matched this business type — rely on the conversation and research alone.'}
+
+Respond with exactly this structure:
 
 ## Strengths
 [2-4 specific strengths identified in the deliberation. Concrete, not generic.]
 
 ## Risks
-[2-4 specific risks or challenges surfaced. Name the actual concern, not abstract warnings.]
+[2-4 specific risks or challenges surfaced. Name the actual concern, not abstract warnings. When the owner mentioned something they tried that failed, explain WHY it failed using evidence — do not just agree it was bad.]
 
 ## Unanswered Questions
 [1-3 important questions that remain open — things the owner still needs to figure out before committing.]
 
 ## Suggested Next Steps
-[3-5 specific, actionable next steps in priority order. Not "do more research." Actual steps.]
+[3-5 specific, actionable next steps in priority order. Each step must be specific enough to act on this week — not "think about positioning" but "set your Google Business Profile service area to 3 miles and add three photos of completed work by Friday." Tie each step to evidence from the conversation or research.]
 
 ---
-Write for the owner, not for an audience. Use plain language unless the conversation established the owner is fluent in business vocabulary. Be direct. This is their deliverable.`
+Write for the owner, not for an audience. Use plain language unless the conversation established the owner is fluent in business vocabulary. Be direct. Take positions — do not hedge with "you might consider." This is the recommendation from the panel, not a menu of options.
 
-  const userPrompt = `Here is the full conversation:\n\n${conversationHistory}\n\nProduce the structured recommendation.`
+Do not say "generate," "output," "results," or "deliverable." Recommendations come from advisors, not artifacts.`
 
-  // Use the orchestrator's model for synthesis — it has context over the full conversation
-  const orchestratorConfig = await fetchOrchestratorConfig()
-  // Recommendation quality matters — use a more capable model
+  const userPrompt = `Here is the full conversation:\n\n${conversationHistory}\n\n${knowledgeContext}\n\nProduce the structured recommendation.`
+
+  // Recommendation quality matters — use a capable model with generous max_tokens
+  // for the structured synthesis (Diagnosis + Channels + Stop + Calendar + Next Steps).
+  // Model name updated 2026-04-18: claude-3-5-sonnet-20241022 was deprecated.
   const llm = new ChatAnthropic({
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     temperature: 0.4, // Lower temperature for more consistent structured output
+    maxTokens: 2048,
   })
 
   let recommendationContent: string

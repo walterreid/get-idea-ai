@@ -1,0 +1,24 @@
+{
+  "thread_id": "00000000-0000-4000-8000-000000000001",
+  "title": "Fixture: GG Solutions smoke",
+  "exported_at": "2026-04-17T12:00:00.000Z",
+  "persona_id": null,
+  "messages": [
+    {
+      "id": "m1",
+      "role": "user",
+      "agent_name": null,
+      "content": "I run GG Solutions LLC out of Greenwich — AI consultancy but nobody knows we exist.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:01.000Z"
+    },
+    {
+      "id": "m2",
+      "role": "agent",
+      "agent_name": "marketer",
+      "content": "For GG Solutions, the wedge isn't more reach yet — it's making one clear path from your walterreid.com presence to a conversation. Gen-X owners in Fairfield County who already know AI matters but feel stuck are your natural fit; I'd start by naming one offer on a single page before spending on Greenwich or LinkedIn boosts.",
+      "metadata": { "display_name": "Marketer", "routing_reason": "Visibility without a funnel", "deliberation_phase": "exploration" },
+      "created_at": "2026-04-17T12:00:15.000Z"
+    }
+  ]
+}

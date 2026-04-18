@@ -160,6 +160,11 @@ When the Orchestrator produces a final recommendation, it should be visually dis
 - Uses the primary accent color subtly.
 - This is the "deliverable" of the deliberation. It should feel like a thoughtful summary, not a generated report.
 
+**Content-quality patterns the backend applies** (visible in output, set in [lib/graph/nodes.ts](lib/graph/nodes.ts) `recommendationNode`):
+- **Divergence rule.** When the Block makes a recommendation the conversation didn't surface directly, it names the bridge. The owner never sees a recommendation they didn't see coming. In UI terms: a Block that says *"you thought this was a visibility problem — here's why the panel sees it as a conversion-infrastructure problem instead"* should read as a thought-through pivot, not a non-sequitur.
+- **Budget signal hierarchy.** Next Steps that involve spend respect STATED > CURRENT > HISTORICAL > INFERRED order. Regretted past spend is pain evidence, not budget. UI should feel trustworthy because the spend recommendations track what the owner actually has, not what an advisor wishes they had.
+- **Evidence binding.** Every recommendation in the Block traces to something the owner said or something found in research. No free-floating advice. UI designers: if you ever render a Block that recommends something the owner didn't mention and research didn't find, that's a backend bug — flag it.
+
 ---
 
 ## Agent Roster Design

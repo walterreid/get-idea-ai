@@ -1,0 +1,33 @@
+{
+  "persona_id": "poza_salon",
+  "profile": {
+    "name": "Pooran (co-owner with wife Zahava)",
+    "business_name": "Poza Salon",
+    "location": "Charlotte, NC (Myers Park)",
+    "business_type": "hair salon, LGBTQ+-owned"
+  },
+  "business_name": "Poza Salon",
+  "website": "https://pozasalon.com",
+  "challenge": "Chairs half empty — need more clients to fill the books; empty chairs and underbooked stylists week to week",
+  "budget_range": "$500-800/month",
+  "team_size": "2 co-owners + stylists (empty chairs to fill)",
+  "personality": "scattered, warm, tangential",
+  "backstory": "Pooran and Zahava are wives and co-owners — name is a combo of Pooran + Zahava. Met in 1998 at a styling academy, trained at Vidal Sassoon's Advanced Academy in London. Opened 2006 on Park Road, moved to Myers Park. LGBTQ+-owned, inclusive, member of the LGBTQ+ Chamber of Commerce. Warm, talkative, scattered — tangents, answers questions that weren't asked, forgets to answer the actual question, circles back. This persona specifically tests the panel's ability to extract useful info from disorganized answers.",
+  "response_length_band": "scattered",
+  "r3_wrong_claim": "You know what, maybe I should do a promotion again — like a half-off new client thing. Last time it brought in a ton of people, and if we do it RIGHT this time, with better follow-up, we can convert them into regulars.",
+  "r4_contradiction": "Wait — I said Myers Park earlier but I want to make sure that's clear. We moved here about seven years ago from Park Road. Some of our older reviews still mention the Park Road location. I don't know if that confuses people finding us.",
+  "conversational_behaviors": [
+    "Opens with greeting or small talk before answering the question",
+    "Answers upcoming questions inside earlier ones (mentions ideal client before being asked)",
+    "Goes on tangents — starts answering, then tells a story",
+    "Forgets the actual question and needs redirecting",
+    "Circles back to previous topics ('Oh wait, I forgot to mention...')",
+    "Asks the panel personal questions ('Have you worked with salons?')",
+    "Gives emotional responses instead of data"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Hi! Oh my gosh, okay so — I'm Pooran, my wife Zahava and I own Poza Salon in Charlotte, North Carolina. We're in Myers Park. Hair salon, we do everything — cuts, color, styling, the works. We actually met back in '98 at a styling academy and then trained at Vidal Sassoon in London together, which was amazing. Opened Poza in 2006, first on Park Road for about seven years, then moved to Myers Park. The name is a mashup of our names. Almost 20 years in now, can you believe it? How does this work, do you ask me questions?",
+    "q2_primary_challenge": "Oh there's so much. I mean the biggest thing is we need more clients to fill the books. We have chairs that aren't full and our stylists don't have enough appointments week to week. It's feast or famine. But also we're really focused on being an inclusive space — LGBTQ+-owned, we donate haircuts to Transcend Charlotte. Getting the word out about what makes us different is hard. Oh — I didn't mention we could also be getting more bridal work. What was the question again?"
+  },
+  "grading_hints": ["Poza", "Charlotte", "Myers Park", "Pooran", "Zahava", "LGBTQ", "salon", "hair"]
+}

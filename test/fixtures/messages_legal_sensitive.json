@@ -1,0 +1,31 @@
+{
+  "thread_id": "00000000-0000-4000-8000-000000000013",
+  "title": "Fixture: liability / waiver",
+  "exported_at": "2026-04-17T12:00:00.000Z",
+  "messages": [
+    {
+      "id": "m1",
+      "role": "user",
+      "agent_name": null,
+      "content": "A member fell during class at Iron Gate Athletics. They signed our waiver — how exposed am I on liability if they pursue a claim?",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:01.000Z"
+    },
+    {
+      "id": "m2",
+      "role": "orchestrator",
+      "agent_name": null,
+      "content": "Chris needs careful language on liability at Iron Gate; legal-awareness should flag limits without playing attorney.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:05.000Z"
+    },
+    {
+      "id": "m3",
+      "role": "agent",
+      "agent_name": "legal_awareness",
+      "content": "Chris, Iron Gate Athletics should treat any injury report as both an operational and a legal triage moment. A waiver can matter for assumption of risk, but enforceability varies by state facts and drafting — I am not your lawyer. What I can say as a business lens: document the incident timeline, preserve sign-in and waiver records, and loop a licensed attorney early if a demand letter appears. Meanwhile, review whether your waiver language matches how classes are actually coached; gaps there are where claims get traction even when a form was signed.",
+      "metadata": { "display_name": "Legal Awareness", "deliberation_phase": "critique" },
+      "created_at": "2026-04-17T12:00:16.000Z"
+    }
+  ]
+}

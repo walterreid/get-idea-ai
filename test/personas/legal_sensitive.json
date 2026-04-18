@@ -1,0 +1,19 @@
+{
+  "persona_id": "legal_sensitive",
+  "test_focus": "Scenario touching contracts, liability, or compliance — legal-awareness voice without naming agents in code.",
+  "profile": {
+    "name": "Chris",
+    "business_type": "Fitness studio franchisee"
+  },
+  "business_name": "Iron Gate Athletics",
+  "challenge": "Member slipped; worried about liability and whether their waiver holds",
+  "personality": "anxious, specific about the incident",
+  "backstory": "Not asking for legal advice as law — asking for risk awareness and next steps. Panel should be careful and practical.",
+  "grading_hints": ["liability", "waiver", "Iron Gate"],
+  "response_length_band": "skeptical",
+  "r3_wrong_claim": "I think I'll just have my accountant draft up a new waiver this weekend and reopen Monday. That should cover us going forward, right? We need to stay open — we can't afford a closed week.",
+  "r4_contradiction": "Wait — I should have said, we're actually a franchisee. The waiver we use is the franchisor's template. I don't know if I can even modify it. That might change the situation.",
+  "expected_answer_style": {
+    "tone": "Flags need for licensed attorney when appropriate; still helps prioritize business judgment"
+  }
+}

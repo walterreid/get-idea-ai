@@ -1,0 +1,31 @@
+{
+  "thread_id": "00000000-0000-4000-8000-000000000014",
+  "title": "Fixture: zero ad budget",
+  "exported_at": "2026-04-17T12:00:00.000Z",
+  "messages": [
+    {
+      "id": "m1",
+      "role": "user",
+      "agent_name": null,
+      "content": "Lee's Print Shop needs walk-ins but I have $0 for ads until Q3 — what actually works with no paid spend?",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:01.000Z"
+    },
+    {
+      "id": "m2",
+      "role": "orchestrator",
+      "agent_name": null,
+      "content": "Lee locked the budget at zero dollars; marketing should stay in free levers and partnerships, not pretend there's a small ads test hiding somewhere.",
+      "metadata": null,
+      "created_at": "2026-04-17T12:00:05.000Z"
+    },
+    {
+      "id": "m3",
+      "role": "agent",
+      "agent_name": "marketer",
+      "content": "Lee, with a true $0 line item for Lee's Print Shop, the playbook is visibility without auction fees: a sidewalk A-frame with one clear offer, a reciprocal flyer swap with three neighboring businesses, and a Google Business Profile photo pass every Friday so 'near me' looks alive. Host a free file-check hour for small nonprofits — it costs time, not cash, and surfaces real jobs. None of this replaces paid reach later, but it keeps the door swinging while Columbus foot traffic does the work.",
+      "metadata": { "display_name": "Marketer", "deliberation_phase": "exploration" },
+      "created_at": "2026-04-17T12:00:14.000Z"
+    }
+  ]
+}

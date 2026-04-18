@@ -322,14 +322,27 @@ get-idea-ai/
 │   │   ├── schema.ts           ← Zod schemas: AgentConfig, PublicAgentConfig, RoutingDecision.
 │   │   │                         Source of truth for what an agent record looks like.
 │   │   ├── loader.ts           ← React.cache agent loader for Next.js server components.
-│   │   └── graph-loader.ts     ← Module-level TTL cache (5 min) for LangGraph node execution.
-│   │                             Separate from loader.ts because React.cache doesn't work in graphs.
+│   │   ├── graph-loader.ts     ← Module-level TTL cache (5 min) for LangGraph node execution.
+│   │   │                         Separate from loader.ts because React.cache doesn't work in graphs.
+│   │   ├── case-loader.ts      ← Per-specialist case retrieval (Phase 7.3). workerNode calls this
+│   │   │                         to pull 2-3 business-type-matched cases before the specialist speaks.
+│   │   │                         "Use the case, don't cite it" is the rule (GR#6).
+│   │   └── cases/              ← Per-specialist JSON case libraries. Marketer shipped (13 cases);
+│   │                             other 9 specialists pending Phase 7.4 length compression first.
+│   ├── knowledge/              ← Org-level marketing knowledge. Injected at recommendationNode ONLY.
+│   │   ├── loader.ts           ← Business-type inference + playbook/channel retrieval.
+│   │   ├── playbooks/          ← 5 verticals (local_services, professional_services, restaurant_food,
+│   │   │                         fitness_wellness, ecommerce_dtc). Ported from Zansei production.
+│   │   └── channels/           ← 8 channel guides (GBP, LSAs, Google Search, Meta, Email/SMS,
+│   │                             LinkedIn, Referrals, SEO). Same Zansei provenance.
 │   ├── graph/
 │   │   ├── state.ts            ← DeliberationStateAnnotation. All LangGraph state fields with
 │   │   │                         reducers. prior_insights_context is injected here from the API.
-│   │   ├── nodes.ts            ← The four nodes: supervisorNode (routing), workerNode (any agent),
-│   │   │                         interruptHandlerNode (resets on user interrupt), recommendationNode
-│   │   │                         (structured assessment). No hardcoded agent names anywhere.
+│   │   ├── nodes.ts            ← The four nodes: supervisorNode (routing), workerNode (any agent,
+│   │   │                         now injects research + cases), interruptHandlerNode (resets on
+│   │   │                         user interrupt), recommendationNode (structured assessment with
+│   │   │                         divergence rule + budget hierarchy + assumption check + knowledge
+│   │   │                         injection). No hardcoded agent names anywhere.
 │   │   └── compile.ts          ← StateGraph compilation. Defines routing logic, MAX_AGENT_TURNS,
 │   │                             and the conditional edges between nodes.
 │   ├── hooks/
@@ -349,9 +362,15 @@ get-idea-ai/
 │   │   └── stream.ts           ← Shared types: StreamEvent (the SSE protocol), ClientMessage,
 │   │                             RosterAgent, SidebarThread, AgentStatus, getAgentColor().
 │   ├── test/
-│   │   └── grade-deliberation.ts ← Tripwire grader: banned generic phrases, tool-voice patterns,
-│   │                               recommendation `##` sections when present, persona hint coverage,
-│   │                               research follow-through heuristics. Not an LLM judge.
+│   │   ├── grade-deliberation.ts ← Tripwire grader + instruments block: banned generic phrases,
+│   │   │                           tool-voice patterns, recommendation `##` sections, persona hint
+│   │   │                           coverage, research follow-through heuristics, plus numeric
+│   │   │                           instruments (routing errors, research calls, advisor word counts).
+│   │   │                           Not an LLM judge. Instruments don't affect pass/fail.
+│   │   ├── pacing.ts           ← Typing-delay for the multi-round harness (Zansei-style 2-6s).
+│   │   ├── role-player.ts      ← Separate-Claude in-character persona response generator.
+│   │   │                         No shared context with system-under-test.
+│   │   └── write-result-bundle.ts ← Result bundle writer used by capture:bundle and test:persona.
 │   └── placeholder.ts          ← Fallback mock data used when DB isn't seeded yet.
 │
 ├── test/                       ← **gitignored** — personas, fixtures, registry, local `results/` (see docs/testing.md).
@@ -369,8 +388,13 @@ get-idea-ai/
 │   │                             Upserts on name — re-running overwrites all fields including prompts.
 │   ├── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
 │   │                             interrupt state reset, agent loading, no-hardcoding constraint.
+│   ├── test-grade.ts           ← Unit tests for grade-deliberation.ts (run via `test:grade`).
 │   ├── run-fixture-grades.ts   ← Runs tripwire grader on all `test/fixtures/registry.json` cases (no DB).
-│   └── grade-transcript-file.ts ← Grade a single exported messages file; used by capture bundle + manual QA.
+│   ├── grade-transcript-file.ts ← Grade a single exported messages file; used by capture bundle + manual QA.
+│   ├── capture-specialist-probe.ts ← Force one specialist to respond to a persona opener.
+│   │                                 Used for voice tuning before full multi-round tests.
+│   └── run-persona-session.ts  ← Multi-round harness (Phase 7.5): R1-R6 with role-player, research,
+│                                 pacing, bundle output. `npm run test:persona -- --persona <path>`.
 │
 └── proxy.ts                    ← Next.js 16 proxy (formerly middleware). Refreshes Supabase
                                    sessions on every request so auth stays current.

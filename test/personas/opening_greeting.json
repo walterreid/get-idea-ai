@@ -1,0 +1,18 @@
+{
+  "persona_id": "opening_greeting",
+  "test_focus": "First message is only a greeting — human validates CX / opening-the-room; orchestrator should not yield immediately per seed prompt.",
+  "grading_hints": ["Sam"],
+  "profile": {
+    "name": "Sam"
+  },
+  "goal": "Warm entry before sharing a business challenge",
+  "personality": "brief, polite",
+  "backstory": "Uses for manual Tier-2: first user turn is 'Hi' or similar with no business detail yet.",
+  "response_length_band": "terse",
+  "r3_wrong_claim": null,
+  "r4_contradiction": null,
+  "_note_multi_round": "This persona is a single-beat CX test (Protocol A). r3/r4 are null — multi-round harness should short-circuit after R1 yield.",
+  "expected_answer_style": {
+    "first_turn": "Hi / Hello only — no pitch yet"
+  }
+}

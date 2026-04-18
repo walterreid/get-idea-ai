@@ -1,0 +1,30 @@
+{
+  "persona_id": "semper_fi_hvac",
+  "profile": {
+    "name": "Jesse Keenan (Marine veteran, 2001-2005)",
+    "business_name": "Semper Fi Heating & Cooling",
+    "location": "Mesa, AZ",
+    "business_type": "HVAC company (install, repair, maintenance, some plumbing)"
+  },
+  "business_name": "Semper Fi Heating & Cooling",
+  "website": "https://semperfiheatingcooling.com",
+  "challenge": "Getting crushed by big national chains (Parker & Sons, Goettl, Day & Night) on Google — homeowners choose them because they show up first",
+  "budget_range": "$1000-2000/month",
+  "team_size": "Owner + technicians + office staff",
+  "personality": "terse, tech-illiterate, wants plain English",
+  "backstory": "Marine veteran who started Semper Fi Heating & Cooling over 10 years ago, named after the Marine Corps motto. Technically excellent but technologically lost — his office staff handles anything with a computer. Knows the big chains are eating his lunch on Google but doesn't understand how or what to do about it. Gets frustrated with jargon. Proud of the veteran-owned angle and the 20% military discount. Has over 8,000 reviews.",
+  "response_length_band": "terse",
+  "r3_wrong_claim": "So let's just do Google Ads again, but bigger this time — like $2,000 a month instead of $800. Find a better company to run it. If the big guys are winning on Google, I gotta outspend 'em.",
+  "r4_contradiction": "Should have mentioned — our Google Business Profile probably hasn't been updated in 2 years. My office people do everything on it but they're mostly filling out our internal scheduling system. I'm not sure what's actually listed there right now.",
+  "conversational_behaviors": [
+    "Terse, direct answers",
+    "Gets frustrated with jargon — asks for plain English",
+    "Proud of Marine Corps background and 8,000+ reviews",
+    "Defers technical/marketing execution to office staff"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Semper Fi Heating and Cooling, Mesa, Arizona. HVAC — install, repair, maintenance, some plumbing too. Residential. Named after the Marine Corps motto, I'm a Marine vet. Been running this over 10 years.",
+    "q2_primary_challenge": "The big national guys — Parker & Sons, Goettl, Day & Night — they're everywhere on Google. Homeowner searches 'AC repair Mesa' and those guys own the whole first page. We've been here over a decade, 8,000-plus reviews, we do better work, but we're getting outspent online. Losing jobs to companies that throw more money at Google than I can."
+  },
+  "grading_hints": ["Semper Fi", "Mesa", "HVAC", "Marine", "veteran", "Jesse"]
+}

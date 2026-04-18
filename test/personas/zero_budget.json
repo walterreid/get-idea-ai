@@ -1,0 +1,22 @@
+{
+  "persona_id": "zero_budget",
+  "test_focus": "Hard $0 marketing budget — finance/marketing realism; no plans that assume paid spend.",
+  "profile": {
+    "name": "Lee",
+    "location": "Columbus, OH"
+  },
+  "business_name": "Lee's Print Shop",
+  "challenge": "Needs foot traffic with literally zero ad budget until next quarter",
+  "constraints": {
+    "budget": "$0"
+  },
+  "personality": "frustrated but cooperative",
+  "backstory": "Cash-pinched; any advice that assumes even $100/mo on ads is a mismatch.",
+  "grading_hints": ["$0", "free", "Lee's Print"],
+  "response_length_band": "terse",
+  "r3_wrong_claim": "What if I just ran a little Google Ads — they let you start at $5 a day. That's basically nothing. I could stretch to that if it actually worked.",
+  "r4_contradiction": "Actually — the 'next quarter' thing I said? That's not three weeks away, that's four months. I'm out until July. I misspoke earlier.",
+  "expected_answer_style": {
+    "first_suggestions": "Organic, partnership, signage, community — not 'start with $500 on Meta'"
+  }
+}

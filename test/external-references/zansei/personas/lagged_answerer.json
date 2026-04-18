@@ -1,0 +1,30 @@
+{
+  "persona_id": "lagged_answerer",
+  "business_name": "Reid AI Solutions",
+  "location": "Greenwich, CT",
+  "business_type": "AI consultancy",
+  "website": "https://reidaisolutions.com",
+  "challenge": "Landing enterprise clients instead of one-off projects",
+  "budget_range": "$1,500-2,500/month",
+  "team_size": "Me and a part-time project manager",
+  "personality": "scattered",
+  "backstory": "Walter Reid runs a small AI consultancy in Greenwich, CT. He helps mid-size companies implement AI tools and workflows. He's sharp but scatterbrained in conversation — he processes questions slowly and tends to answer the PREVIOUS question instead of the current one. By the time Zansei asks about budget, Walter is still mentally on the ideal customer question. He eventually circles back and provides real information, but his first response to any question is usually answering something that was asked 1-2 questions ago. He's not being evasive — his brain just works on a delay.",
+  "conversational_behaviors": [
+    "Answers the PREVIOUS question instead of the current one — consistently 1 question behind",
+    "Opens with social pleasantries before getting to substance ('Oh hey, right so...')",
+    "Eventually provides real information but buries it after irrelevant preamble",
+    "Will correct himself mid-answer when he realizes he's off-topic ('wait, that's not what you asked')",
+    "Types in fragments and run-on sentences — stream of consciousness"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Hi! Yeah so I do AI consulting, Reid AI Solutions in Greenwich CT. We help companies figure out how to actually use AI instead of just talking about it.",
+    "q2_primary_challenge": "Oh right so about the business — we mostly work with mid-size companies, financial services and healthcare. Sorry I should've said that before. The AI implementation stuff.",
+    "q3_ideal_customer": "The thing I want to change — so right now it's all one-off projects. Someone needs a chatbot built, we build it, done. I need retainer clients, recurring revenue. That's the real problem.",
+    "q4_website_observation": "My ideal client is a VP of Operations at a company with 200-500 employees. They know they need AI but their team doesn't know where to start. They have budget but not expertise.",
+    "q5_failed_attempts": "Yeah the website, I know. My nephew built it two years ago and I haven't touched it since. It probably looks like a template because it basically is one.",
+    "q6_channel_economics": "I tried LinkedIn ads for a couple months, maybe $800 total. Got impressions but zero leads. Also did a webinar series — spent more time prepping than I got back in prospects.",
+    "q7_budget_or_retention": "Mostly referrals honestly. My former colleagues send people my way. Some come through LinkedIn posts when I remember to post. A couple found me on Google but that's rare.",
+    "q8_execution_capacity": "Probably Google Ads? Wait no, for consulting that doesn't really work does it. LinkedIn I guess. I'd put it toward content — case studies, that kind of thing.",
+    "q9_success_definition": "Me and Sarah, my PM. She's part-time, maybe 15 hours a week. I can do maybe 3 hours a week on marketing if it's clear what to do. I'm usually heads-down on client work."
+  }
+}

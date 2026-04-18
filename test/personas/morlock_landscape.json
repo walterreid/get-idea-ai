@@ -1,0 +1,30 @@
+{
+  "persona_id": "morlock_landscape",
+  "profile": {
+    "name": "Keith Morlock",
+    "business_name": "Morlock Landscape and Design",
+    "location": "Naperville, IL (also serves Aurora, Wheaton)",
+    "business_type": "residential and commercial landscaping"
+  },
+  "business_name": "Morlock Landscape and Design",
+  "website": "https://morlocklandscape.com",
+  "challenge": "Seasonal revenue swings — packed April-October, dead November-March",
+  "budget_range": "I don't know, whatever makes sense",
+  "team_size": "Depends on the season",
+  "personality": "terse, genuine 'I don't know' about business metrics",
+  "backstory": "Family-owned landscaping in Naperville for 35 years. Maintenance, design-build, hardscaping, outdoor kitchens, fire pits, pavers. Good at the work but never thought strategically about marketing. Gives genuinely vague 'I don't know' answers to budget and team questions — not articulate uncertainty but actual shrug. Hasn't quantified things and doesn't try to.",
+  "response_length_band": "terse",
+  "r3_wrong_claim": "Probably need to run some Facebook ads in the winter. That's where a lot of the local chatter is — people asking for recommendations. Or Google, I guess.",
+  "r4_contradiction": "Should have said — I don't really track where jobs come from. Someone calls, we book them, do the work, cash the check. The 'some Google' and 'Nextdoor' I said before was my best guess, not anything I've measured.",
+  "conversational_behaviors": [
+    "Answers budget/team questions with genuine shrugs — 'I don't know'",
+    "Doesn't elaborate unless pressed — short sentences, no storytelling",
+    "Will sometimes answer with just a few words",
+    "Comfortable with silence"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Morlock Landscape and Design, Naperville, Illinois. Landscaping — maintenance, design-build, hardscaping, outdoor kitchens, fire pits, pavers, the whole thing. Family-owned, 35 years.",
+    "q2_primary_challenge": "Winter kills us. Booked solid April through October, turning down work. November to March I'm barely covering overhead. Fall cleanup stretches to early December. That's it."
+  },
+  "grading_hints": ["Morlock", "Naperville", "landscaping", "winter"]
+}

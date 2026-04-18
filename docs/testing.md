@@ -39,6 +39,40 @@ npm run test:quality
 
 Synthetic owners for human Tier-2 sessions. Typical fields: `persona_id`, `business_name`, `challenge`, `grading_hints`, `test_focus`, `profile`, `expected_answer_style`.
 
+**Fields used by the multi-round harness** ([scripts/run-persona-session.ts](../scripts/run-persona-session.ts)):
+
+| Field | Purpose |
+|-------|---------|
+| `response_length_band` | One of `terse` · `adversarial` · `skeptical` · `scattered` · `verbose` · `enthusiastic`. Word-count band the role-player targets (Zansei `run_test_suite.py` lines 150-162). Hard ceiling: 80 words. |
+| `r3_wrong_claim` | Plausibly-wrong assertion injected verbatim as the R3 user turn (friction stress). Null = role-player improvises. |
+| `r4_contradiction` | User-truth reveal injected verbatim as the R4 user turn (tests GR#5: user truth beats search truth). Null = role-player improvises. |
+
+The harness treats R3 and R4 as scripted stimuli — the role-player never sees those fields, to prevent them leaking into R1/R2 dialogue.
+
+## Multi-round harness (`test:persona`)
+
+**Phase 7.5 tool — pulled forward ahead of Phase 7.1–7.4.** Drives the compiled graph through a full R1–R5 persona protocol (per [BUILD.md §6.2](../BUILD.md#62-conversation-quality-and-testing)) with a separate-Claude role-player. Bypasses `/api/chat` — no HTTP, no auth, no DB writes. Research and typing delay are both live by default.
+
+```bash
+# Requires .env.local exported into shell — tsx's --env-file parser drops
+# ANTHROPIC_API_KEY in some setups. Source the file manually:
+set -a && . ./.env.local && set +a
+
+# Full 4-round against Walter with research + pacing on (~$0.15–0.30)
+npm run test:persona -- --persona test/personas/ai_consultant.json --rounds 4
+
+# Dry run — no research, no pacing, 2 rounds (~$0.05)
+npm run test:persona -- --persona test/personas/ai_consultant.json --rounds 2 --no-research --no-pace
+
+# Other flags: --pace-min 2000 --pace-max 6000 --role-player-model <model> --out-dir <path>
+```
+
+Output: a standard [result bundle](#result-bundle-layout-testresults) plus one extra file `harness_rounds.json` with per-round timing, word counts, research call counts, and role-player model info.
+
+**What the harness does NOT test:** the HTTP SSE streaming layer, session auth, thread persistence. For those, use `capture:bundle` against a real `/chat` session. The harness is for *repeatable panel behavior testing*; `capture:bundle` is for *production path testing*.
+
+**Human review target:** apply the §6.2 hard-fail checks. Tripwires in `grade-deliberation.ts` are a floor — passing 6/6 checks is necessary but **not sufficient** for reference quality. Read the `transcript.md` and ask whether a friend of the persona would say *"they heard this person."*
+
 ## Result bundle layout (`test/results/`)
 
 | File | Purpose |
@@ -88,5 +122,6 @@ Example **full_result** shape: [full-result.example.json](full-result.example.js
 | `grade:file` | Grades on stdout; `--write` for a bundle folder |
 | `test:grade` | Grader unit tests |
 | `test:graph` | Graph + DB checks (needs env + seed) |
+| `test:persona` | Multi-round harness: R1–R5 with role-player, research, and pacing |
 
 **CI note:** Without a populated local `test/` tree, `test:fixtures` has nothing to run. Typical PR CI uses `test:grade` only, or restores fixtures from a private artifact.

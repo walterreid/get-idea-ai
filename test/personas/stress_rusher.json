@@ -1,0 +1,23 @@
+{
+  "persona_id": "stress_rusher",
+  "profile": {
+    "name": "Alex",
+    "business_type": "Unknown — refuses detail"
+  },
+  "business_name": "QuickBiz",
+  "goal": "Get a plan fast",
+  "personality": "rusher — tries to skip steps, answers 'whatever' and 'next'",
+  "backstory": "Stress persona: tests whether the panel forces intake vs accepting vapor.",
+  "conversational_behaviors": [
+    "First message may be only 'help' or 'ideas'",
+    "Says 'just tell me what to do' when asked for numbers",
+    "Uses 'next' to skip advisor questions"
+  ],
+  "expected_answer_style": {
+    "note": "Panel should still ask for constraints before prescribing spend"
+  },
+  "grading_hints": ["QuickBiz"],
+  "response_length_band": "adversarial",
+  "r3_wrong_claim": "Fine — I flip used furniture on Facebook Marketplace. Just tell me to run Facebook Ads already. That's obviously where my customers are. I need $5K/month in 60 days.",
+  "r4_contradiction": "I should have said — I haven't actually sold anything yet. I was going to start. The photos I put up got views but zero messages."
+}

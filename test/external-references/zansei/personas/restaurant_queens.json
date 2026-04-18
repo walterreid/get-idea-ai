@@ -1,0 +1,29 @@
+{
+  "persona_id": "restaurant_queens",
+  "business_name": "Stamatis Restaurant",
+  "location": "Astoria, Queens, NY",
+  "business_type": "Greek restaurant",
+  "website": "https://stamatisrestaurant.net",
+  "challenge": "Weekday lunch traffic has dropped — competing with faster casual options and the density of Greek restaurants in Astoria",
+  "budget_range": "$800-1500/month",
+  "team_size": "1 owner + 12 staff (none do marketing)",
+  "personality": "verbose",
+  "backstory": "Stamatis has been a family-owned Greek restaurant in Astoria since 1990 — over 35 years. The owner is a talker, gives you the whole story behind every answer. Proud of the regulars, worried about losing weekday lunch traffic to faster options, and deeply skeptical of anything that smells like a chain restaurant tactic. 570+ Yelp reviews, outdoor dining in front and a quieter backyard garden.",
+  "conversational_behaviors": [
+    "Gives you the full story behind every answer",
+    "References specific dishes and regulars by habit",
+    "Proud of the restaurant's long history in Astoria",
+    "Skeptical of marketing gimmicks and discount promotions"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "We're Stamatis Restaurant, been in Astoria since 1990 — that's over 35 years now. Greek restaurant, real Greek, authentic food, not the fast-casual stuff. We're on 23rd Avenue, just steps from the train station. Family-owned from the beginning. We do about 80 covers on a good night, we've got the dining room inside plus outdoor seating in front and a nice quiet garden out back. Used to be packed at lunch too.",
+    "q2_primary_challenge": "Look, Astoria has always been the Greek food neighborhood, right? But now there are so many options — not just Greek places, but food halls, fast-casual spots, delivery apps. My weekday lunches dropped. The office crowd that used to come in every Tuesday and Thursday, they're ordering DoorDash or going somewhere faster. Weekends are still strong because our regulars come in, but lunch during the week is hurting us. And honestly some of these newer Greek spots are marketing themselves better online even though their food isn't as good.",
+    "q3_ideal_customer": "The couple that comes in every Friday night. Mid-40s, lives in the neighborhood, orders a bottle of wine and the grilled octopus and the whole spread. They bring friends, they celebrate birthdays here, they send their parents when they visit from Greece. They don't look at the prices. They come because it's their place. I want 50 more of those people — neighborhood people who make us their spot, not someone looking for the cheapest gyro on Seamless.",
+    "q4_website_observation": "Yeah, the website is basic. We update specials on Instagram sometimes but the website is kind of frozen in time. I know it needs work. We've got the menu on there and the hours but we added outdoor garden seating and that's barely mentioned. I keep meaning to fix it but honestly who has the time when you're running a kitchen?",
+    "q5_failed_attempts": "We tried Yelp ads for about six months, maybe $300 a month. We've got over 570 reviews there, mostly good, but I couldn't tell you if the ads brought a single extra person in. Then someone set up Instagram and Facebook ads — boosted posts, you know — maybe $200 a month. We got likes but likes don't pay rent. I also did a Groupon once, years ago. Never again. People came in, ordered the cheapest thing, left a bad tip, never came back. That's not who we are.",
+    "q6_channel_economics": "Mostly word of mouth and people walking by — we're right near the train station which helps. Google brings some people in, we've got good ratings. Some Instagram, people tag us when they get the octopus or the seafood platter. But if I'm honest, 60-70% is regulars and their friends. The newer places on 30th Avenue are getting the walk-by traffic we used to own.",
+    "q7_budget_or_retention": "My gut says Instagram because that's where I see other restaurants doing well. But honestly I don't know if that's right for us. We're not a pretty-plate Instagram place — we're a neighborhood institution. Maybe Google? People searching 'Greek restaurant Astoria' should find us first, not some place that opened last year. I'd spend the $1,000 but I'd want to see something for it within a month or two.",
+    "q8_execution_capacity": "It's me. I'm in the kitchen from 10am to 11pm most days. My family helps when they can but nobody's doing marketing. Realistically I have maybe 2 hours a week, and that's generous. If something needs daily attention, it's not getting it unless it's as easy as posting a photo of tonight's special.",
+    "q9_success_definition": "Weekday lunches back to where they were — 30-35 covers instead of 18-20. That's the number that makes or breaks our month. We've survived 35 years in Astoria, I'm not worried about weekends. But those empty tables at lunch on a Wednesday, that's the bleeding."
+  }
+}

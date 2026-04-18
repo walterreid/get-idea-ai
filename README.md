@@ -63,7 +63,14 @@ get-idea-ai/
 │   ├── agents/
 │   │   ├── schema.ts            # Zod schemas: AgentConfig, PublicAgentConfig, RoutingDecision
 │   │   ├── loader.ts            # React.cache-based agent loader (for Next.js server components)
-│   │   └── graph-loader.ts      # Module-level TTL cache for LangGraph node execution
+│   │   ├── graph-loader.ts      # Module-level TTL cache for LangGraph node execution
+│   │   ├── case-loader.ts       # Per-specialist case retrieval for workerNode (Phase 7.3)
+│   │   └── cases/
+│   │       └── marketer.json    # Marketer case library (13 cases, indexed by business_type_category)
+│   ├── knowledge/
+│   │   ├── loader.ts            # Vertical playbook + channel guide retrieval for recommendationNode
+│   │   ├── playbooks/           # 5 verticals: local_services, professional_services, restaurant_food, fitness_wellness, ecommerce_dtc
+│   │   └── channels/            # 8 channels: gbp, lsa, google_search, meta, email_sms, linkedin, referral, seo
 │   ├── graph/
 │   │   ├── state.ts             # DeliberationStateAnnotation — all LangGraph state fields
 │   │   ├── nodes.ts             # supervisorNode, researchNode, workerNode, interruptHandlerNode, recommendationNode
@@ -78,7 +85,10 @@ get-idea-ai/
 │   │   ├── server.ts            # Server-side client (uses cookies)
 │   │   └── admin.ts             # Service role client for graph nodes and scripts
 │   ├── test/
-│   │   └── grade-deliberation.ts  # Tripwire grader (anti-generic, structure, persona specificity)
+│   │   ├── grade-deliberation.ts  # Tripwire grader + instruments (routing/research/advisor-turn metrics)
+│   │   ├── pacing.ts            # Multi-round harness typing-delay (Zansei-style 2-6s linear interp)
+│   │   ├── role-player.ts       # Separate-Claude in-character persona response generator
+│   │   └── write-result-bundle.ts  # Result bundle writer (transcripts + grades + manifest)
 │   └── types/
 │       └── stream.ts            # Shared StreamEvent types, ClientMessage, RosterAgent, SidebarThread
 │
@@ -87,11 +97,14 @@ get-idea-ai/
 │       └── 001_foundation.sql   # Full schema: profiles, threads, messages, agent_configs, idea_insights
 │
 ├── scripts/
-│   ├── seed-agents.ts           # Seeds all 10 specialist agents + orchestrator into agent_configs
-│   ├── test-graph.ts            # Integration tests for graph compilation, routing, and constraints
-│   ├── run-fixture-grades.ts    # Runs tripwire grader on all registered message fixtures (no DB)
-│   ├── grade-transcript-file.ts
-│   ├── capture-review-bundle.ts
+│   ├── seed-agents.ts                # Seeds all 10 specialist agents + orchestrator into agent_configs
+│   ├── test-graph.ts                 # Integration tests for graph compilation, routing, and constraints
+│   ├── test-grade.ts                 # Unit tests for lib/test/grade-deliberation.ts
+│   ├── run-fixture-grades.ts         # Runs tripwire grader on all registered message fixtures (no DB)
+│   ├── grade-transcript-file.ts      # Grade a single messages.json file
+│   ├── capture-review-bundle.ts      # Capture a real /chat thread into a result bundle
+│   ├── capture-specialist-probe.ts   # Force one specialist to respond to a persona opener (voice tuning)
+│   ├── run-persona-session.ts        # Multi-round persona harness (Phase 7.5 — npm run test:persona)
 │   └── export-thread-transcript.ts
 │
 ├── docs/
@@ -277,8 +290,9 @@ These are enforced throughout the codebase and reflected in the Cursor rules (`.
 | `npm run test:fixtures` | All registry cases in `test/fixtures/` — no DB, no LLM |
 | `npm run test:fixtures:write` | Same as `test:fixtures`, plus writes `test/results/…` bundle folders |
 | `npm run test:quality` | `test:graph` + `test:grade` + `test:fixtures` |
+| `npm run test:persona` | **Multi-round persona harness** — R1–R6 with role-player + research + pacing. See [docs/testing.md](docs/testing.md). |
 | `npm run grade:file` | Grade one exported `messages` JSON; add `--write` for a `test/results/…` folder |
-| `npm run capture:bundle` | Save a real thread + manifest + grades under `test/results/` (gitignored) |
+| `npm run capture:bundle` | Save a real thread + manifest + grades under `test/results/` |
 | `npm run export:thread` | Export thread messages to JSON or Markdown |
 
 ---

@@ -1,0 +1,30 @@
+{
+  "persona_id": "stamatis_restaurant",
+  "profile": {
+    "name": "Stamatis (owner, verbose Greek host)",
+    "business_name": "Stamatis Restaurant",
+    "location": "Astoria, Queens, NY (23rd Avenue, near the train station)",
+    "business_type": "Greek restaurant"
+  },
+  "business_name": "Stamatis Restaurant",
+  "website": "https://stamatisrestaurant.net",
+  "challenge": "Weekday lunch traffic has dropped — competing with faster casual options and the density of Greek restaurants in Astoria",
+  "budget_range": "$800-1500/month",
+  "team_size": "1 owner + 12 staff (none do marketing)",
+  "personality": "verbose, proud of 35-year history, skeptical of gimmicks",
+  "backstory": "Family-owned Greek restaurant in Astoria since 1990 — over 35 years. The owner is a talker who gives the whole story behind every answer. Proud of the regulars, worried about losing weekday lunch traffic to faster options and delivery apps, deeply skeptical of anything that smells like a chain restaurant tactic. 570+ Yelp reviews, outdoor dining in front and a quieter backyard garden.",
+  "response_length_band": "verbose",
+  "r3_wrong_claim": "You know what — maybe I should just do Groupon again. Times are different now, people love a deal. Our food's better than what's getting traffic up the block, get them in the door once and they'll come back.",
+  "r4_contradiction": "Actually — those 570 Yelp reviews? A lot of them are from 2019 and before. We haven't really pushed for new reviews in years. I don't know what the rating even looks like in the last 12 months vs. overall.",
+  "conversational_behaviors": [
+    "Gives the full story behind every answer",
+    "References specific dishes (octopus, seafood platter) and regulars by habit",
+    "Proud of the restaurant's long Astoria history",
+    "Skeptical of marketing gimmicks and discount promotions"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "We're Stamatis Restaurant, been in Astoria since 1990 — that's over 35 years now. Greek restaurant, real Greek, authentic food, not the fast-casual stuff. We're on 23rd Avenue, just steps from the train station. Family-owned from the beginning. We do about 80 covers on a good night. Dining room inside, outdoor seating in front, and a nice quiet garden out back. Used to be packed at lunch too.",
+    "q2_primary_challenge": "Astoria has always been the Greek food neighborhood. But now there are so many options — food halls, fast-casual spots, delivery apps. My weekday lunches dropped. The office crowd that used to come in every Tuesday and Thursday, they're ordering DoorDash or going somewhere faster. Weekends are still strong because our regulars come in, but lunch during the week is hurting us. And honestly some of these newer Greek spots are marketing themselves better online even though their food isn't as good."
+  },
+  "grading_hints": ["Stamatis", "Astoria", "Queens", "Greek", "23rd Avenue"]
+}

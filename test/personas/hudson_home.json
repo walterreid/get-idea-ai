@@ -1,0 +1,30 @@
+{
+  "persona_id": "hudson_home",
+  "profile": {
+    "name": "Richard Bodin & Greg Feller (co-owners)",
+    "business_name": "Hudson Home",
+    "location": "Hudson, NY (366 Warren Street)",
+    "business_type": "interior design showroom and home furnishings shop"
+  },
+  "business_name": "Hudson Home",
+  "website": "https://www.hudson-home.com",
+  "challenge": "Foot traffic down since pandemic — tourists weekends, locals stopped coming for design work",
+  "budget_range": "$300-600/month",
+  "team_size": "2 co-owners + part-time staff",
+  "personality": "terse, no-nonsense, business-savvy",
+  "backstory": "Opened in 2004. Greg is Parsons-trained interior designer with 25+ years experience; Richard has marketing background. 5,000-square-foot showroom. Tourist weekends keep lights on but weekday design clients are the real business — dried up after COVID and never came back.",
+  "response_length_band": "terse",
+  "r3_wrong_claim": "We should probably just run Instagram ads targeting the design crowd in Manhattan — get weekenders to book design consultations before they even come up. Our work photographs well, it should convert.",
+  "r4_contradiction": "I should have been clearer — the 'Facebook ads' we tried? The account is still active. I haven't actually checked it in a year. I don't know if we're still being charged or what the spend totals really were.",
+  "conversational_behaviors": [
+    "Answers questions directly without elaboration",
+    "References the 5,000-sq-ft showroom and 20+ year history",
+    "Distinguishes tourist sales (browsers) from design projects (real business)",
+    "Privately worried about the weekday drought"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Hudson Home, interior design and home furnishings, 366 Warren Street in Hudson, New York. Twenty-plus years in. Full-service design firm with a 5,000-square-foot showroom.",
+    "q2_primary_challenge": "Locals stopped coming for design work. We get tourists on weekends browsing the showroom but the weekday clients — the people who actually hire us for full interior design projects — that dried up after COVID and never came back. Warren Street foot traffic is a two-day-a-week thing now. The showroom rent is based on seven-day traffic, not two."
+  },
+  "grading_hints": ["Hudson Home", "Hudson", "Warren Street", "interior design", "showroom"]
+}

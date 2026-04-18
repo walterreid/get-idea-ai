@@ -1,0 +1,32 @@
+{
+  "persona_id": "civic_helpers",
+  "profile": {
+    "name": "David (Executive Director, founder)",
+    "business_name": "Civic Helpers",
+    "location": "White Plains, NY (serves Westchester County and NY State)",
+    "business_type": "nonprofit civic advocacy organization (501(c)(3))"
+  },
+  "business_name": "Civic Helpers",
+  "website": "https://www.civichelpers.org/",
+  "challenge": "Need to reach more New Yorkers struggling with government agencies, utilities, and insurance; also need to attract individual donors to sustain operations",
+  "budget_range": "Unclear — recently earned 501(c)(3); maybe $300-500/month if justified",
+  "team_size": "1 Executive Director, 4 board members, small partner network",
+  "personality": "verbose, passionate about mission, vague on marketing budget",
+  "backstory": "Founded and run by David, who served 11 years as elected official — White Plains city councilmember, then four terms in NY State Assembly representing 132,000 residents. Authored 70+ bills into law. Tax attorney by training (Paul, Weiss), Yale physics, Harvard Law, Kennedy School MPP. Incorporated November 2024, 501(c)(3) mid-2025. Already helped 75 people/orgs, unlocked $500K+ in grants, got a nationwide medical billing code updated. Passionate about mission, vague on marketing — organization runs lean.",
+  "response_length_band": "verbose",
+  "r3_wrong_claim": "Maybe we should apply for Google Ad Grants — I've heard nonprofits can get free Google Ads up to $10,000 a month. That seems like the obvious first move given we don't have much budget.",
+  "r4_contradiction": "I should clarify — when I said 'we've helped 75 people,' most of those were unlocked in the period before we had 501(c)(3) status. Since formal launch, the pipeline of new cases has been much thinner. I'm not sure our current infrastructure would scale if we suddenly did reach more New Yorkers at once.",
+  "conversational_behaviors": [
+    "Verbose and passionate when talking about mission and impact",
+    "Cites specific results ($500K+ in grants unlocked, billing code change)",
+    "Genuinely uncertain on marketing budget — defaults to 'young nonprofit' framing",
+    "Frames challenges as two-pronged (reach beneficiaries + attract donors)",
+    "Uses 'we' not 'I'",
+    "Answers team questions by describing full board and partners"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "We're Civic Helpers — a nonprofit that helps New Yorkers overcome hurdles with government agencies, utilities, and health insurance companies. Incorporated in NY State November 2024, earned 501(c)(3) status mid-2025. What makes us different: we don't just solve one problem for one person, we try to fix the underlying issue so it stops happening to others. Already helped 75 people directly, unlocked over $500,000 in grant dollars for other nonprofits, and got a nationwide medical billing code updated.",
+    "q2_primary_challenge": "Two things, connected. First, we need to reach more New Yorkers struggling with agencies, utilities, insurance who don't know we exist. People hitting bureaucratic walls, giving up. Second, we need to attract individual donors. We have 501(c)(3) now so donations are tax-deductible, but we need a real donor base beyond personal networks. Individual donations would let us take on more cases and not have it all on me and the board."
+  },
+  "grading_hints": ["Civic Helpers", "Westchester", "nonprofit", "New York", "501(c)(3)", "White Plains"]
+}

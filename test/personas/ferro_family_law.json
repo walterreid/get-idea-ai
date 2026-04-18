@@ -1,0 +1,32 @@
+{
+  "persona_id": "ferro_family_law",
+  "profile": {
+    "name": "Janet Battey (senior partner)",
+    "business_name": "Ferro, Battey & Eucalitto LLC",
+    "location": "Westport, CT (serves Fairfield County)",
+    "business_type": "family law firm (divorce, custody, child support, alimony, prenups)"
+  },
+  "business_name": "Ferro, Battey & Eucalitto LLC",
+  "website": "https://ferrofamilylaw.com",
+  "challenge": "Founding partner retired — two active partners need to build their own caseloads and keep the pipeline full",
+  "budget_range": "$3000-5000/month (will not volunteer a number; demands the panel propose one)",
+  "team_size": "2 partners, 1 office manager, 1 paralegal",
+  "personality": "adversarial, skeptical of marketing, burned by an agency",
+  "backstory": "Senior partner at an exclusively family law firm. AAML Fellow, Super Lawyers, Best Lawyers in America. Founding partner Gaetano Ferro is retired; Janet and Olivia Eucalitto now run the practice. Spent $18,000 on an agency last year that delivered a 'brand refresh' and a social media calendar she never used. Thinks marketing people are full of it. Challenges premises, minimal answers, will push back on generic advice.",
+  "response_length_band": "adversarial",
+  "r3_wrong_claim": "Fine. Tell me how much to spend on Google Ads, since that's what every marketer says. My attorneys are AAML — if we bid more aggressively on 'divorce attorney Fairfield County' we should be at the top. Budget's not the issue.",
+  "r4_contradiction": "I should say — when I told you about the $18,000 agency, what I didn't mention is that Olivia actually thinks some of the blog posts they wrote are decent. I've been dismissing it as a total loss but she's pushed back privately. I'm not sure my read is calibrated there.",
+  "conversational_behaviors": [
+    "Challenges the premise of questions ('Why do you need to know that?')",
+    "Short, clipped answers — often one sentence",
+    "Redirects to her own agenda ('The real question is...')",
+    "Demands the panel prove competence before engaging",
+    "Will answer with hostility if observations feel generic",
+    "Refuses to state budget — demands the panel propose one"
+  ],
+  "expected_answer_style": {
+    "q1_business_identity": "Family law. Westport. Ferro, Battey & Eucalitto. Exclusively family law — divorce, custody, child support, alimony, prenups. Why?",
+    "q2_primary_challenge": "Our founding partner retired. Olivia and I run the practice now and we need to fill the pipeline he left behind. We serve Fairfield County — Stamford, Darien, Greenwich, New Canaan. Cases need to keep coming in. I've heard the pitch before, so let's see if you've got something different."
+  },
+  "grading_hints": ["Ferro", "Battey", "Eucalitto", "Westport", "Fairfield", "family law", "AAML", "Janet"]
+}

@@ -1,0 +1,19 @@
+{
+  "persona_id": "vague_thought",
+  "test_focus": "Emotional or non-commercial vent — panel should probe before prescribing tactics.",
+  "profile": {
+    "name": "Jordan",
+    "location": "Reno, NV"
+  },
+  "business_name": "Jordan's Corner Cafe",
+  "challenge": "Overwhelmed and doubting the business — not a crisp KPI question yet",
+  "personality": "tired, circular, not ready for a marketing plan",
+  "backstory": "Owner is venting about stress; advisors should meet them where they are before optimization speak.",
+  "grading_hints": ["Corner Cafe", "Reno"],
+  "response_length_band": "verbose",
+  "r3_wrong_claim": "I've been thinking — maybe I just need to lean into my story. More TikTok content about being a cafe owner. People love that authentic small business stuff, right? Maybe I just haven't been visible enough.",
+  "r4_contradiction": "I should have said this earlier — I don't actually have numbers in front of me. What I told you about my sales trending down is what it feels like, not what I've measured. I haven't looked at my P&L in maybe three months.",
+  "expected_answer_style": {
+    "first_reply": "Acknowledges emotion; asks one clarifying question rather than a channel list"
+  }
+}
