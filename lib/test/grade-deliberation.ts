@@ -118,6 +118,19 @@ export interface GradesResult {
       over_150_words: number
       /** Turns below a rough per-turn floor (8 words). Suggests thin advisor turns. */
       under_8_words: number
+      /**
+       * §7.2 evidence-binding tripwire — long advisor turns (>80 words) that
+       * contain NEITHER a user-quote echo (any persona business_name_hints
+       * string) NOR a research-reference signal (http/site/page/search/found/
+       * online/"if that"/etc.). Instrument only — NOT factored into
+       * overall_pass. Marketer v3 produced some long turns that were right to
+       * be long; watch this counter across runs and only promote to hard-fail
+       * if a specific pattern emerges.
+       *
+       * Skipped (counter stays at 0) when no persona hints are supplied —
+       * the user-quote-echo leg of the check has nothing to anchor against.
+       */
+      suspect_unbound_turns: number
     }
   }
 }
@@ -146,22 +159,58 @@ function hasResearchRows(messages: MessageRow[]): boolean {
   })
 }
 
+/**
+ * Signals that suggest an advisor turn is bound to research evidence
+ * (a URL was looked at, a search ran, the advisor hedged against uncertainty).
+ * Shared by `researchFollowthroughOk` (pass/fail check) and
+ * `isTurnEvidenceBound` (§7.2 instrument) so both use the same signal set.
+ */
+const RESEARCH_REFERENCE_SIGNALS = [
+  'http',
+  'site',
+  'page',
+  'search',
+  'found',
+  'online',
+  'if that',
+  "isn't you",
+  'correct me',
+  'provisional',
+] as const
+
 /** Heuristic: after research, advisors should cite something concrete or hedge */
 function researchFollowthroughOk(advisorText: string): boolean {
   const t = normalize(advisorText)
-  const signals = [
-    'http',
-    'site',
-    'page',
-    'search',
-    'found',
-    'online',
-    'if that',
-    "isn't you",
-    'correct me',
-    'provisional',
-  ]
-  return signals.some((s) => t.includes(s))
+  return RESEARCH_REFERENCE_SIGNALS.some((s) => t.includes(s))
+}
+
+/**
+ * §7.2 evidence-binding check — a turn is "bound" to evidence if it echoes
+ * something the owner said (any persona hint appears in the turn text) OR
+ * if it references research (any RESEARCH_REFERENCE_SIGNAL appears).
+ *
+ * Returns `null` when there is nothing to check against (no hints supplied),
+ * which the caller treats as "skip the check." Returns `true` for bound,
+ * `false` for suspect-unbound.
+ *
+ * The hint match requires a non-trivial hint (length > 2, same rule the
+ * mentions_business_context check uses) to avoid matching on stopwords.
+ */
+function isTurnEvidenceBound(
+  turnContent: string,
+  personaHints: string[] | undefined
+): boolean | null {
+  const t = normalize(turnContent)
+  const hasResearchRef = RESEARCH_REFERENCE_SIGNALS.some((s) => t.includes(s))
+  if (hasResearchRef) return true
+
+  if (!personaHints || personaHints.length === 0) return null
+
+  const hints = personaHints.map((h) => normalize(h.trim())).filter((h) => h.length > 2)
+  if (hints.length === 0) return null
+
+  const hasUserQuoteEcho = hints.some((h) => t.includes(h))
+  return hasUserQuoteEcho
 }
 
 function recommendationSections(content: string): { found: string[]; missing: string[] } {
@@ -247,7 +296,7 @@ export function gradeDeliberation(
   const structureCheckOk = !recMsg || structPass
 
   // ── Instruments (observations, not pass/fail) ─────────────────────────────
-  const instruments = computeInstruments(messages)
+  const instruments = computeInstruments(messages, persona ?? null)
 
   const checks = [
     antiPass,
@@ -301,7 +350,10 @@ const ROUTING_ERROR_PHRASES: Record<string, keyof GradesResult['instruments']['r
   'encountered an issue': 'error_yields',
 }
 
-function computeInstruments(messages: MessageRow[]): GradesResult['instruments'] {
+function computeInstruments(
+  messages: MessageRow[],
+  persona: PersonaGradingHints | null
+): GradesResult['instruments'] {
   const routing = {
     unknown_agent_yields: 0,
     could_not_parse_yields: 0,
@@ -366,6 +418,28 @@ function computeInstruments(messages: MessageRow[]): GradesResult['instruments']
   const wordCounts = agentTurns.map(
     (m) => m.content.split(/\s+/).filter(Boolean).length
   )
+
+  // §7.2 evidence-binding counter. Count long turns (>80 words) that are
+  // visibly *not* bound to either a user quote or a research reference.
+  // `null` from isTurnEvidenceBound means the check can't evaluate (no
+  // persona hints AND no research signal in the turn) — skip per plan:
+  // no hints → no check, counter stays at 0. Long turns with persona
+  // hints available but neither echoed nor research-bound increment.
+  let suspectUnbound = 0
+  for (let i = 0; i < agentTurns.length; i++) {
+    const wc = wordCounts[i]
+    if (wc <= 80) continue
+    const bound = isTurnEvidenceBound(
+      agentTurns[i].content,
+      persona?.business_name_hints
+    )
+    if (bound === false) {
+      suspectUnbound += 1
+    }
+    // bound === true  → turn is anchored; don't count.
+    // bound === null  → can't evaluate (no hints to check against); don't count.
+  }
+
   const advisor_turns = {
     count: agentTurns.length,
     word_counts: wordCounts,
@@ -375,6 +449,7 @@ function computeInstruments(messages: MessageRow[]): GradesResult['instruments']
     max_words: wordCounts.length ? Math.max(...wordCounts) : 0,
     over_150_words: wordCounts.filter((w) => w > 150).length,
     under_8_words: wordCounts.filter((w) => w < 8).length,
+    suspect_unbound_turns: suspectUnbound,
   }
 
   return { routing, research, advisor_turns }

@@ -1,0 +1,133 @@
+{
+  "_note": "Per-specialist case material for Finance. Used at workerNode (per specialty turn), not at recommendation. The specialist retrieves 2-3 cases whose `business_type_category` matches the inferred category, and weaves their insight into the turn without naming them — per CLAUDE.md GR#6 (\"use the case, don't cite it\"). Budget-hierarchy patterns (STATED / CURRENT / HISTORICAL / INFERRED) are visible in the observations and what_wasted_money fields; Finance turns pulling these cases should name regretted spend as pain, never willingness.",
+  "specialist": "finance",
+  "version": 1,
+  "cases": [
+    {
+      "id": "solo_consultant_regretted_linkedin_boost",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "owner describes regretted past marketing spend and is considering the same move again",
+      "observation": "Solo consultant who spent $300-500 on LinkedIn boosts months earlier with no return, pipeline still empty. Openly called the experience a loss. When asked what to try next, reached for the same channel at a higher budget — 'maybe if I spend more this time it works.' The prior number was framed as the budget floor; it was actually evidence that the offer had not converted on that channel.",
+      "what_worked": "Treating the prior $300-500 as HISTORICAL pain, not willingness. Asking what had to be true for the next LinkedIn dollar to be different from the last — concrete answers only. Walking back to the offer page and the lead capture path before any new spend. The conversation unlocked when the owner saw that the channel was not the problem; the destination the channel pointed to was.",
+      "what_wasted_money": "Re-upping the same channel under the assumption that the prior spend had been too small. Past regretted spend is the floor of what they are afraid to lose, not the ceiling of what they are willing to invest.",
+      "one_line_lesson": "Regretted spend is pain evidence, not a budget line. Before another dollar goes out, something has to be different about where the dollar is going."
+    },
+    {
+      "id": "solo_consultant_owner_labor_not_free",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "pricing treats the owner's own hours as zero-cost because no payroll check is being written",
+      "observation": "Solo advisor charging $200-400/month for a recurring service that took 8-12 hours to deliver per client. Gross margin looked great on paper. Once owner labor was priced at even a conservative $75/hour consulting rate, per-client hourly yield was $25-40 — below what the owner was declining from project work to deliver the service.",
+      "what_worked": "Adding the owner's time to the cost side of the unit economics before the pricing conversation. Either the price went up to cover the hours, or the scope went down to fit the price, or the delivery became asynchronous / templated to compress the hours. Three viable moves; the old pricing was not one of them.",
+      "what_wasted_money": "The opportunity cost — every hour spent on a subsidized service was an hour not spent on higher-yield work. The cost was invisible in the books but real in the calendar.",
+      "one_line_lesson": "Owner labor is not free just because there is no check written for it. If the pricing does not carry your hours at a realistic rate, you are paying customers to work with you."
+    },
+    {
+      "id": "fractional_service_anchor_pricing",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "fractional / 'as-a-service' pricing anchored to a number the buyer cannot mentally compare to",
+      "observation": "Fractional CFO service priced at $2K/month. Prospects hesitated not because the number was unreasonable but because they had no frame to compare it to. An in-house CFO was $200K/year in their heads; the $2K/month felt either suspiciously cheap or unjustifiably expensive depending on the prospect. The frame was missing, not the value.",
+      "what_worked": "Replacing the monthly number with a comparison the buyer already had: 'the monthly financial picture you need for a board meeting, without the $200K hire.' Same price; the frame shifted the buyer's comparison from 'is $2K reasonable' to 'is this worth a fraction of a CFO salary.' Close rate moved materially within a quarter.",
+      "what_wasted_money": "Discount experiments — trying $1,500/month or $1,200/month to close hesitant prospects. The hesitation was not about the price; discounts compressed the margin without changing the conversion rate.",
+      "one_line_lesson": "When a price has no frame, the buyer fills in the frame themselves and usually gets it wrong. Provide the comparison before the number."
+    },
+    {
+      "id": "new_business_no_named_budget_inferred_conservative",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "owner has not named a budget; 'whatever makes sense' is the answer when asked",
+      "observation": "Pre-revenue solo founder asking about a launch plan. Asked directly about budget; got a genuine 'I don't know yet, whatever it takes.' The temptation was to propose a balanced plan at $1-2K/month and see what stuck. The owner would have said yes, started spending, then hit the number that hurt and pulled back hard — worse than if the plan had been conservative from the start.",
+      "what_worked": "Naming the inference openly: 'I'm assuming a conservative first ninety days — think one to three hundred dollars in actual spend, plus your own time. If the real envelope is bigger, say so and we scale.' The owner then volunteered a real number — $600-800/month — that was below the balanced-plan number but above the inference. The plan fit the actual envelope.",
+      "what_wasted_money": "Proposing plans that required a number the owner had not stated. In the absence of a signal, optimistic defaults produce the worst kind of surprise: the owner realizing mid-execution that the plan assumed money they never agreed to.",
+      "one_line_lesson": "When no budget is stated, infer conservatively and name the inference. The owner will correct you up if there is more; the correction is the commitment."
+    },
+    {
+      "id": "contractor_project_cost_vs_job_cost",
+      "business_type_category": "local_services",
+      "challenge_pattern": "pricing per-job on variable materials without rolling overhead into the project cost",
+      "observation": "Independent contractor quoting jobs at materials-plus-a-day-rate. Busy months looked profitable; quarterly P&L showed marginal margin. Truck, tools, insurance, fuel, phone, licensing — rolled into 'overhead' as a vague background cost rather than allocated against each job. Every job looked profitable in isolation; in aggregate the overhead ate the margin.",
+      "what_worked": "Computing monthly overhead as a dollar number and dividing across a realistic billable-day count. The result was a $180/day overhead floor every quoted day had to carry before the owner's time counted. Day-rate went up $175; job volume stayed flat; quarterly margin jumped 22%. Customers who left over the price increase were the low-margin ones the business needed to shed anyway.",
+      "what_wasted_money": "Running the business at the old rate for a year while knowing something was off. Every quoted job at the old rate was a subsidy paid to the customer using the owner's retirement savings.",
+      "one_line_lesson": "If the overhead is not in the quote, the owner is financing the job. Compute the floor once; carry it every day."
+    },
+    {
+      "id": "contractor_net_30_working_capital_squeeze",
+      "business_type_category": "local_services",
+      "challenge_pattern": "billing net-30 to commercial customers while materials are paid on the card the moment they are ordered",
+      "observation": "Small electrical contractor landed a $40K commercial job with net-30 payment terms. Materials required upfront: $22K on the business credit card. Payroll for the crew due bi-weekly. The job was profitable on paper; the thirty days between materials-out and payment-in created a working capital gap that forced the owner to float $28K at a moment when cash reserves were $9K. One customer paying net-45 instead of net-30 would have produced a missed payroll.",
+      "what_worked": "Negotiating 50% deposit on the next commercial job up front, non-negotiable; extending residential terms unchanged because residential customers pay on completion. For the existing net-30 job, a working capital line of credit specifically sized to bridge the gap — drawn only when needed, repaid the day payment arrived.",
+      "what_wasted_money": "Running payroll and material buys on the personal credit card at 22% APR during the gap. The margin on the job was less than the interest accrued across the full cycle.",
+      "one_line_lesson": "Profitable on paper and solvent today are different questions. When terms mismatch, the business finances the gap — either from reserves or from interest."
+    },
+    {
+      "id": "restaurant_delivery_margin_swap",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "adding delivery platforms as new revenue when they are actually a margin swap",
+      "observation": "Bakery owner considering DoorDash, UberEats, Grubhub. Each took 20-30% commission. Gross margin before delivery was 55%; after commission plus delivery packaging plus order error refunds, net margin on delivery orders was 12-15%. Dine-in stayed at 42%. Adding delivery was presented as 'more revenue.' The books disagreed — it was lower-margin revenue that cannibalized kitchen capacity during the rush hours that produced the best dine-in margin.",
+      "what_worked": "Listing on one platform only, capped at 20 orders/day to protect in-store execution. Using the platform as a reach channel, not a volume channel. Margin held; overall revenue grew modestly without breaking the dine-in experience.",
+      "what_wasted_money": "Running all three platforms simultaneously for the first quarter. Morning-rush delivery tickets broke kitchen flow; dine-in tickets — the high-margin ones — were served slower, some customers left. The business paid to lose its best margin.",
+      "one_line_lesson": "Delivery is not new revenue. It is a margin swap at your lowest-margin tier. Cap the volume; protect the margin engine."
+    },
+    {
+      "id": "restaurant_owner_cook_hidden_labor_cost",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "owner is also the cook; menu pricing does not carry their hours",
+      "observation": "Small bistro with the owner running the line 55 hours/week. Books showed 'labor cost' at the wage rate of the one dishwasher — $800/month. Pricing based on food cost plus that labor line produced a cheerful 38% net margin on paper. Once the owner's hours were imputed at the going chef rate in the market ($28/hour), labor cost was $7,000/month not $800/month. Real net margin was slightly negative; the business was subsidizing its customers with the owner's unpaid hours.",
+      "what_worked": "Imputing a fair-market chef rate on the owner's hours before any pricing decision. The menu went up an average of $1.75/entree with no entree crossing the neighborhood price ceiling. Margin moved into real profitability; the owner saw for the first time that the kitchen was making money, not draining it.",
+      "what_wasted_money": "The prior year of cheerful reporting to the accountant that missed this — every month the books showed margin that did not exist, every month the owner concluded they just needed more volume to get ahead.",
+      "one_line_lesson": "When the owner works the line, their hours are the largest cost center the books are not tracking. Price for the chef you would have to hire if you weren't there."
+    },
+    {
+      "id": "fitness_studio_payback_not_monthly_revenue",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "studio tracks monthly revenue without knowing how long a member takes to pay back acquisition cost",
+      "observation": "Boutique fitness studio spending $85 per member to acquire (ads + free trial class). Monthly membership $149. Gross revenue metrics were healthy; the studio was growing. Average member tenure: 4.2 months. Member lifetime gross revenue: $626. CAC-to-LTV was fine. But variable costs per member (class capacity, cleaning, owner time) made contribution margin per member $58/month. Break-even on acquisition was month 1.5; first real profit was month 2. Members who churned at month 2 — a material fraction — left the business with no profit on that member. The studio was growing in headcount but not in real contribution.",
+      "what_worked": "Shifting ad spend toward retention — onboarding sequence, personal check-in at month 1, class-type nudges for members showing attendance drop. Tenure rose from 4.2 to 5.6 months, which moved profitable members from 'most' to 'nearly all' at the same acquisition spend. Revenue grew modestly; profit grew materially.",
+      "what_wasted_money": "Doubling the acquisition budget to 'grow faster' before retention was stable. More members through a leaky bucket cost more, not less.",
+      "one_line_lesson": "Monthly revenue hides the unit economics question. The number that matters is how many months it takes a member to pay back the cost of getting them."
+    },
+    {
+      "id": "fitness_utilization_not_gross_sales",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "owner optimizes for total memberships sold instead of class utilization",
+      "observation": "Yoga studio with 180 members on unlimited plans. Classes sized at 16 mats. Owner proud of the 180 number. Utilization audit showed an average class running at 7-8 attendees — 45-50% utilization. The rent, instructor salary, and utilities cost the same whether 7 or 15 people attended. The studio was paying full cost for half-used capacity. The fix was not more members; it was either trimming underused class slots or shifting members into the underused slots.",
+      "what_worked": "Reducing the schedule by 20% and compressing members into the remaining slots. Utilization moved from 47% to 72%. Instructor cost fell 20%; member complaints were minimal because the 'cut' classes were the ones no one attended anyway. Margin jumped without losing a single member.",
+      "what_wasted_money": "Marketing campaign the prior quarter to grow the membership base 'to fill the schedule.' New members joined the packed classes they had already been attending; utilization barely moved.",
+      "one_line_lesson": "For a fixed-capacity business, the number is not memberships sold. It is capacity used. One is vanity; the other is the margin engine."
+    },
+    {
+      "id": "ecommerce_monthly_discount_is_the_price",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "monthly 20%-off promotion is eroding margin and training customers to wait",
+      "observation": "DTC skincare brand running monthly 20% off promos via email. Revenue metrics looked fine. Full-price conversion rate had dropped from 60% to 22% over fourteen months; customers had learned the promo cadence and were shopping on the discount. The 'real' price was the discounted price; the full price was a psychological target that customers had stopped treating as the number.",
+      "what_worked": "Killing the monthly promo entirely. Replacing with a loyalty structure tied to purchase count (3rd purchase = free sample, 5th = full-size free product) and bundle discounts that raised AOV rather than eroded margin. First 90 days revenue dipped 8%; margin jumped 19% because every sale was at full price or on a margin-friendly bundle.",
+      "what_wasted_money": "Fourteen months of the scheduled promo, which did not drive new customer acquisition (the list was existing customers); the 20% was pure margin given away without a change in the number of purchases.",
+      "one_line_lesson": "A discount you run every month is not a promotion. It is your real price, plus a lie."
+    },
+    {
+      "id": "ecommerce_ad_spend_without_payback_discipline",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "acquiring customers at a CAC that only pencils out if LTV materializes exactly as projected",
+      "observation": "DTC coffee brand spending $68 to acquire a customer whose first-order margin was $22. LTV projection assumed 4 repeat orders over 18 months to hit $95 total margin per customer. Four months of real data showed repeat rate of 1.1, not 4. Projected LTV was a spreadsheet; actual LTV was a loss on every customer. The owner was spending faster than the business was compounding.",
+      "what_worked": "Freezing acquisition spend while the subscription / repeat-order mechanic was rebuilt. Introducing a two-month auto-ship on the 2nd order landing page specifically; opt-in rate of 31% pushed repeat count from 1.1 toward 2.3 within the cohort that saw the new flow. CAC unchanged; LTV moved enough that per-customer economics became positive. Only then did acquisition spend resume.",
+      "what_wasted_money": "Every acquisition dollar spent before the repeat mechanic was fixed was a dollar chasing a projected LTV that had not materialized. The 'invest in growth' framing hid the fact that the unit was unprofitable.",
+      "one_line_lesson": "CAC is a real number today. LTV is a forecast. When the forecast and the actuals diverge, you are financing the gap with runway."
+    },
+    {
+      "id": "seasonal_cashflow_peak_and_trough_planning",
+      "business_type_category": "local_services",
+      "challenge_pattern": "seasonal business spends the peak-season cash as if the trough is not coming",
+      "observation": "Landscaping contractor with April-October peak and November-March near-zero revenue. Peak months produced $40-60K/month in cash; trough months required $8-12K/month just to cover truck, insurance, and storage. The owner treated the peak as 'how much we make' and spent accordingly — new equipment in August, vacation in October — and reached December short of working capital nearly every year, scrambling for a line of credit or personal loan at the worst possible rates.",
+      "what_worked": "Computing trough-month minimum cash burn and multiplying by the full trough length — a $60K reserve requirement. That reserve was built from peak-month revenue before any discretionary spend was allowed. The business ran tighter in August; December no longer required emergency borrowing at 18%.",
+      "what_wasted_money": "Five consecutive years of interest on trough-season emergency borrowing. The line of credit was the highest-cost financing in the business; it existed only because peak months were being spent like they were annualized.",
+      "one_line_lesson": "A seasonal business has two budgets: the year and the trough. The trough reserve comes out of the peak before anything discretionary does."
+    },
+    {
+      "id": "retail_new_location_opening_month_optimism",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "month-one launch projected to cover month-one operating costs",
+      "observation": "Independent retailer opening a second location. Business plan showed revenue at 60% of the original store from day one. Real pattern from comparable openings: month 1 at 15-25% of mature-store revenue, month 3 at 35-45%, month 6 at 55-70%, month 12 approaching parity. The plan quietly assumed six months of mature-store revenue that would not arrive. The owner had budgeted six weeks of runway; the real ramp needed nine to twelve months.",
+      "what_worked": "Rebuilding the plan around the actual ramp curve — 12-month operating reserve sized to the trough of months 2-4, not to the month-6 projection. Delayed the opening by one quarter to build the reserve. When the opening happened, the slow early months were on-plan, not a crisis.",
+      "what_wasted_money": "The original timeline would have forced emergency action in month 2 — promotional discounting, rushed marketing, staff cuts — each of which would have slowed the ramp further. The cost of the pre-opening delay was far smaller than the cost of emergency moves once the lease was live.",
+      "one_line_lesson": "A new location does not open at mature revenue. Size the reserve to the ramp, not to the projection — and the ramp is longer than the business plan wants to admit."
+    }
+  ]
+}

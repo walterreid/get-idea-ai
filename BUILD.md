@@ -144,7 +144,7 @@ Canonical ladder (A–E), tiers (1–3), review protocols (A/B/C), human rubric,
 
 **Read first:** CLAUDE.md (Reference quality, Golden rules — especially #1, #4, #6). [BUILD.md §6.2](#62-conversation-quality-and-testing) (multi-round persona protocol).
 
-**Status:** IN PROGRESS — 7.1 Marketer · 7.3 Marketer-layer · 7.4 · 7.5 · 7.6 · 7.7 all SHIPPED. **Next coherent block: 7.1/7.3 replication to the other 9 specialists** (now unblocked by 7.4). 7.2's specialist-prompt rollout folds into that replication.
+**Status:** IN PROGRESS — 7.1 Marketer + Finance · 7.2 instrument · 7.3 Marketer-layer + Finance · 7.4 · 7.5 · 7.6 · 7.7 all SHIPPED. **Next coherent block: 7.1/7.2/7.3 replication to the other 8 specialists** (now unblocked by 7.4 and by Finance's cycle closing).
 
 **Sequencing reality (vs. original linear ordering):**
 
@@ -161,24 +161,26 @@ Canonical ladder (A–E), tiers (1–3), review protocols (A/B/C), human rubric,
 
 These are explicit "we made a call, a future phase should watch for the signal" notes. Do not lose them in the next compression.
 
-- **R4 async observability.** Never observed end-to-end in a real persona transcript — orchestrator was conservative on both personas tested and didn't emit `async: true`. Scheduler proven correct by direct smoke test against Serper. A future cycle needs either (a) a persona that reliably triggers research (volunteers URL + asks research-gated question) or (b) an orchestrator-prompt bias flip making async the default for enrichment fetches. See §7.6 archive entry for context.
+- **R4 async observability.** Still not observed end-to-end in a real persona transcript. The async-default prompt bias and in-flight guard shipped in commit `0242880`. The Finance cycle 19-persona batch (2026-04-18) produced 0 async fires and 2 sync fires (both on the "user just shared a URL" carve-out, correctly sync). The current 18-persona pool does not include a persona whose natural R3/R4 asks a market/competitor question AFTER the entity is already established — that's the shape that would trip the async branch under the new prompt. Next close path: either a targeted persona whose R3 volunteers a URL and R4 asks "what are other [category] businesses in my area doing" (the enrichment fetch case), or a manual `/api/chat` exercise. Not a blocker for further specialist replication. Scheduler remains proven-correct by direct smoke test against Serper.
 - **Ideation's soft-signal threshold.** "Route to Ideation on contentless openers" is prompt-level guidance, not a code check. Intentional — keeping orchestrator judgment intact is a Phase 7 principle. The threshold needs observation across real user openers. A future phase should audit the ledger for: how often Ideation fires on turn 1 (expected: pure greetings only); how often it fires on turn 2+ (would be a bug — handoff not working); whether a specialist is wrongly skipped because Ideation picked up an opener with actual signal. See §7.7 archive entry.
 - **Walter falsifiability framing.** Run the full 12-persona batch and check whatever specialists naturally fire. Not 1:1 persona-to-specialist — real deliberations pull 3–4 specialists per conversation. Specialists whose archetype is rarely triggered by the existing pool (probably Legal, possibly Accountant) may warrant a targeted persona added later, but this is additive, not a prerequisite for specialist replication.
 
 ### 7.1 Specialist voice rewrite
 
-**Status:** Marketer v2/v3 SHIPPED (2026-04-17 / 2026-04-18). Other 9 NOT yet rewritten.
+**Status:** Marketer v2/v3 SHIPPED (2026-04-17 / 2026-04-18) · **Finance v2 SHIPPED (2026-04-18)**. Other 8 NOT yet rewritten.
 **Full detail for Marketer ship:** [BUILD-ARCHIVE-1.md §Phase 7.1](BUILD-ARCHIVE-1.md#phase-71--specialist-voice-rewrite-marketer-shipped)
 
 - [x] Marketer v3 — lived-in stance, voice-discipline section, banned-phrase list, "use the case, don't cite it" rule. Changelog block above the Marketer object in [scripts/seed-agents.ts](scripts/seed-agents.ts).
-- [ ] **Other 9 specialists — UNBLOCKED 2026-04-18.** Evidence from the 12-persona batch run (11/12 pass) shows Marketer v3 + case injection produces reference-quality turns when the case-match is tight. Original hold condition was Phase 7.4 length compression; 7.4 shipped. **Replication is now the next coherent work block.**
+- [x] **Finance v2 (2026-04-18)** — lived-history opener replacing generic "discussed with numbers" framing; voice discipline with Finance-specific banned smoke-signal phrases ("optimize your pricing", "build a financial plan", "improve your unit economics", "watch your cash flow", "keep your costs low", "focus on profitability"); dedicated Budget Signal Hierarchy section (STATED > CURRENT > HISTORICAL > INFERRED) mirroring `recommendationNode`'s language so per-turn and synthesis speak the same grammar; divergence rule; evidence-bound rule; "use the case, don't cite it" discipline. Paired with tightened `description_for_orchestrator` that explicitly names Finance-vs-Realist ("Finance names the specific number that is wrong, missing, or misapplied") and Finance-vs-Accountant ("Finance is unit economics; Accountant is mechanics/compliance"). Validated against 19-persona batch — **Finance fired in 16/19**, zero banned phrases, budget hierarchy visibly applied on `ai_consultant` (LinkedIn boost treated as opportunity-cost-dominated rather than willingness-to-spend). Changelog block above the Finance object in [scripts/seed-agents.ts](scripts/seed-agents.ts). 35 total Finance turns across batch; max consecutive Finance 5 (earned each turn on distinct numerics). See [lib/agents/cases/finance.json](lib/agents/cases/finance.json) for the case library shipped alongside.
+- [ ] **Other 8 specialists — next block.** Evidence from Finance cycle shows the Marketer v3 pattern replicates cleanly when paired with a clear `description_for_orchestrator` distinction from adjacent specialists. Next picks driven by ledger gaps: Realist fires often but from a generic register; Operations and Accountant under-fire; CX has been holding its own but would benefit from the same case-library discipline. Pick one per cycle for focused iteration.
 
   **Validation approach (corrected 2026-04-18).** Earlier thinking implied each specialist needed a 1:1 persona that *primarily* exercised it. That framing was too rigid — real deliberations pull 3–4 specialists per persona, and the batch suite already covers this naturally. The correct pattern is:
 
   - Replicate voice + cases to the next specialist (pick one at a time for focused iteration).
-  - Run the **full 12-persona batch** — the specialist fires when the orchestrator judges it useful, across whatever personas happen to pull it. Walter doesn't have to exercise the Accountant for the Accountant's changes to be validated; several of the 12 personas will pull it naturally over the suite.
+  - Run the **full 19-persona batch** — the specialist fires when the orchestrator judges it useful, across whatever personas happen to pull it. Walter doesn't have to exercise the Accountant for the Accountant's changes to be validated; several personas in the batch will pull it naturally over the suite.
   - Check the grader's output on those naturally-triggered turns. If a new Accountant prompt ships and not a single persona in the batch surfaces an Accountant turn, *that* is the signal that the orchestrator description or routing guidance needs tightening — not that the specialist is broken.
-  - For specialists whose archetype is rarely triggered by the existing pool (probably Legal, possibly Accountant), consider adding a targeted persona the way `legal_sensitive.json` was added — but this is additive, not a prerequisite.
+  - **Stage-1 checkpoint pattern** (confirmed by Finance cycle 2026-04-18): before running the full batch, run 5 specialist-likely personas first. If the specialist fires in 0–1 of the 5, the description needs tightening — not the voice. Finance's initial description under-fired (0 fires in 2 personas); tightening with explicit "bring in when numbers are *misapplied*, not only *missing*" + Finance-vs-Realist / Finance-vs-Accountant distinctions moved it to 5/5 Stage 1 and 16/19 batch.
+  - For specialists whose archetype is rarely triggered by the existing pool (probably Legal, possibly Accountant — also confirmed by this batch: Legal 4 turns, Accountant 1 turn), consider adding a targeted persona the way `legal_sensitive.json` was added — but this is additive, not a prerequisite.
 
 ### 7.2 Divergence, budget signal hierarchy, evidence binding
 
@@ -192,22 +194,23 @@ Three generative constraints, lifted from ad101/Zansei `plan_generation.md`. The
   4. **INFERRED** — no explicit signal → default conservative; name the inference.
 - **Evidence-bound rule** (all specialists): *"Every recommendation must reference either something the owner said OR something from research. If it can't be tied to evidence, cut it."*
 
-- [ ] Add divergence rule to all specialist prompts (rollout with 7.1/7.3 replication).
-- [ ] Add budget signal hierarchy as a dedicated section in the Finance agent prompt.
-- [ ] Add evidence-bound rule to all specialist prompts.
-- [ ] Extend [lib/test/grade-deliberation.ts](lib/test/grade-deliberation.ts) with a tripwire: advisor turn >80 words containing no user-quote or research-reference = suspect.
+- [ ] Add divergence rule to all specialist prompts (rollout with 7.1/7.3 replication — Marketer has it in v3; Finance has it in v2; 8 remaining).
+- [x] **Budget signal hierarchy in Finance prompt (2026-04-18)** — dedicated section in [scripts/seed-agents.ts](scripts/seed-agents.ts) Finance object, mirroring the exact STATED / CURRENT / HISTORICAL / INFERRED grammar already enforced at [recommendationNode](lib/graph/nodes.ts). Canonical case in the batch: `ai_consultant` R3 — Walter proposes another $100–200 LinkedIn boost after describing the prior $300–500 as regretted; Finance names the opportunity-cost-dominated math rather than re-upping the channel.
+- [ ] Add evidence-bound rule to all specialist prompts (Marketer + Finance have it; 8 remaining).
+- [x] **Evidence-binding instrument in grader (2026-04-18).** Added `instruments.advisor_turns.suspect_unbound_turns` counter in [lib/test/grade-deliberation.ts](lib/test/grade-deliberation.ts) — counts agent turns >80 words with no user-quote-echo (persona hints) AND no research-reference signal. **Instrument only, NOT factored into `overall_pass`.** Shared `RESEARCH_REFERENCE_SIGNALS` list between the existing `researchFollowthroughOk` check and the new `isTurnEvidenceBound` helper. Unit tests in [scripts/test-grade.ts](scripts/test-grade.ts) cover: long+unbound=1, long+persona-echo=0, short=0, long+research-reference=0. Finance-cycle batch (19 personas) recorded 21 suspect turns total across all specialists — observational; some long-but-bound Finance turns didn't echo the business name and counted, which is the pattern the counter was designed to surface.
 
-**Done when:** primary persona transcript shows at least one specialist naming a bridge, and the Finance turn handles regretted LinkedIn boost spend as HISTORICAL pain rather than willingness.
+**Done when:** primary persona transcript shows at least one specialist naming a bridge, and the Finance turn handles regretted LinkedIn boost spend as HISTORICAL pain rather than willingness. **(Second half confirmed 2026-04-18 on `ai_consultant` with Finance v2.)**
 
 ### 7.3 Hand-curated case library + vertical knowledge files
 
-**Status:** Marketer layer SHIPPED (2026-04-18). Other 9 case libraries NOT yet created.
+**Status:** Marketer layer SHIPPED (2026-04-18) · **Finance case library SHIPPED (2026-04-18)**. Other 8 case libraries NOT yet created.
 **Full detail:** [BUILD-ARCHIVE-1.md §Phase 7.3](BUILD-ARCHIVE-1.md#phase-73--hand-curated-case-library--vertical-knowledge-files-marketer-layer)
 
 - [x] Layer A — Per-specialist cases structure; Marketer 13 cases shipped.
+- [x] **Finance case library shipped (2026-04-18):** 14 cases in [lib/agents/cases/finance.json](lib/agents/cases/finance.json) indexed by `business_type_category` (professional_services ×4, local_services ×3, restaurant_food ×2, fitness_wellness ×2, ecommerce_dtc ×3). Each case exhibits a specific budget-hierarchy pattern or money-shape (HISTORICAL-pain-not-willingness, owner-labor-not-free, margin-swap-dressed-as-new-revenue, opportunity-cost-ceiling, payback-period-vs-monthly-revenue, seasonal trough reserve, new-location ramp curve). Follows Marketer schema exactly; no loader changes needed ([case-loader.ts](lib/agents/case-loader.ts) auto-discovers `finance.json`).
 - [x] Layer B — 5 vertical playbooks + 8 channel guides in `lib/knowledge/`; injected at `recommendationNode` only.
 - [x] Recommendation-node enrichment (divergence / budget / assumption-check / evidence rules).
-- [ ] **Specialist replication — the big remaining block.** 9 × (case library JSON + validation against naturally-triggering personas in the 12-persona batch). Pair with each specialist's 7.1 voice rewrite and 7.2 rule rollout; pick one specialist at a time for focused iteration.
+- [ ] **Specialist replication — the remaining block.** 8 × (case library JSON + validation against naturally-triggering personas in the full 19-persona batch). Pair with each specialist's 7.1 voice rewrite and 7.2 rule rollout; pick one specialist at a time for focused iteration.
 
 ### 7.4 Length compression as consequence
 

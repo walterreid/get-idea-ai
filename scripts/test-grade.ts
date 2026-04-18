@@ -52,6 +52,104 @@ test('personaToHints picks up grading_hints and business_name', () => {
   assert.ok(h.business_name_hints?.includes('Greenwich'))
 })
 
+test('suspect_unbound_turns counts long turns with no user-quote-echo and no research-reference', () => {
+  // Build a ~100-word agent turn that neither echoes the persona's hints nor
+  // references research. Fill words deterministically so the test is stable.
+  const longFiller = Array.from({ length: 100 }, (_, i) => `word${i}`).join(' ')
+  const messages: MessageRow[] = [
+    { role: 'user', content: 'I run a small business.' },
+    {
+      role: 'agent',
+      content: longFiller,
+      agent_name: 'finance',
+      metadata: { display_name: 'Finance' },
+    },
+  ]
+  const persona = personaToHints({
+    persona_id: 'anchored_persona',
+    business_name: 'Acme Widgets',
+    grading_hints: ['Riverside'],
+  })
+  const g = gradeDeliberation(messages, persona)
+  assert.equal(
+    g.instruments.advisor_turns.suspect_unbound_turns,
+    1,
+    'long turn with no echo and no research should count as suspect'
+  )
+  // Instrument must not affect overall_pass.
+  assert.ok(g.anti_generic.pass)
+  assert.ok(g.voice.pass)
+})
+
+test('suspect_unbound_turns does NOT count long turns that echo a persona hint', () => {
+  const bound = `Acme Widgets is the frame here — ` +
+    Array.from({ length: 100 }, (_, i) => `word${i}`).join(' ')
+  const messages: MessageRow[] = [
+    { role: 'user', content: 'I run Acme Widgets.' },
+    {
+      role: 'agent',
+      content: bound,
+      agent_name: 'finance',
+      metadata: { display_name: 'Finance' },
+    },
+  ]
+  const persona = personaToHints({
+    persona_id: 'anchored_persona',
+    business_name: 'Acme Widgets',
+  })
+  const g = gradeDeliberation(messages, persona)
+  assert.equal(
+    g.instruments.advisor_turns.suspect_unbound_turns,
+    0,
+    'turn echoing a persona hint is evidence-bound; do not count'
+  )
+})
+
+test('suspect_unbound_turns does NOT count short turns (<=80 words)', () => {
+  const shortTurn = 'A quick observation with no persona hints or research references anywhere.'
+  const messages: MessageRow[] = [
+    { role: 'user', content: 'I run Acme Widgets.' },
+    {
+      role: 'agent',
+      content: shortTurn,
+      agent_name: 'finance',
+      metadata: {},
+    },
+  ]
+  const persona = personaToHints({
+    persona_id: 'anchored_persona',
+    business_name: 'Acme Widgets',
+  })
+  const g = gradeDeliberation(messages, persona)
+  assert.equal(g.instruments.advisor_turns.suspect_unbound_turns, 0)
+})
+
+test('suspect_unbound_turns does NOT count long turns that reference research (site/page/found/etc.)', () => {
+  const longResearchBound =
+    'Looking at what we found online about this market, here is the picture. ' +
+    Array.from({ length: 100 }, (_, i) => `word${i}`).join(' ')
+  const messages: MessageRow[] = [
+    { role: 'user', content: 'Look at my site' },
+    {
+      role: 'agent',
+      content: longResearchBound,
+      agent_name: 'finance',
+      metadata: {},
+    },
+  ]
+  // Persona hints provided but NOT echoed; research signal ("found online") anchors the turn.
+  const persona = personaToHints({
+    persona_id: 'anchored_persona',
+    business_name: 'Acme Widgets',
+  })
+  const g = gradeDeliberation(messages, persona)
+  assert.equal(
+    g.instruments.advisor_turns.suspect_unbound_turns,
+    0,
+    'research-reference signal anchors the turn; do not count'
+  )
+})
+
 test('in-flight skip rows increment skipped_in_flight and do NOT count as fetches or trigger followthrough', () => {
   const messages: MessageRow[] = [
     { role: 'user', content: 'Hi, I run a bakery.' },
