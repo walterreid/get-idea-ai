@@ -109,7 +109,7 @@ test('interruptHandlerNode resets interrupt flag and turn count', async () => {
 })
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test 4: Verify all 10 active agents are fetchable by name
+// Test 4: Verify all seeded active agents are fetchable by name
 // ─────────────────────────────────────────────────────────────────────────────
 
 test('All seeded agents are fetchable by name from the DB', async () => {
@@ -119,12 +119,12 @@ test('All seeded agents are fetchable by name from the DB', async () => {
   invalidateAgentCache()
   const agents = await fetchActiveAgents()
 
-  assert.ok(agents.length >= 10, `Expected at least 10 active agents, got ${agents.length}`)
+  assert.ok(agents.length >= 11, `Expected at least 11 active agents, got ${agents.length}`)
   console.log(`  ✓ ${agents.length} active agents returned`)
 
   const expectedAgents = [
     'marketer', 'finance', 'creative', 'copywriter', 'designer',
-    'accountant', 'operations', 'legal', 'cx', 'realist',
+    'accountant', 'operations', 'legal', 'cx', 'realist', 'ideation',
   ]
 
   for (const name of expectedAgents) {

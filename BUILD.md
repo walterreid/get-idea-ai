@@ -732,7 +732,7 @@ Not required for Tier 2: banned boilerplate phrases, minimum user-specific refer
 
 **Read first:** CLAUDE.md (Reference quality, Golden rules — especially #1, #4, #6). [BUILD.md §6.2](#62-conversation-quality-and-testing) (multi-round persona protocol). This phase mostly does not touch the Orchestrator, though necessary serialization/routing-discipline fixes did happen during 7.1–7.3 (see subphase notes).
 
-**Status:** IN PROGRESS — 7.1 Marketer shipped · 7.3 Marketer-layer shipped · 7.4 shipped · 7.5 (harness) pulled forward and shipped early · Phase 7.6 (recommendation force fix + research follow-through + R4 async) shipped 2026-04-18 · **next: 7.1/7.3 replication to the other 9 specialists** (now unblocked by 7.4) · 7.2's specialist-prompt rollout folds into that replication.
+**Status:** IN PROGRESS — 7.1 Marketer shipped · 7.3 Marketer-layer shipped · 7.4 shipped · 7.5 (harness) pulled forward and shipped early · 7.6 (recommendation force fix + research follow-through + R4 async) shipped 2026-04-18 · 7.7 (Ideation host) shipped 2026-04-18 · **next: 7.1/7.3 replication to the other 9 specialists** (now unblocked by 7.4) · 7.2's specialist-prompt rollout folds into that replication.
 
 **Sequencing reality (vs. BUILD.md's original linear ordering):** Phase 7.5 (multi-round harness) was pulled forward ahead of 7.1–7.4 because without it, specialist changes could not be measured. Phase 7.3 (case library + knowledge files) was done before 7.2 (divergence / budget / evidence rules) because the Marketer 7.1 evidence showed voice-rewrite alone didn't move the quality needle — case material was the load-bearing lever. Phase 7.2's rules were integrated directly into 7.3's `recommendationNode` wiring (divergence rule, budget signal hierarchy, assumption check) rather than shipped as a separate subphase. Phase 7.4 length compression shipped 2026-04-18 (per-specialist token budgets in [lib/agents/token-budgets.ts](lib/agents/token-budgets.ts); 21–46% reduction on spot-checks). **Next coherent cycle (post-7.6): replicate 7.1 voice-rewrite + 7.3 case libraries to the other 9 specialists, one at a time, validated against a persona whose archetype actually exercises that specialist** (Walter is not the universal falsifiability case — Legal/Accountant/Operations need different personas to produce signal).
 
@@ -752,7 +752,13 @@ Lift the voice-discipline structure from the ad101/Zansei `conversation_system.m
 - **Versioning:** block comment above each specialist tracking prompt versions + the evidence that drove each revision (*"v2 (YYYY-MM-DD): Tightened specificity. Driven by ai_consultant persona — advisor produced 'thought-leadership engine' on R2."*).
 
 - [x] **Marketer v2/v3 shipped** (2026-04-17 / 2026-04-18). Marketer prompt rewritten with lived-in stance, voice discipline section, banned-phrase inline list, and "use the case, don't cite it" rule (v3). Changelog block added above the Marketer object in [scripts/seed-agents.ts](scripts/seed-agents.ts).
-- [ ] **Other 9 specialists NOT yet rewritten — UNBLOCKED 2026-04-18.** Evidence from the 2026-04-18 batch run (12 personas, 11/12 pass) shows Marketer v3 + case injection produces reference-quality turns when the case-match is tight (Ella/Glory Days, Steve Scillieri). Original hold condition was Phase 7.4 length compression; 7.4 shipped 2026-04-18 (see below). **Replication is now the next coherent work block.** Sequencing note: each specialist should be validated against a persona whose archetype actually exercises that specialist — Walter (`ai_consultant`) is the right falsifiability case for Marketer / Copywriter / Realist, but not for Legal / Accountant / Operations (his business has no real surface area for those). Map is in the cycle plan, not hardcoded here.
+- [ ] **Other 9 specialists NOT yet rewritten — UNBLOCKED 2026-04-18.** Evidence from the 2026-04-18 batch run (12 personas, 11/12 pass) shows Marketer v3 + case injection produces reference-quality turns when the case-match is tight (Ella/Glory Days, Steve Scillieri). Original hold condition was Phase 7.4 length compression; 7.4 shipped 2026-04-18. **Replication is now the next coherent work block.**
+
+  **Validation approach (corrected 2026-04-18).** Earlier thinking implied each specialist needed a 1:1 persona that *primarily* exercised it. That framing was too rigid — real deliberations pull 3–4 specialists per persona, and the batch suite already covers this naturally. The correct pattern is:
+  - Replicate voice + cases to the next specialist (pick one at a time for focused iteration).
+  - Run the **full 12-persona batch** — the specialist fires when the orchestrator judges it useful, across whatever personas happen to pull it. Walter doesn't have to exercise the Accountant for the Accountant's changes to be validated; three of the 12 personas will pull it naturally over the suite.
+  - Check the grader's output on those naturally-triggered turns. If a new Accountant prompt ships and not a single persona in the batch surfaces an Accountant turn, *that* is the signal that the orchestrator description or routing guidance needs tightening — not that the specialist is broken.
+  - For specialists whose archetype is rarely triggered by the existing pool (probably Legal, possibly Accountant), consider adding a targeted persona the way `legal_sensitive.json` was added — but this is additive, not a prerequisite.
 
 **What 7.1 actually proved (different from original hypothesis):**
 - Voice-rewrite alone does NOT reliably move specificity — the Marketer v2 was within length variance of v1 on Walter (the Marketer's sessions ran long regardless of prompt).
@@ -871,6 +877,48 @@ With cases carrying specificity, prose can shrink structurally. Brevity stopped 
 
 - [ ] Add before/after transcript pair for primary persona (Walter) into `test/fixtures/` — unblocked by Phase 7.4 shipping (2026-04-18). Fold into the specialist-replication cycle so the "after" captures both length-compressed state AND the broader voice-rewrite surface as specialists roll out.
 
+### 7.6 Recommendation force, research follow-through, R4 async research
+
+**Status:** SHIPPED 2026-04-18 (commit 5b53b2c). Three items shipped as one coherent cycle because they all touched graph-entry state management + research plumbing.
+
+- [x] **Recommendation force (Option B — state flag).** Added `force_recommendation: boolean` to `DeliberationStateAnnotation`. At the top of `supervisorNode`, if the flag is true the function short-circuits (no routing LLM call) and emits `{ deliberation_phase: 'recommendation', next_speaker: 'user', force_recommendation: false }`. The existing edge in [compile.ts](lib/graph/compile.ts) `routeFromSupervisor` then routes to `recommendationNode`. Production `/chat` never sets the flag. The harness sets it in R5 closure rounds via `buildNextRoundState` — verified on ai_consultant + steve_scillieri 5-round runs (both produced `metadata.message_type === 'recommendation'` messages).
+- [x] **Research follow-through rule.** Extended `WORKER_RESEARCH_EPISTEMICS` in [lib/graph/nodes.ts](lib/graph/nodes.ts): *"If research context is present, your turn must reference something specific from it OR explicitly hedge that what was found may not be current. Silence about research that ran is a signal to the owner that you didn't do your homework."* Applies whenever `state.research_context.length > 0`. Closed steve_scillieri's single batch-run failure.
+- [x] **R4 async research.** New [lib/research/scheduler.ts](lib/research/scheduler.ts) with `executeResearchTool` (framework-agnostic core) + `scheduleAsyncResearch` (Next.js `after()`-wrapped, DB persist via `supabaseAdmin`). Optional `async: boolean` added to `RoutingDecisionSchema.research_needed`. Router edge skips inline `researchNode` when `async === true`; the specialist answers this turn without the context; result lands as a `role: 'system'` research message matching the sync path's metadata shape for the next round. Harness gained `--research-mode sync|async|off` flag.
+
+**Design principle surfaced this cycle (applies going forward): sync and async research both have legitimate use cases.** Sync is correct when the user just shared a URL and is asking about what's on it, or for the first entity-disambiguation fetch in a thread — the specialist cannot answer meaningfully without it. Async is correct for enrichment fetches, competitor scans, secondary URL reads, anything that *adds* depth without *gating* the specialist's next turn. The orchestrator prompt currently defaults to sync when unsure (conservative — correctness over speed); a future cycle will flip that bias once we have more evidence on how often async is chosen correctly.
+
+**Judgment-call flag (carried forward):** validation of the async path end-to-end in a real persona transcript was not achieved in the R4 session — the orchestrator was conservative on both personas tested and didn't emit `async: true`. The scheduler was proven correct by direct smoke test against Serper. A future cycle should add either (a) a persona that reliably triggers research (volunteers URL + asks research-gated question) or (b) an orchestrator-prompt bias flip to make async the default for enrichment fetches. Tracked in the "next cycle" notes below.
+
+### 7.7 Ideation — the host voice for contentless openers
+
+**Status:** SHIPPED 2026-04-18.
+
+**Why this exists.** Before this phase the orchestrator prompt routed all greetings (*"Hi"*, *"Hello"*) to Customer Experience. CX was chosen because its voice is the warmest available, but CX is optimized for users who already have customers — its opener question is about a *recent customer interaction*, which misses for pre-business users and for users who are still deciding what they came to discuss.
+
+Ideation replaces CX as the cold-open default. Its role is **orientation, not advising** — welcome the user, offer a choice of paths (*"building something, a problem you're working through, or an idea you're thinking about?"*), ask for a name, and step back for a specialist once the user names a direction. CX stays available for its real role (customer-focused discussion, demand-side assumptions).
+
+**What shipped:**
+- [x] New `ideation` specialist record in [scripts/seed-agents.ts](scripts/seed-agents.ts) with host-voice prompt — one or two sentences, no meta-verbs ("let's brainstorm"), no advising, explicit handoff behavior after one turn.
+- [x] Orchestrator prompt's "Opening the Room" section rewritten — routes to `ideation` **only when** the opener has no business type, no specific challenge, and no named intent. Any signal ("I run a bakery", "I'm setting up a new business") skips Ideation and goes to the specialist who fits best. Explicit *"do not route to Ideation twice in a row"* rule.
+- [x] Ideation added to [lib/types/stream.ts](lib/types/stream.ts) `AGENT_COLOR_MAP`, [app/globals.css](app/globals.css) as `--agent-ideation: #4A7278` (deep warm teal, host-like), and [lib/agents/token-budgets.ts](lib/agents/token-budgets.ts) with a tight 140-token cap (one or two sentences is the whole job).
+- [x] New persona [test/personas/ideation_cold_open.json](test/personas/ideation_cold_open.json) — "Jonathan" greets on R1, volunteers a new CT business on R2. Tests the route-to-ideation-then-hand-off flow.
+- [x] `test-graph.ts` expected-agents list updated to include `ideation`; active-agent assertion lifted from ≥10 to ≥11.
+- [x] CLAUDE.md and README.md hierarchy blocks updated to note the Ideation host separately from the 10 specialists.
+
+**Design principle surfaced this cycle (carried forward):** Ideation is deliberately **not** a peer specialist — it's a host role. CLAUDE.md §"The Agents Are Advisors, Not Performers" still says "10+ specialist agents" because Ideation is not one. The distinction matters: a specialist gives perspective on the business; a host orients the conversation. Conflating them would over-structure the room. Future cycles should preserve this distinction — if a new role needs a different register (e.g., a closing host after the recommendation), model it as a host role too, not as another specialist.
+
+**Judgment-call flag (carried forward):** the orchestrator's soft-signal threshold between "route to Ideation" and "route to a specialist" is currently prompt-level guidance, not a code check. This is intentional — keeping the orchestrator's judgment intact is a Phase 7 rule (see Routing is the Art memory). But the soft threshold needs observation across real user openers. A future phase should check the ledger for how often Ideation fires on turn 1, how often it fires on turn 2+ (which would be a bug — handoff is not working), and whether any specialist is getting wrongly skipped because Ideation picked up an opener with actual signal. If any of those patterns appear, the orchestrator prompt gets a tightening edit — not a hardcoded rule.
+
+**Validation approach:**
+- Cold-open fidelity: `npm run test:persona -- --persona test/personas/ideation_cold_open.json --rounds 3` — R1 should route to `ideation`, R2 should route to a specialist (not back to ideation), grader overall_pass.
+- Regression: no existing persona should now route to Ideation — their openers all carry business signal. `test:fixtures` stays green (fixtures are static).
+- Integration: `test:graph` updated for the 11-active-agent count.
+
+**Future-phase follow-ups (not blocking 7.7's ship):**
+- Observation phase (after 2–3 weeks of live use, or after the specialist-replication cycle): audit ledger for Ideation-firing patterns per the judgment-call flag above.
+- If field evidence shows Ideation is too timid (skipped when it should fire) or too aggressive (fires when a specialist would be better), tighten the orchestrator prompt — not the Ideation prompt itself.
+- Consider a parallel *closing host* role if Panel Recommendation feels too abrupt as an ending — deferred until there's user evidence either way.
+
 ### Phase 7 Complete When:
 
 The same opener (*"nobody really knows about my AI consultancy — I'm competing against people who watched a few YouTube videos"*) produces a visibly different advisor turn after all subphases.
@@ -880,6 +928,16 @@ The same opener (*"nobody really knows about my AI consultancy — I'm competing
 **After:** something tied to Walter's stated constraint and regretted spend — naming what's **at risk** (invisibility in a market where differentiation itself is invisible) and what not to do (another LinkedIn boost treating past pain as willingness), before naming what to do. Specific enough to forward to a friend who would say: *"they heard you."*
 
 **Deferred to a potential Phase 8 (only if Phase 7 does not close the gap):** Orchestrator running-diagnosis schema (stated vs observed problem, plan_readiness flag), diagnosis-pattern case indexing, stop-list tracked across turns. See the multi-round / lived-in-role discussion thread for the architecture. Do not pre-build these — the Orchestrator already reads the room well; adding metadata layers risks complicating what sings.
+
+### Parked considerations (not scheduled — revisit when relevant)
+
+These are thoughts that emerged during Phase 7 cycles but aren't the right call now. Captured so they survive into future planning without growing the current scope.
+
+- **Potential "Product" specialist (raised 2026-04-18).** Product thinking — *"what problem does this solve, for whom, how would you test it cheaply, is your roadmap reflecting what you've learned or what you originally hoped?"* — is a distinct register not cleanly held by the current 10. If added, it would be a full peer specialist (own voice, own case library, own falsifiability persona — Walter is a good candidate since pre-marketing AI consulting is exactly the archetype Product would challenge). **Not bundled into 7.7.** Decision deferred: add as its own cycle post-specialist-replication, only if field evidence shows the existing panel consistently misses product-framing questions. Risk of conflating with Marketer/Realist if scoped carelessly — the test before adding is whether a well-framed Product prompt produces materially different turns from what Marketer or Realist already say on the same persona.
+
+- **Ideation vs Creative/Designer — "brainstorm" register? (raised 2026-04-18).** Ideation (7.7) is scoped narrowly as a cold-open host. But there's a separate thought worth holding: what happens when a user walks in with *"I have five business ideas and I need help picking one"* or *"what game should I create"*? That's a real ideation *process* inside the conversation — not orientation. Creative touches brand/angle-finding; Designer touches tangible expression; neither is *"help me flesh out and choose between alternatives"*. Could be covered by a richer Creative prompt, or by a dedicated "brainstorm" register. **Not a new specialist yet** — probably a prompt enrichment to Creative when we get to 7.1/7.3 replication for Creative, not a new seat at the table. Keep the specialist count stable unless field evidence forces otherwise.
+
+- **Potential "Champion" / "Evangelist" as Realist's opposite (raised 2026-04-18).** If field evidence ever shows the room is systemically too skeptical — ideas getting critiqued without anyone naming genuine promise — a counterweight voice whose job is *"here's why this could work"* might be warranted. Creative leans that way sometimes but isn't dedicated to it. Do not add preemptively. The 12-persona batch doesn't currently show this pattern.
 
 ---
 

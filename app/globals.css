@@ -31,6 +31,7 @@
   --agent-legal:       #5A5A5A;
   --agent-cx:          #B07A7A;
   --agent-realist:     #5C6B4E;
+  --agent-ideation:    #4A7278;
 
   /* Typography */
   --font-display: var(--font-lora);

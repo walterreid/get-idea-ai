@@ -99,7 +99,7 @@ get-idea-ai/
 │       └── 001_foundation.sql   # Full schema: profiles, threads, messages, agent_configs, idea_insights
 │
 ├── scripts/
-│   ├── seed-agents.ts                # Seeds all 10 specialist agents + orchestrator into agent_configs
+│   ├── seed-agents.ts                # Seeds all 10 specialist agents + Ideation host + orchestrator into agent_configs
 │   ├── test-graph.ts                 # Integration tests for graph compilation, routing, and constraints
 │   ├── test-grade.ts                 # Unit tests for lib/test/grade-deliberation.ts
 │   ├── run-fixture-grades.ts         # Runs tripwire grader on all registered message fixtures (no DB)
@@ -183,7 +183,7 @@ This creates all tables (`profiles`, `threads`, `messages`, `agent_configs`, `id
 
 ### 5. Seed the agent panel
 
-This populates the `agent_configs` table with all 10 specialist agents and the orchestrator:
+This populates the `agent_configs` table with all 10 specialist agents, the Ideation host, and the orchestrator:
 
 ```bash
 npm run seed

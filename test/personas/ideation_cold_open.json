@@ -1,0 +1,32 @@
+{
+  "persona_id": "ideation_cold_open",
+  "test_focus": "User opens the room with a pure greeting and no business signal. Validates Ideation as the first voice (not CX), orchestrator honoring the soft-signal rule on turn 1, and Ideation stepping back once the user names any direction in R2.",
+  "grading_hints": ["Jonathan"],
+  "profile": {
+    "name": "Jonathan",
+    "business_name": "(unnamed new venture)",
+    "location": "Connecticut",
+    "business_type": "new business, just created — type not yet disclosed on turn 1"
+  },
+  "challenge": "Pre-business opener — has a new entity but has not named the work yet. Wants orientation before advice.",
+  "personality": "brief, polite, willing to share once welcomed",
+  "response_length_band": "terse",
+  "backstory": "Jonathan just formed a Connecticut LLC for a business he's starting and is testing whether the room is worth bringing his actual problem to. His first message is a greeting only. If welcomed warmly and asked what he's here to work on, he'll disclose on R2 that it's a new business in CT and he wants to talk through how to get it off the ground.",
+  "conversational_behaviors": [
+    "Opens with only a greeting, no business context",
+    "Volunteers his name and general situation on R2 if the room feels inviting",
+    "Not looking for advice on R1 — looking for a reason to keep talking",
+    "Uses plain language, no business vocabulary"
+  ],
+  "expected_answer_style": {
+    "q1_opener": "Hi",
+    "q2_if_welcomed": "Hi, I'm Jonathan and I want to talk about my new business I just created, I'm setting it up in CT."
+  },
+  "r3_wrong_claim": null,
+  "r4_contradiction": null,
+  "_note_multi_round": "Single-objective persona (Protocol A adjacent). R1 tests Ideation routing; R2 tests handoff. r3/r4 null — orchestrator should have moved off Ideation by then and the conversation proceeds normally with whichever specialist picks up Jonathan's new-business question.",
+  "expected_routing": {
+    "r1": "ideation (cold open — no business signal)",
+    "r2": "NOT ideation (user has named a direction — a new CT business) — any specialist, most likely Marketer or Realist for a new-business orientation conversation"
+  }
+}

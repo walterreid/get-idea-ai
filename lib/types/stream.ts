@@ -110,6 +110,7 @@ export const AGENT_COLOR_MAP: Record<string, string> = {
   legal: 'var(--agent-legal)',
   cx: 'var(--agent-cx)',
   realist: 'var(--agent-realist)',
+  ideation: 'var(--agent-ideation)',
   panel_recommendation: 'var(--color-primary)',
 }
 

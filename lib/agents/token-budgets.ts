@@ -43,6 +43,11 @@ const TOKEN_BUDGETS: Record<string, number> = {
   // Synthesis role — earns more length per turn when summoned
   realist: 350,
 
+  // Orientation role — one or two sentences by design. Host, not advisor.
+  // Ideation speaks first when the user walks in contentless, then steps back
+  // for a specialist. A tight cap enforces the "one welcome, not a battery".
+  ideation: 140,
+
   // Orchestrator stays uncapped here — it only emits short routing JSON, and
   // the supervisor's own Anthropic client already uses a sensible default.
   // If ever added, keep it > 600 to avoid truncating routing JSON.

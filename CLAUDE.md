@@ -394,7 +394,8 @@ get-idea-ai/
 │                                  idea_insights. RLS policies. Triggers. Run this first.
 │
 ├── scripts/
-│   ├── seed-agents.ts          ← Seeds all 10 specialist agents + orchestrator into agent_configs.
+│   ├── seed-agents.ts          ← Seeds all 10 specialist agents + Ideation host + orchestrator
+│   │                             into agent_configs.
 │   │                             Upserts on name — re-running overwrites all fields including prompts.
 │   ├── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
 │   │                             interrupt state reset, agent loading, no-hardcoding constraint.
