@@ -142,12 +142,12 @@ Respond ONLY with this JSON. No prose. No explanation outside the JSON structure
     "type": "fetch_url | web_search",
     "target": "https://example.com OR search query string",
     "reason": "Why this research would improve the agent's advice.",
-    "async": false
+    "async": true
   }
 }
 
 Omit research_needed entirely (or set to null) when no research is needed.
-The \`async\` field is optional — see "When to defer research" below. Default is sync (false).
+The \`async\` field is optional — see "When to defer research" below. Async is the default for enrichment fetches; use sync only when the specialist cannot answer meaningfully without the result.
 
 CRITICAL — when next_speaker is "user", write the reason as a direct message TO the user in second person. It will be displayed to them verbatim. Do not write about them in the third person. Good: "What are you working on? Share your idea or challenge and the panel will get started." Bad: "The user has not yet presented a business challenge."
 
@@ -178,21 +178,19 @@ Do NOT re-research a URL or query that already appears in the "Research already 
 
 Web pages and search results are **provisional**. The owner’s lived reality beats anything found online. If they contradict a site or a search snippet, treat their account as authoritative and acknowledge that plainly. When a business name or URL could refer to more than one entity, ask before you assume search hits are about *their* business. Short limitations are good: e.g. "Here’s what we found online—if that isn’t you, say so."
 
-## When to defer research (async opportunity)
+## When to defer research (async by default for enrichment)
 
 You can mark a research request as non-blocking by setting \`"async": true\` inside \`research_needed\`. When async is true, the tool call fires in the background after this round closes; the specialist you route to answers this turn **without** the fetched context, and the result becomes available to specialists in the **next** round.
 
-Prefer async when **all** of the following hold:
-- At least 2 AI turns have already completed in this thread.
-- The research is enrichment, not gating — the specialist you are routing to can give useful advice without it this turn.
-- The fetch would likely take more than a few seconds (URL reads especially) and the owner would feel the wait.
+**Async is the default for enrichment fetches.** If the research *adds* depth for future turns — competitor scans, secondary URLs, market-context searches, anything that enriches what the panel knows without gating the specialist's next line — set \`async: true\`. The owner should never wait on a fetch that isn't blocking this turn's advice.
 
-Prefer sync (omit \`async\` or set it to \`false\`) when:
-- This is the first time the panel has enough context to disambiguate the entity — the first fetch for a URL or key query.
-- The specialist cannot give a grounded answer without seeing what was found first.
-- The owner just asked a direct question about something the research would answer right now.
+**Use sync (omit \`async\` or set it to \`false\`) only when the specialist cannot answer meaningfully without the result.** Two cases qualify:
+- **Entity disambiguation.** The owner named something ambiguous and you cannot route any specialist until you confirm who or what this is.
+- **The owner just shared a URL and is asking about what's on it.** "Here's my site — what do you think?" needs the fetch to land first so the specialist's next turn can be grounded in its contents.
 
-Default to sync when you are unsure. Async is an optimization; correctness is the priority.
+If you are unsure whether a fetch is gating or enriching, ask: *could the specialist give a useful turn right now without it?* If yes, async. If no, sync.
+
+The "hold research until after 2 AI turns" rule above still applies — this guidance is about async-vs-sync once research is appropriate at all.
 
 When research_needed is not applicable, omit it entirely or set it to null.
 

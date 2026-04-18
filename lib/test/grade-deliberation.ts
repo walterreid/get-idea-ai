@@ -95,6 +95,13 @@ export interface GradesResult {
       successful_searches: number
       /** Failed attempts (timeout, bad key, 4xx/5xx). */
       failed_calls: number
+      /**
+       * Async dispatches dropped by the scheduler's in-flight guard
+       * (lib/research/scheduler.ts). Low signal today; becomes essential when
+       * R3 multi-batch research emits concurrent requests on the same thread.
+       * A non-zero count here is NOT a failure — it's evidence the lock held.
+       */
+      skipped_in_flight: number
     }
     advisor_turns: {
       /** Number of agent messages in the session. */
@@ -129,11 +136,14 @@ function collectAdvisorText(messages: MessageRow[]): string {
 }
 
 function hasResearchRows(messages: MessageRow[]): boolean {
-  return messages.some(
-    (m) =>
-      m.role === 'system' &&
-      (m.metadata as Record<string, unknown> | undefined)?.type === 'research'
-  )
+  return messages.some((m) => {
+    if (m.role !== 'system') return false
+    const meta = m.metadata as Record<string, unknown> | undefined
+    if (meta?.type !== 'research') return false
+    // Skip breadcrumbs are not actual research — don't trigger the advisor
+    // follow-through check on them.
+    return meta.skip_reason !== 'in_flight'
+  })
 }
 
 /** Heuristic: after research, advisors should cite something concrete or hedge */
@@ -328,10 +338,17 @@ function computeInstruments(messages: MessageRow[]): GradesResult['instruments']
     successful_fetches: 0,
     successful_searches: 0,
     failed_calls: 0,
+    skipped_in_flight: 0,
   }
   for (const m of messages) {
     const meta = m.metadata as Record<string, unknown> | undefined
     if (m.role !== 'system' || meta?.type !== 'research') continue
+    // In-flight skip breadcrumbs are observational — never count as a fetch /
+    // search attempt, because the tool never ran.
+    if (meta.skip_reason === 'in_flight') {
+      research.skipped_in_flight += 1
+      continue
+    }
     const kind = meta.research_type as string | undefined
     const success = meta.success === true
     if (kind === 'fetch_url') {

@@ -70,6 +70,24 @@ const afterImpl: AfterFn | null =
   null
 
 /**
+ * In-flight guard (ports Zansei's `_flight_lock` / `in_flight` concept from
+ * research_orchestrator.py). While an async job for a given threadId is
+ * running, a second `scheduleAsyncResearch` call for the same thread is
+ * **dropped**, not queued. The orchestrator sees the prior result on the next
+ * turn; the dropped request was enrichment that wasn't gating, by construction.
+ *
+ * Durability: module-level memory. Survives across requests within one Node
+ * process; resets on cold starts / serverless instance rotation. Acceptable at
+ * current single-instance volume; a DB-backed flag becomes the right answer
+ * once R3 multi-batch work arrives or the deployment goes multi-instance.
+ *
+ * Intentionally NOT a queue. Zansei drops duplicate requests for the same
+ * reason — the second request's result would land after the first's anyway,
+ * and serializing would mean the owner's next turn waits on two fetches.
+ */
+const inFlightByThread = new Set<string>()
+
+/**
  * Run the tool call and map the result to the merge patch + ResearchEntry
  * shape researchNode produces. No DB access; no side effects beyond the
  * outbound HTTP call. Safe to use from any context (API route, harness, test).
@@ -276,8 +294,52 @@ async function executeAsyncResearchForThread(
 }
 
 /**
+ * Persist a tiny "research skipped — in flight" breadcrumb so the grader can
+ * count it (instruments.research.skipped_in_flight) and the ledger picks up
+ * the pattern across runs. Low signal today; essential when R3 multi-batch
+ * dispatches arrive.
+ *
+ * Fire-and-forget: we do NOT block scheduling on the insert. The skip itself
+ * is already decided by the in-flight check; the row is purely observational.
+ */
+function recordInFlightSkip(threadId: string, req: ResearchRequest): void {
+  const admin = createAdminClient()
+  admin
+    .from('messages')
+    .insert({
+      thread_id: threadId,
+      role: 'system',
+      agent_name: null,
+      content: '',
+      metadata: {
+        type: 'research',
+        research_type: req.type,
+        target: req.target,
+        success: false,
+        fetched_at: new Date().toISOString(),
+        skip_reason: 'in_flight',
+        async: true,
+      },
+    })
+    .then(({ error }) => {
+      if (error) {
+        console.error(
+          '[scheduler] Failed to persist in-flight skip row:',
+          error
+        )
+      }
+    })
+  console.warn(
+    `[scheduler] research_skip_in_flight: another research job active for thread ${threadId} — dropping ${req.type} ${req.target}`
+  )
+}
+
+/**
  * Fire-and-forget async research dispatch. Must be called from an API route
  * handler (Next.js `after()` hooks the response lifecycle).
+ *
+ * Enforces the in-flight guard: only one active async job per thread. A second
+ * call while one is running is dropped (recorded as a breadcrumb, then ignored).
  *
  * If `after()` is unavailable in this Next.js version, falls back to a plain
  * `void` promise — Node keeps the process alive long enough in serverful
@@ -288,10 +350,23 @@ export function scheduleAsyncResearch(
   threadId: string,
   req: ResearchRequest
 ): void {
-  const run = () =>
-    executeAsyncResearchForThread(threadId, req).catch((err) => {
+  // In-flight guard. Synchronous check + add so a concurrent caller (same Node
+  // process, different request) cannot race past it.
+  if (inFlightByThread.has(threadId)) {
+    recordInFlightSkip(threadId, req)
+    return
+  }
+  inFlightByThread.add(threadId)
+
+  const run = async () => {
+    try {
+      await executeAsyncResearchForThread(threadId, req)
+    } catch (err) {
       console.error('[scheduler] Unhandled error:', err)
-    })
+    } finally {
+      inFlightByThread.delete(threadId)
+    }
+  }
 
   if (afterImpl) {
     afterImpl(run)

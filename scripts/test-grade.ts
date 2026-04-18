@@ -52,4 +52,36 @@ test('personaToHints picks up grading_hints and business_name', () => {
   assert.ok(h.business_name_hints?.includes('Greenwich'))
 })
 
+test('in-flight skip rows increment skipped_in_flight and do NOT count as fetches or trigger followthrough', () => {
+  const messages: MessageRow[] = [
+    { role: 'user', content: 'Hi, I run a bakery.' },
+    {
+      role: 'system',
+      content: '',
+      metadata: {
+        type: 'research',
+        research_type: 'fetch_url',
+        target: 'https://example.com',
+        success: false,
+        fetched_at: new Date().toISOString(),
+        skip_reason: 'in_flight',
+        async: true,
+      },
+    },
+    {
+      role: 'agent',
+      content:
+        'A bakery lives on foot traffic and local search. What is the neighborhood like on weekday mornings?',
+      agent_name: 'marketer',
+      metadata: { display_name: 'Marketer' },
+    },
+  ]
+  const g = gradeDeliberation(messages, null)
+  assert.equal(g.instruments.research.skipped_in_flight, 1)
+  assert.equal(g.instruments.research.fetch_calls, 0)
+  assert.equal(g.instruments.research.failed_calls, 0)
+  // Research follow-through must not be "applicable" — the tool never ran.
+  assert.equal(g.research_followthrough.applicable, false)
+})
+
 console.log('\nRunning grade-deliberation tests...\n')
