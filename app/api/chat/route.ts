@@ -10,6 +10,10 @@ import {
   AccumulatedResearchSchema,
   type AccumulatedResearch,
 } from '@/lib/agents/schema'
+import {
+  scheduleAsyncResearch,
+  type ResearchRequest,
+} from '@/lib/research/scheduler'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -250,6 +254,13 @@ export async function POST(request: Request) {
           metadata: Record<string, unknown>
         }> = []
 
+        // R4: async research requests observed on supervisor on_chain_end.
+        // Dispatched after the stream closes via lib/research/scheduler.ts.
+        // Deduped by target so the same URL/query is not scheduled twice even
+        // if the supervisor re-requests it on a later turn within this round.
+        const asyncResearchQueue: ResearchRequest[] = []
+        const asyncResearchSeen = new Set<string>()
+
         const graphStream = deliberationGraph.streamEvents(
           initialState,
           { version: 'v2' }
@@ -264,6 +275,33 @@ export async function POST(request: Request) {
           // ── Supervisor completed → routing decision ──
           if (event.event === 'on_chain_end' && event.name === 'supervisor') {
             const output = event.data?.output as Record<string, unknown> | undefined
+
+            // R4: any async research request the supervisor just emitted. The
+            // graph edge skips the inline researchNode when async is true; we
+            // queue the request here and dispatch after the stream closes.
+            const rn = output?.research_needed as
+              | { type: 'fetch_url' | 'web_search'; target: string; reason: string; async?: boolean }
+              | null
+              | undefined
+            if (rn && rn.async === true && !asyncResearchSeen.has(rn.target)) {
+              asyncResearchSeen.add(rn.target)
+              asyncResearchQueue.push({
+                type: rn.type,
+                target: rn.target,
+                reason: rn.reason,
+                async: true,
+              })
+              emit({
+                type: 'research_scheduled',
+                researchType: rn.type,
+                target: rn.target,
+                reason: rn.reason,
+              })
+              console.log(
+                `[/api/chat] Async research queued: ${rn.type} → ${rn.target}`
+              )
+            }
+
             if (output && typeof output.next_speaker === 'string') {
               pendingRoutingReason = (output.routing_reason as string) ?? ''
               pendingRoutingObjective = (output.routing_objective as string) ?? ''
@@ -524,6 +562,19 @@ export async function POST(request: Request) {
           .eq('id', threadId)
 
         console.log(`[/api/chat] Round complete. Persisting ${agentMessagesToPersist.length} message(s).`)
+
+        // ── R4: dispatch queued async research ──
+        // Runs after the response closes via Next.js after(). Results land as
+        // system research rows picked up on the next POST via dbRowsToLangChain
+        // + latestAccumulatedResearchFromRows — no reload-path changes needed.
+        for (const req of asyncResearchQueue) {
+          scheduleAsyncResearch(threadId, req)
+        }
+        if (asyncResearchQueue.length > 0) {
+          console.log(
+            `[/api/chat] Scheduled ${asyncResearchQueue.length} async research request(s) for thread ${threadId}`
+          )
+        }
 
         // ── Signal round completion to client ──
         // The client gets control back here. Extraction runs silently below

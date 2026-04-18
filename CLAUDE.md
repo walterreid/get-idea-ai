@@ -335,16 +335,26 @@ get-idea-ai/
 │   │   │                         fitness_wellness, ecommerce_dtc). Ported from Zansei production.
 │   │   └── channels/           ← 8 channel guides (GBP, LSAs, Google Search, Meta, Email/SMS,
 │   │                             LinkedIn, Referrals, SEO). Same Zansei provenance.
+│   ├── research/
+│   │   └── scheduler.ts        ← R4 async research dispatch. executeResearchTool (framework-agnostic
+│   │                             core — runs fetchUrl/webSearch, builds merge patch) and
+│   │                             scheduleAsyncResearch (Next.js after()-wrapped, writes system
+│   │                             research message via supabaseAdmin). API route dispatches when
+│   │                             supervisor emits research_needed.async=true.
 │   ├── graph/
 │   │   ├── state.ts            ← DeliberationStateAnnotation. All LangGraph state fields with
 │   │   │                         reducers. prior_insights_context is injected here from the API.
-│   │   ├── nodes.ts            ← The four nodes: supervisorNode (routing), workerNode (any agent,
-│   │   │                         now injects research + cases), interruptHandlerNode (resets on
-│   │   │                         user interrupt), recommendationNode (structured assessment with
+│   │   │                         force_recommendation is a harness-only test affordance.
+│   │   ├── nodes.ts            ← The four nodes: supervisorNode (routing; short-circuits on
+│   │   │                         force_recommendation), workerNode (injects research + cases;
+│   │   │                         WORKER_RESEARCH_EPISTEMICS now requires research follow-through),
+│   │   │                         interruptHandlerNode (resets on user interrupt), researchNode
+│   │   │                         (sync tool call), recommendationNode (structured assessment with
 │   │   │                         divergence rule + budget hierarchy + assumption check + knowledge
 │   │   │                         injection). No hardcoded agent names anywhere.
 │   │   └── compile.ts          ← StateGraph compilation. Defines routing logic, MAX_AGENT_TURNS,
-│   │                             and the conditional edges between nodes.
+│   │                             and the conditional edges between nodes. Research edge skips
+│   │                             the inline researchNode when research_needed.async === true.
 │   ├── hooks/
 │   │   └── useDeliberation.ts  ← Client SSE hook. Manages stream lifecycle, parses events, updates
 │   │                             agentStatuses in real time, handles AbortController for interrupts.

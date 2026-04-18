@@ -96,6 +96,7 @@ test('interruptHandlerNode resets interrupt flag and turn count', async () => {
     research_needed: null,
     research_context: [],
     accumulated_research: null,
+    force_recommendation: false,
   }
 
   const result = await interruptHandlerNode(fakeState)

@@ -35,6 +35,8 @@ import { resolve } from 'node:path'
 import { HumanMessage, AIMessage, SystemMessage } from '@langchain/core/messages'
 import { deliberationGraph } from '@/lib/graph/compile'
 import type { DeliberationState } from '@/lib/graph/state'
+import { mergeAccumulatedResearch } from '@/lib/agents/schema'
+import { executeResearchTool } from '@/lib/research/scheduler'
 import {
   gradeDeliberation,
   personaToHints,
@@ -53,10 +55,12 @@ import { generateUserTurn } from '@/lib/test/role-player'
 // CLI parsing
 // ─────────────────────────────────────────────────────────────────────────────
 
+type ResearchMode = 'sync' | 'async' | 'off'
+
 interface Options {
   personaPath: string
   rounds: number
-  research: boolean
+  researchMode: ResearchMode
   pace: PacingConfig | null
   rolePlayerModel: string
   outDir?: string
@@ -71,7 +75,9 @@ function parseArgs(argv: string[]): Options {
     // research (Zansei-style post-Q2 timing) time to materially inform
     // later turns. Quality over tokens.
     rounds: 6,
-    research: true,
+    // R4: sync preserves the pre-R4 behavior for regression coverage; the
+    // orchestrator's async flag is honored in async mode, suppressed in sync.
+    researchMode: 'sync',
     pace: { ...DEFAULT_PACING },
     rolePlayerModel: 'claude-sonnet-4-5',
   }
@@ -79,7 +85,16 @@ function parseArgs(argv: string[]): Options {
     const a = args[i]
     if (a === '--persona' && args[i + 1]) opts.personaPath = args[++i]
     else if (a === '--rounds' && args[i + 1]) opts.rounds = parseInt(args[++i], 10)
-    else if (a === '--no-research') opts.research = false
+    else if (a === '--no-research') opts.researchMode = 'off'
+    else if (a === '--research-mode' && args[i + 1]) {
+      const v = args[++i]
+      if (v === 'sync' || v === 'async' || v === 'off') {
+        opts.researchMode = v
+      } else {
+        console.error(`[harness] --research-mode must be sync|async|off (got "${v}")`)
+        process.exit(1)
+      }
+    }
     else if (a === '--no-pace') opts.pace = null
     else if (a === '--pace-min' && args[i + 1] && opts.pace)
       opts.pace.min_ms = parseInt(args[++i], 10)
@@ -91,7 +106,7 @@ function parseArgs(argv: string[]): Options {
   }
   if (!opts.personaPath) {
     console.error(
-      'Usage: --persona <path> [--rounds N] [--no-research] [--no-pace] [--pace-min ms] [--pace-max ms] [--role-player-model name] [--out-dir dir]'
+      'Usage: --persona <path> [--rounds N] [--research-mode sync|async|off] [--no-research] [--no-pace] [--pace-min ms] [--pace-max ms] [--role-player-model name] [--out-dir dir]'
     )
     process.exit(1)
   }
@@ -276,7 +291,11 @@ function buildNextRoundState(
     return {
       messages: [userMsg],
       prior_insights_context: '',
-      ...(forceRecommendation ? { deliberation_phase: 'recommendation' as const } : {}),
+      // force_recommendation is the only field the supervisor respects on entry;
+      // the legacy deliberation_phase hint stays for clarity but is advisory.
+      ...(forceRecommendation
+        ? { force_recommendation: true, deliberation_phase: 'recommendation' as const }
+        : {}),
     }
   }
 
@@ -285,9 +304,10 @@ function buildNextRoundState(
     research_context: prior.research_context,
     accumulated_research: prior.accumulated_research,
     // Force recommendation phase when the harness is explicitly testing closure.
-    // This bypasses the orchestrator's (appropriately conservative) judgment about
-    // whether enough deliberation has happened to warrant synthesis. For product
-    // use, the orchestrator decides — this override is a test affordance only.
+    // The supervisor respects force_recommendation and short-circuits without
+    // invoking its routing LLM, so the routeFromSupervisor edge reliably lands
+    // at recommendationNode. Production /chat never sets this.
+    force_recommendation: forceRecommendation,
     deliberation_phase: forceRecommendation ? 'recommendation' : prior.deliberation_phase,
     user_sophistication: prior.user_sophistication,
     prior_insights_context: '',
@@ -401,6 +421,18 @@ interface RoundRecord {
   }
   pacing_ms: number
   invoke_ms: number
+  /**
+   * R4: populated when `--research-mode async` and the supervisor marked a
+   * research request as async this round. The harness runs the tool after
+   * the graph returns and merges the result before the next round's initial
+   * state is built — mirroring the API route's after()-dispatched scheduler.
+   */
+  async_research?: {
+    type: 'fetch_url' | 'web_search'
+    target: string
+    success: boolean
+    elapsed_ms: number
+  } | null
 }
 
 async function main() {
@@ -410,7 +442,7 @@ async function main() {
   // process. web-research.ts will throw inside the tool; the graph catches
   // the error and appends a failure entry, which is the "research failed"
   // signal without any graph modification.
-  if (!opts.research) {
+  if (opts.researchMode === 'off') {
     process.env.SERPER_API_KEY = ''
     process.env.JINA_API_KEY = ''
     console.log('[harness] research disabled — tool calls will fail fast')
@@ -422,7 +454,7 @@ async function main() {
   const personaId = String(personaRaw.persona_id ?? 'unknown')
 
   console.log(
-    `[harness] persona=${personaId} rounds=${opts.rounds} research=${opts.research} pace=${
+    `[harness] persona=${personaId} rounds=${opts.rounds} research=${opts.researchMode} pace=${
       opts.pace ? `${opts.pace.min_ms}-${opts.pace.max_ms}ms` : 'off'
     } role_player_model=${opts.rolePlayerModel}`
   )
@@ -500,6 +532,53 @@ async function main() {
     }
     const invoke_ms = Date.now() - invokeT0
 
+    // Step 3b (R4): if the supervisor marked research as async, the graph's
+    // routing edge skipped the inline researchNode — this round's specialist
+    // answered WITHOUT the context. In async mode we execute the tool here,
+    // merge the result into state, and let the NEXT round's supervisor see
+    // the accumulated_research. In sync mode we do the same catch-up so any
+    // orchestrator-emitted async doesn't leak into sync-mode regression runs.
+    let asyncResearchRecord: RoundRecord['async_research'] = null
+    if (
+      opts.researchMode !== 'off' &&
+      state.research_needed &&
+      state.research_needed.async === true
+    ) {
+      const req = state.research_needed
+      const label = opts.researchMode === 'async' ? 'async' : 'sync-catchup'
+      console.log(`  [${label}] executing research post-round: ${req.type} ${req.target}`)
+      const asyncT0 = Date.now()
+      try {
+        const { entry, accPatch } = await executeResearchTool({
+          type: req.type,
+          target: req.target,
+          reason: req.reason,
+          async: true,
+        })
+        const merged = mergeAccumulatedResearch(state.accumulated_research ?? null, accPatch)
+        // Apply to state so buildNextRoundState carries it forward.
+        // research_context is append-reducer in state.ts, but here we mutate the
+        // finalized state object so the harness's own state machine observes it.
+        state = {
+          ...state,
+          research_needed: null,
+          research_context: [...state.research_context, entry],
+          accumulated_research: merged,
+        } as DeliberationState
+        asyncResearchRecord = {
+          type: req.type,
+          target: req.target,
+          success: entry.success,
+          elapsed_ms: Date.now() - asyncT0,
+        }
+        console.log(
+          `  [${label}] done in ${asyncResearchRecord.elapsed_ms}ms, success=${entry.success}`
+        )
+      } catch (err) {
+        console.error(`  [${label}] executeResearchTool threw:`, err)
+      }
+    }
+
     // Step 4: summarize what the panel produced this round
     const newAICount = state.messages.filter((m) => m._getType() === 'ai').length -
       rounds.reduce((acc, r) => acc + r.panel.turns_count, 0)
@@ -532,6 +611,7 @@ async function main() {
       },
       pacing_ms,
       invoke_ms,
+      async_research: asyncResearchRecord,
     })
   }
 
@@ -556,7 +636,7 @@ async function main() {
       persona_id: personaId,
       source: 'thread',
       thread_id: null,
-      title: `Multi-round harness — ${personaId} (${opts.rounds} rounds, research=${opts.research})`,
+      title: `Multi-round harness — ${personaId} (${opts.rounds} rounds, research=${opts.researchMode})`,
       persona_file: opts.personaPath,
       exported_at: exportedAt,
     },
@@ -566,12 +646,13 @@ async function main() {
 
   // Write a harness-specific round log alongside the bundle
   const roundLogPath = resolve(dir, 'harness_rounds.json')
+  const asyncRoundsTotal = rounds.filter((r) => r.async_research).length
   const roundLog = {
     persona_id: personaId,
     persona_file: opts.personaPath,
     options: {
       rounds: opts.rounds,
-      research: opts.research,
+      research_mode: opts.researchMode,
       pace: opts.pace,
       role_player_model: opts.rolePlayerModel,
     },
@@ -581,6 +662,7 @@ async function main() {
       total_messages: exportRows.length,
       total_panel_turns: rounds.reduce((a, r) => a + r.panel.turns_count, 0),
       total_research_calls: state.research_context.length,
+      total_async_research_calls: asyncRoundsTotal,
       total_invoke_ms: rounds.reduce((a, r) => a + r.invoke_ms, 0),
       total_pacing_ms: rounds.reduce((a, r) => a + r.pacing_ms, 0),
       final_deliberation_phase: state.deliberation_phase,
@@ -606,10 +688,11 @@ async function main() {
     ts: exportedAt,
     persona_id: personaId,
     rounds: opts.rounds,
-    research_enabled: opts.research,
+    research_mode: opts.researchMode,
     role_player_model: opts.rolePlayerModel,
     panel_turns: roundLog.summary.total_panel_turns,
     research_calls: state.research_context.length,
+    async_research_calls: asyncRoundsTotal,
     unknown_agent_yields: grades.instruments.routing.unknown_agent_yields,
     error_yields: grades.instruments.routing.error_yields,
     advisor_avg_words: grades.instruments.advisor_turns.avg_words,

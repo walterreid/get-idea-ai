@@ -41,8 +41,12 @@ function routeFromSupervisor(state: DeliberationState): string {
     return END
   }
 
-  // Research runs as a sub-step before the agent speaks — doesn't increment turn_count
-  if (state.research_needed) {
+  // Research runs as a sub-step before the agent speaks — doesn't increment turn_count.
+  // R4: when the orchestrator marks research as async, skip the inline node; the
+  // chat route dispatches the tool call after the response closes (via
+  // lib/research/scheduler.ts). The specialist answers this turn without the
+  // fetched context; results land in accumulated_research for the NEXT round.
+  if (state.research_needed && state.research_needed.async !== true) {
     return 'research'
   }
 

@@ -62,12 +62,19 @@ export const RoutingDecisionSchema = z.object({
    * Optional research the orchestrator wants to run BEFORE the next agent speaks.
    * When present, the graph routes to researchNode first, then to the worker.
    * Null or omitted means no research needed this turn.
+   *
+   * `async` (R4): when true, skip the inline researchNode and dispatch the
+   * tool call via lib/research/scheduler.ts after the chat response closes.
+   * The specialist answers THIS turn without the fetched context; the result
+   * is available to the NEXT round's supervisor via accumulated_research.
+   * Defaults to false when omitted (fully backward compatible).
    */
   research_needed: z
     .object({
       type: z.enum(['fetch_url', 'web_search']),
       target: z.string().min(1),
       reason: z.string(),
+      async: z.boolean().optional(),
     })
     .nullable()
     .optional(),

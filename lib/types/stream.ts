@@ -39,6 +39,18 @@ export type StreamEvent =
       target: string
       error: string
     }
+  | {
+      /**
+       * R4: orchestrator marked a research request as async. The tool call is
+       * dispatched after the response closes via lib/research/scheduler.ts.
+       * Purely observational — no bouncing-dots UI. Harness uses it to prove
+       * the timing shift in the ledger.
+       */
+      type: 'research_scheduled'
+      researchType: 'fetch_url' | 'web_search'
+      target: string
+      reason: string
+    }
   | { type: 'error'; message: string }
   | { type: 'done' }
 

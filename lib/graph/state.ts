@@ -94,16 +94,35 @@ export const DeliberationStateAnnotation = Annotation.Root({
 
   /**
    * Research the orchestrator has requested before routing to the next agent.
-   * Set by supervisorNode, consumed and cleared by researchNode.
+   * Set by supervisorNode, consumed and cleared by researchNode (sync) OR
+   * dispatched via lib/research/scheduler.ts after the response closes (async).
    * Null means no research is pending.
    */
   research_needed: Annotation<{
     type: 'fetch_url' | 'web_search'
     target: string
     reason: string
+    async?: boolean
   } | null>({
     reducer: (_, next) => next,
     default: () => null,
+  }),
+
+  /**
+   * Test affordance for the persona harness closure rounds.
+   *
+   * When true, supervisorNode short-circuits without invoking its routing LLM
+   * and returns a state patch that sets deliberation_phase='recommendation' +
+   * next_speaker='user'. The routeFromSupervisor edge then routes straight to
+   * recommendationNode as designed.
+   *
+   * Production /chat never sets this — the orchestrator decides when the
+   * conversation is ready for a recommendation. Only the harness sets this
+   * in R5 closure rounds so the recommendation path is reliably exercised.
+   */
+  force_recommendation: Annotation<boolean>({
+    reducer: (_, next) => next ?? false,
+    default: () => false,
   }),
 
   /**

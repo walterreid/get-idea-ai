@@ -71,6 +71,8 @@ get-idea-ai/
 │   │   ├── loader.ts            # Vertical playbook + channel guide retrieval for recommendationNode
 │   │   ├── playbooks/           # 5 verticals: local_services, professional_services, restaurant_food, fitness_wellness, ecommerce_dtc
 │   │   └── channels/            # 8 channels: gbp, lsa, google_search, meta, email_sms, linkedin, referral, seo
+│   ├── research/
+│   │   └── scheduler.ts         # R4 async research — executeResearchTool (core) + scheduleAsyncResearch (after()-wrapped DB persist)
 │   ├── graph/
 │   │   ├── state.ts             # DeliberationStateAnnotation — all LangGraph state fields
 │   │   ├── nodes.ts             # supervisorNode, researchNode, workerNode, interruptHandlerNode, recommendationNode
@@ -290,7 +292,7 @@ These are enforced throughout the codebase and reflected in the Cursor rules (`.
 | `npm run test:fixtures` | All registry cases in `test/fixtures/` — no DB, no LLM |
 | `npm run test:fixtures:write` | Same as `test:fixtures`, plus writes `test/results/…` bundle folders |
 | `npm run test:quality` | `test:graph` + `test:grade` + `test:fixtures` |
-| `npm run test:persona` | **Multi-round persona harness** — R1–R6 with role-player + research + pacing. See [docs/testing.md](docs/testing.md). |
+| `npm run test:persona` | **Multi-round persona harness** — R1–R6 with role-player + research + pacing. `--research-mode sync\|async\|off` controls how research fires (sync is default). See [docs/testing.md](docs/testing.md). |
 | `npm run grade:file` | Grade one exported `messages` JSON; add `--write` for a `test/results/…` folder |
 | `npm run capture:bundle` | Save a real thread + manifest + grades under `test/results/` |
 | `npm run export:thread` | Export thread messages to JSON or Markdown |

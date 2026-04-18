@@ -30,6 +30,8 @@ import type { DeliberationState } from './state'
 /** Injected when any web research is present; complements agent_configs (R5 epistemics). */
 const WORKER_RESEARCH_EPISTEMICS = `## How to treat web research
 Research is provisional evidence, not ground truth. **If the user says something that contradicts a page or search result, trust the user** and say so plainly. If a name or URL might be ambiguous, ask one clarifying question before treating search hits as being about them. Brief acknowledgements help: e.g. "Here's what we found online—if that isn't your business, tell us."
+
+**Follow-through is required.** If research context is present in this turn, you must reference something specific from it OR explicitly hedge that what was found may not be current. Silence about research that ran is a signal to the owner that you didn't do your homework.
 `
 
 /**
@@ -206,6 +208,25 @@ function buildLLMClient(
 export async function supervisorNode(
   state: DeliberationState
 ): Promise<Partial<DeliberationState>> {
+  // Test affordance: the persona harness sets force_recommendation=true in R5
+  // closure rounds. Production /chat never sets this flag. When present, bypass
+  // the routing LLM entirely and emit the state patch that routes straight into
+  // recommendationNode via the existing conditional edge in compile.ts.
+  // Clear the flag on the way out so subsequent supervisor entries within this
+  // run (shouldn't happen — recommendationNode → END — but defense in depth)
+  // don't loop the short-circuit.
+  if (state.force_recommendation === true) {
+    return {
+      deliberation_phase: 'recommendation',
+      next_speaker: 'user',
+      suppressed_agents: [],
+      routing_reason: 'Harness forced recommendation phase for this round.',
+      routing_objective: '',
+      research_needed: null,
+      force_recommendation: false,
+    }
+  }
+
   const [orchestratorConfig, activeAgents] = await Promise.all([
     fetchOrchestratorConfig(),
     fetchActiveAgents(),
