@@ -732,9 +732,9 @@ Not required for Tier 2: banned boilerplate phrases, minimum user-specific refer
 
 **Read first:** CLAUDE.md (Reference quality, Golden rules — especially #1, #4, #6). [BUILD.md §6.2](#62-conversation-quality-and-testing) (multi-round persona protocol). This phase mostly does not touch the Orchestrator, though necessary serialization/routing-discipline fixes did happen during 7.1–7.3 (see subphase notes).
 
-**Status:** IN PROGRESS — 7.1 Marketer shipped · 7.3 shipped · 7.5 (harness) pulled forward and shipped early · 7.4 next · 7.2 deferred.
+**Status:** IN PROGRESS — 7.1 Marketer shipped · 7.3 Marketer-layer shipped · 7.4 shipped · 7.5 (harness) pulled forward and shipped early · Phase 7.6 (recommendation force fix + research follow-through + R4 async) shipped 2026-04-18 · **next: 7.1/7.3 replication to the other 9 specialists** (now unblocked by 7.4) · 7.2's specialist-prompt rollout folds into that replication.
 
-**Sequencing reality (vs. BUILD.md's original linear ordering):** Phase 7.5 (multi-round harness) was pulled forward ahead of 7.1–7.4 because without it, specialist changes could not be measured. Phase 7.3 (case library + knowledge files) was done before 7.2 (divergence / budget / evidence rules) because the Marketer 7.1 evidence showed voice-rewrite alone didn't move the quality needle — case material was the load-bearing lever. Phase 7.2's rules were integrated directly into 7.3's `recommendationNode` wiring (divergence rule, budget signal hierarchy, assumption check) rather than shipped as a separate subphase. Phase 7.4 length compression is the clear next priority based on 2026-04-18 batch evidence (11/12 personas exceed the 150-word per-turn ceiling).
+**Sequencing reality (vs. BUILD.md's original linear ordering):** Phase 7.5 (multi-round harness) was pulled forward ahead of 7.1–7.4 because without it, specialist changes could not be measured. Phase 7.3 (case library + knowledge files) was done before 7.2 (divergence / budget / evidence rules) because the Marketer 7.1 evidence showed voice-rewrite alone didn't move the quality needle — case material was the load-bearing lever. Phase 7.2's rules were integrated directly into 7.3's `recommendationNode` wiring (divergence rule, budget signal hierarchy, assumption check) rather than shipped as a separate subphase. Phase 7.4 length compression shipped 2026-04-18 (per-specialist token budgets in [lib/agents/token-budgets.ts](lib/agents/token-budgets.ts); 21–46% reduction on spot-checks). **Next coherent cycle (post-7.6): replicate 7.1 voice-rewrite + 7.3 case libraries to the other 9 specialists, one at a time, validated against a persona whose archetype actually exercises that specialist** (Walter is not the universal falsifiability case — Legal/Accountant/Operations need different personas to produce signal).
 
 **Primary falsifiability case:** the Walter Reid / `ai_consultant` persona (see local `test/personas/zansei-reference.md`). Same opener, before and after each subphase. If advisor turns do not visibly change on the dimension the subphase addresses, the subphase did not land — revert and rethink.
 
@@ -752,7 +752,7 @@ Lift the voice-discipline structure from the ad101/Zansei `conversation_system.m
 - **Versioning:** block comment above each specialist tracking prompt versions + the evidence that drove each revision (*"v2 (YYYY-MM-DD): Tightened specificity. Driven by ai_consultant persona — advisor produced 'thought-leadership engine' on R2."*).
 
 - [x] **Marketer v2/v3 shipped** (2026-04-17 / 2026-04-18). Marketer prompt rewritten with lived-in stance, voice discipline section, banned-phrase inline list, and "use the case, don't cite it" rule (v3). Changelog block added above the Marketer object in [scripts/seed-agents.ts](scripts/seed-agents.ts).
-- [ ] **Other 9 specialists NOT yet rewritten.** Evidence from the 2026-04-18 batch run (12 personas, 11/12 pass) shows Marketer v3 + case injection produces reference-quality turns when the case-match is tight (Ella/Glory Days, Steve Scillieri). Replication to the other 9 is held pending Phase 7.4 length compression — replicating voice+cases to 9 more specialists at current length variance would compound the length problem we're about to fix.
+- [ ] **Other 9 specialists NOT yet rewritten — UNBLOCKED 2026-04-18.** Evidence from the 2026-04-18 batch run (12 personas, 11/12 pass) shows Marketer v3 + case injection produces reference-quality turns when the case-match is tight (Ella/Glory Days, Steve Scillieri). Original hold condition was Phase 7.4 length compression; 7.4 shipped 2026-04-18 (see below). **Replication is now the next coherent work block.** Sequencing note: each specialist should be validated against a persona whose archetype actually exercises that specialist — Walter (`ai_consultant`) is the right falsifiability case for Marketer / Copywriter / Realist, but not for Legal / Accountant / Operations (his business has no real surface area for those). Map is in the cycle plan, not hardcoded here.
 
 **What 7.1 actually proved (different from original hypothesis):**
 - Voice-rewrite alone does NOT reliably move specificity — the Marketer v2 was within length variance of v1 on Walter (the Marketer's sessions ran long regardless of prompt).
@@ -761,7 +761,7 @@ Lift the voice-discipline structure from the ad101/Zansei `conversation_system.m
 - Orchestrator serialization fix (name-emission) was necessary during 7.1. The Orchestrator was emitting `"business_realist"` (snake-cased display name) when the seeded name is `"realist"`. Fixed with explicit enumeration guidance in the orchestrator prompt. Zero unknown-agent yields across 12 post-fix runs.
 
 **Done when (original):** primary persona shows advisor turns averaging ≤3 sentences with zero banned phrases.
-**Actual Marketer v3 state (2026-04-18):** 0 banned phrases consistently across all 12 batch runs. Turn length averages 139–343 words (far above 3 sentences). Length problem is real and systemic — deferred to Phase 7.4, not Marketer-prompt work.
+**Actual Marketer v3 state (2026-04-18):** 0 banned phrases consistently across all 12 batch runs. Turn length averages 139–343 words (far above 3 sentences). Length problem was real and systemic — addressed by Phase 7.4 (token-budgets.ts), not by further Marketer-prompt work. Post-7.4 spot-checks showed 21–46% reduction.
 
 ### 7.2 Divergence, budget signal hierarchy, evidence binding
 
@@ -792,7 +792,7 @@ Three generative constraints, lifted from ad101/Zansei `plan_generation.md`. The
 - Retrieved by [lib/agents/case-loader.ts](lib/agents/case-loader.ts) — returns 2–3 best matches by business-type category (fills with cross-category if fewer than top-N match).
 - Injected by `workerNode` into the specialist's user-prompt block (after research, before conversation history).
 - Rule: **"Use the case, don't cite it."** Added to Marketer v3 prompt explicitly. The insight lands; the source stays invisible.
-- **Currently shipped:** Marketer only (13 cases, [lib/agents/cases/marketer.json](lib/agents/cases/marketer.json)). Other 9 specialists pending Phase 7.4 resolution.
+- **Currently shipped:** Marketer only (13 cases, [lib/agents/cases/marketer.json](lib/agents/cases/marketer.json)). Other 9 specialists were pending Phase 7.4 resolution — **now unblocked (2026-04-18)** and are the next coherent work block. Each specialist's case library gets validated against a persona that actually exercises it (not Walter universally — see 7.1 note).
 
 **Layer B — Vertical playbooks + channel guides** (`lib/knowledge/`):
 - 5 playbooks: local_services, professional_services, restaurant_food, fitness_wellness, ecommerce_dtc.
@@ -831,28 +831,29 @@ Three generative constraints, lifted from ad101/Zansei `plan_generation.md`. The
 
 ### 7.4 Length compression as consequence
 
-**Status:** IN PROGRESS (2026-04-18). Elevated from post-7.3 subphase to immediate-next based on batch evidence: 11/12 personas exceed the 150-word per-turn ceiling, avg turn 139w–343w, max observed 622w (civic_helpers). Voice-discipline rules in the Marketer v3 prompt ("two to three sentences default") don't constrain length at temperature 0.7.
+**Status:** SHIPPED (2026-04-18). Elevated from post-7.3 subphase to immediate-next based on batch evidence: 11/12 personas exceeded the 150-word per-turn ceiling, avg turn 139w–343w, max observed 622w (civic_helpers). Voice-discipline rules in the Marketer v3 prompt ("two to three sentences default") did not constrain length at temperature 0.7.
 
-With cases carrying specificity, prose can shrink structurally. Brevity stops being an aspiration and becomes a budget.
+With cases carrying specificity, prose can shrink structurally. Brevity stopped being an aspiration and became a budget.
 
-**Design:**
-- Add `max_tokens` to the `AgentConfig` Zod schema and Supabase `agent_configs` table.
-- Per-specialist defaults based on role character:
-  - Marketer, Copywriter, Designer, Customer Experience: **200 tokens** (~150 words) — concise probing + observation specialists.
-  - Creative: **220 tokens** — slightly more for angle-finding.
-  - Accountant, Operations, Legal Awareness: **280 tokens** — need room for mechanics/structure detail.
-  - Finance: **320 tokens** — quantitative arguments need numbers + reasoning.
-  - Business Realist: **350 tokens** — synthesis role; earns more length.
-- Worker node ([lib/graph/nodes.ts](lib/graph/nodes.ts)) passes per-specialist `max_tokens` to the LLM-client builder at invocation.
-- **Grader instrument already in place** (added 2026-04-17): `advisor_turns.over_150_words` count and `advisor_turns.word_counts` per turn. Ledger tracks these across runs so length drift over time is visible.
+**What shipped (commit 8955276):** per-specialist token budgets live in [lib/agents/token-budgets.ts](lib/agents/token-budgets.ts) as a static config lookup (not an `agent_configs` column — documented as future migration path to avoid a DB migration for this phase). `workerNode` reads `getMaxTokensFor(agentConfig.name)` and passes it to `buildLLMClient`. The "no hardcoded agent names in logic" rule still holds — this is config lookup by name, same pattern as `lib/agents/cases/*.json`.
 
-- [ ] Add `max_tokens` to AgentConfig Zod schema.
-- [ ] Add per-specialist defaults in seed-agents.ts (do NOT touch Orchestrator's max_tokens — already 2048 by default and that's appropriate).
-- [ ] Extend `buildLLMClient` to honor `max_tokens` from config.
-- [ ] Wire through workerNode.
-- [ ] Re-seed, run batch validation, confirm length drop.
+**Per-specialist caps (final):**
+- Marketer, Copywriter, Designer, CX: **200 tokens** (~150 words)
+- Creative: **220 tokens**
+- Accountant, Operations, Legal: **280 tokens**
+- Finance: **320 tokens**
+- Realist: **350 tokens**
+- Default (unknown agent): **260 tokens**
 
-**Done when:** advisor turn word counts visibly drop in the ledger across at least 3 post-7.4 persona runs; no new failure modes (e.g., truncated mid-sentence turns). Average advisor turn drops below 150 words on terse personas; below 220 on verbose personas.
+- [x] Add `max_tokens` via `lib/agents/token-budgets.ts` config module (deferred DB column to a later migration).
+- [x] `buildLLMClient` honors optional `maxTokens` parameter.
+- [x] `workerNode` passes per-specialist `max_tokens` at invocation.
+- [x] Orchestrator's model left untouched — its default budget is appropriate for routing JSON.
+- [x] Re-seed (no DB change — budgets live in code), run spot-check validation, confirmed length drop.
+
+**Spot-check results (from commit 8955276 body, 2026-04-18):** 21–46% reduction in advisor-turn word counts across spot-checked personas. No truncated-mid-sentence failures observed.
+
+**Done when (original):** advisor turn word counts visibly drop in the ledger across at least 3 post-7.4 persona runs; no new failure modes. Average advisor turn drops below 150 words on terse personas; below 220 on verbose personas. **Met on spot-checks.** Full batch re-validation folds into the Phase 7.1/7.3 specialist replication cycle since those changes will also affect advisor-turn shape.
 
 ### 7.5 Test harness upgrades
 
@@ -868,7 +869,7 @@ With cases carrying specificity, prose can shrink structurally. Brevity stops be
 - [x] Grader extended with `instruments` block — routing/research/advisor-turn numeric observations separate from pass/fail.
 - [x] **Batch validation across 12 personas** completed 2026-04-18: 11/12 overall pass, zero spectacular breakage, zero unknown-agent yields, zero parse errors. Single failure was `steve_scillieri` on `research_followthrough` (research fired but specialist didn't cite).
 
-- [ ] Add before/after transcript pair for primary persona (Walter) into `test/fixtures/` — held until Phase 7.4 lands so the "after" reflects current length-compressed state, not the drifting-long baseline we have today.
+- [ ] Add before/after transcript pair for primary persona (Walter) into `test/fixtures/` — unblocked by Phase 7.4 shipping (2026-04-18). Fold into the specialist-replication cycle so the "after" captures both length-compressed state AND the broader voice-rewrite surface as specialists roll out.
 
 ### Phase 7 Complete When:
 
