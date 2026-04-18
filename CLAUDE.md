@@ -383,10 +383,17 @@ get-idea-ai/
 │   │   └── write-result-bundle.ts ← Result bundle writer used by capture:bundle and test:persona.
 │   └── placeholder.ts          ← Fallback mock data used when DB isn't seeded yet.
 │
-├── test/                       ← **gitignored** — personas, fixtures, registry, local `results/` (see docs/testing.md).
+├── test/                       ← Personas, fixtures, registry, and external-reference prompts are **tracked** in git.
+│                                  Only `test/results/` (ephemeral run bundles) is gitignored. See docs/testing.md.
 │
 ├── docs/
-│   └── testing.md              ← Published testing guide (fixtures themselves stay local / private).
+│   ├── testing.md              ← Published testing guide. Tracked alongside the personas/fixtures it references.
+│   └── handoffs/               ← Cross-session handoff notes. `2026-04-18-post-7.7.md` is the first one.
+│
+├── relevant-zansei-materials/  ← **Gitignored, local-only.** Python reference port-source from the ad101/Zansei
+│                                  project — research orchestrator, conversation engine, prompts. Patterns are
+│                                  ported to TypeScript (R4 already landed). Never imported or executed from
+│                                  this repo. If you have a local copy, start at its README.md.
 │
 ├── supabase/
 │   └── migrations/
@@ -422,4 +429,6 @@ get-idea-ai/
 | `scripts/seed-agents.ts` | The source of truth for agent identities and prompts. Re-running overwrites. |
 | `supabase/migrations/001_foundation.sql` | The data model. Changes here require a migration, not a code edit. |
 | `lib/test/grade-deliberation.ts` | Cheap automated checks on transcripts (tripwires aligned with **Reference quality** above). See `docs/testing.md` and `BUILD.md` §6.2. |
-| `docs/testing.md` | How to run persona + fixture grading, capture bundles, and the combined `test:quality` gate (local `test/` is gitignored). |
+| `docs/testing.md` | How to run persona + fixture grading, capture bundles, and the combined `test:quality` gate. Tracked alongside the `test/` tree; only `test/results/` is gitignored. |
+| `BUILD.md` / `BUILD-ARCHIVE-1.md` | Living build plan + historical archive. Shipped phases live in the archive; open/in-progress work stays in `BUILD.md`. |
+| `docs/handoffs/` | Session handoff notes. Start with the most recent — it's the entry point when resuming work. |

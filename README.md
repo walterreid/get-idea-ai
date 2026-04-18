@@ -110,12 +110,14 @@ get-idea-ai/
 │   └── export-thread-transcript.ts
 │
 ├── docs/
-│   ├── testing.md               # Published QA guide (local `test/` tree is gitignored)
-│   └── full-result.example.json # Example full_result.json shape for bundles
+│   ├── testing.md               # Published QA guide. Tracked alongside the `test/` tree it describes.
+│   ├── full-result.example.json # Example full_result.json shape for bundles
+│   └── handoffs/                # Cross-session handoff notes; start with the most recent when resuming
 │
 ├── proxy.ts                     # Next.js 16 proxy (formerly middleware) — refreshes Supabase sessions
 ├── CLAUDE.md                    # Product philosophy — read before any development decision
-├── BUILD.md                     # Phase-by-phase build plan with completion status
+├── BUILD.md                     # Living build plan (open + in-progress work)
+├── BUILD-ARCHIVE-1.md           # Historical detail for shipped phases (split from BUILD.md 2026-04-18)
 └── DESIGN.md                    # UI/UX principles — visual identity, component inventory, animations
 ```
 
@@ -231,7 +233,7 @@ For the full **local quality gate** (graph + grader units + fixtures — require
 npm run test:quality
 ```
 
-**Details, personas, registry format, and Tier-2 capture workflow:** [docs/testing.md](docs/testing.md). **Methodology and CI split:** [BUILD.md §6.2](BUILD.md#62-conversation-quality-and-testing). The **`test/`** directory (fixtures, personas, local results) is **not** in git — maintain it locally.
+**Details, personas, registry format, and Tier-2 capture workflow:** [docs/testing.md](docs/testing.md). **Methodology and CI split:** [BUILD.md §6.2](BUILD.md#62-conversation-quality-and-testing). The **`test/`** directory (personas, fixtures, `registry.json`, external-reference prompts) is **tracked** in git; only the ephemeral `test/results/` bundle folder is gitignored.
 
 ---
 
@@ -304,6 +306,8 @@ These are enforced throughout the codebase and reflected in the Cursor rules (`.
 | File | Purpose |
 |---|---|
 | `CLAUDE.md` | Product philosophy. Read before any development decision. If a technical decision conflicts with this document, this document wins. |
-| `BUILD.md` | Phase-by-phase build plan. Tracks what is complete, in-progress, and pending — including **Phase 5 evolution** (research providers, accumulation, future async work) and **§6.2** conversation quality / testing ladder. |
+| `BUILD.md` | Living build plan — phase names, one-line status per shipped phase, full detail for anything `[ ]` or `[~]`. Pointer into the archive for shipped-phase detail. |
+| `BUILD-ARCHIVE-1.md` | Historical detail for every phase shipped up to and including Phase 7.7 (split from BUILD.md on 2026-04-18). Read this when you need to know *why* a thing was designed a given way. |
 | `DESIGN.md` | Visual identity and UI principles. What this product must never look like, and what it should feel like. |
-| `docs/testing.md` | **Testing entry point:** personas, fixtures, `test:fixtures`, capture bundles, `grade:file` (local `test/` is gitignored). |
+| `docs/testing.md` | **Testing entry point:** personas, fixtures, `test:fixtures`, capture bundles, `grade:file`. Personas/fixtures/registry are tracked in git; only `test/results/` is gitignored. |
+| `docs/handoffs/` | Cross-session handoff notes. Start with the most recent file in this directory when resuming work. |

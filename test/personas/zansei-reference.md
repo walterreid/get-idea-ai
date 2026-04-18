@@ -1,4 +1,4 @@
-# Zansei persona reference (local only — `test/` is gitignored)
+# Zansei persona reference (tracked — only `test/results/` is gitignored)
 
 This repo is **standalone**. Nothing here depends on a sibling project. The Zansei files we studied have been copied into `test/external-references/zansei/` so every reference in this tree resolves inside the repo, even if the original `ad101-AI-marketing-advisor/` directory is gone.
 
@@ -109,4 +109,4 @@ Zansei's persona JSON assumes a 9-question scripted intake flow (`expected_answe
 
 All files copied on this session's date from `/Users/walterreid/Github Games/ad101-AI-marketing-advisor/`. The source repo is unrelated to get-idea-ai's git history. If you ever want to re-sync (e.g., Zansei adds a new persona shape you want to study), re-copy manually — do not wire this as an automated sync.
 
-`test/` is gitignored per [.gitignore:16](../../.gitignore). Nothing in this directory is published.
+The `test/` tree is tracked in git (personas, fixtures, registry, external-reference prompts). Only `test/results/` is gitignored per [.gitignore](../../.gitignore). This file ships with the repo.

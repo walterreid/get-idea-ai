@@ -1,6 +1,6 @@
 # Deliberation testing (GetIdea.ai)
 
-The entire **`test/`** directory (personas, fixtures, `registry.json`, local `test/results/` bundles) is **gitignored** and not published. Keep your own copy locally or in private storage. This page is the **canonical published** reference for how testing works.
+The **`test/`** directory is part of the repo: personas, fixtures, the `registry.json`, and the external-reference prompts are all tracked. Only `test/results/` (ephemeral run bundles from `test:fixtures:write`, `grade:file --write`, `capture:bundle`, and `test:persona`) is gitignored. This page is the canonical reference for how testing works.
 
 The quality ladder and tiers live in [BUILD.md §6.2](../BUILD.md#62-conversation-quality-and-testing).
 
