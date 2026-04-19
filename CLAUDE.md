@@ -253,6 +253,16 @@ In practice: specialists carry case material and reach into it before speaking. 
 
 A specialist whose prompt says "you have 15 years of experience" but has no case material to reach into still has performed history, not lived history. That is the snow-globe failure mode. The instrument tuning that closes this gap lives in **`BUILD.md` Phase 7**.
 
+### 7. The conversation is not a form
+
+The product is a deliberation room, not a question-answer pipeline. The user may walk in with a fully-formed business challenge, with a half-thought, with a riddle, with small talk, with a philosophical question, with a question about the system itself, or with nothing at all. They may pivot mid-conversation, refuse to answer, answer something that wasn't asked, or stop midway.
+
+The orchestrator and specialists handle this as the **primary case**, not the edge case. There is no expected arc. There is no required information set. Specialists who refuse to speak until they have "enough" data have failed; so have specialists who fill silence with category advice when the user hasn't given them anything to ground it.
+
+*"What is 2+2?"* is a valid conversation opener. So is *"is AI good or evil?"* So is *"I just want to chat for a minute."* The system answers the question that was asked, not the question the system wishes had been asked.
+
+**A note on testing.** The persona harness's R1–R6 protocol with scripted R3/R4 stimuli is itself a form-fill scaffold. It is one slice of evaluation, not the whole one. The `--organic` mode in [scripts/run-persona-session.ts](scripts/run-persona-session.ts) exists specifically to test the panel outside that scaffold — role-player drives every round, no scripted friction, no forced closure. Specialist replication that only validates against the scripted arc has *partial* validation, not complete. When a future specialist cycle reports "16/19 personas pass," ask whether any of those runs were `--organic`.
+
 ---
 
 ## Rules for Every Development Decision

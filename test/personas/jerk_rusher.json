@@ -1,0 +1,47 @@
+{
+  "persona_id": "jerk_rusher",
+  "profile": {
+    "name": "Jake",
+    "business_name": "Apex Roofing",
+    "location": "Plano, TX",
+    "business_type": "residential roofing contractor"
+  },
+  "business_name": "Apex Roofing",
+  "website": null,
+  "challenge": "Storm season is coming and I need leads NOW, not in 90 days",
+  "budget_range": "$2,000/month but only if it works fast",
+  "team_size": "Me, my brother, and 2 crews",
+  "personality": "adversarial — dismissive first, respects pushback, then engages",
+  "backstory": "Jake runs Apex Roofing in Plano, TX. He's been doing roofing for 12 years and has zero patience for anything that feels like a waste of time. He agreed to try this because a buddy told him to, but he's skeptical and impatient. His first few answers are deliberately dismissive one-word garbage — he's testing whether the panel is worth his time. If a specialist pushes back firmly (not submissively), Jake respects that and starts giving real answers. He's the kind of guy who answers 'whatever' to the first question, gets told 'I need more than that,' and then thinks 'okay, this thing has some backbone.' His real answers are short but packed with useful info once he engages.",
+  "expected_answer_style": {
+    "q1_business_identity": "whatever",
+    "q1_business_identity_after_pushback": "Fine. Apex Roofing, Plano Texas. Residential roofing — tear-offs, repairs, insurance claims. Twelve years in business.",
+    "q2_primary_challenge": "Need more leads. Storm season starts in a month and last year I sat around waiting for the phone to ring while my competitors were booked solid.",
+    "q3_ideal_customer": "Homeowner with hail damage and good insurance. 3-5 year old roof in a subdivision. They file a claim, I do the work, insurance pays. That's 80% of my business March through August.",
+    "q4_website_observation": "Don't have one. Never needed one — the guys I compete with don't either. Door knocking and yard signs after storms. That's roofing.",
+    "q5_failed_attempts": "Bought some leads from HomeAdvisor. Garbage — half were fake, the other half were calling 10 other roofers. Wasted like $3,000. Tried Angi for a while, same crap.",
+    "q6_channel_economics": "Storm chasing and door knocking. After a big hailstorm I send my guys out with flyers. Yard signs on every job. Referrals from adjusters I know. That's basically it.",
+    "q7_budget_or_retention": "Google. People search 'roofer near me' after a storm and I want to be the first one they see. I'd throw the whole grand at that.",
+    "q8_execution_capacity": "Me and my brother run the business. He does the crews, I do sales and estimates. I got maybe an hour a day for marketing stuff tops. We don't have a secretary or an office — I work out of my truck.",
+    "q9_success_definition": "20 signed contracts before July. That's a full storm season. Last year I did 12 and almost couldn't make payroll in August."
+  },
+  "response_length_band": "adversarial",
+  "r3_wrong_claim": "Just throw the whole grand at Google Ads tomorrow morning. Bidding on 'roofer near me' Plano. Set and forget. Quit the analysis paralysis and let me get back to work.",
+  "r4_contradiction": "Look — I should mention. Last storm season I actually did try Google Ads through some guy in Dallas. Spent $1,800 in two weeks. One lead, never closed. So when I say I'm sold on Google, that's me hoping it works this time, not knowing it does.",
+  "conversational_behaviors": [
+    "First 1-2 answers are deliberately dismissive — 'whatever', 'sure', 'next'",
+    "Respects pushback — if a specialist pushes back firmly, Jake engages",
+    "Once engaged, gives short but genuinely useful answers",
+    "Impatient — asks 'how much longer' or 'is this almost done' mid-conversation",
+    "Drops casual language — not hostile, just how he talks"
+  ],
+  "grading_hints": [
+    "Apex Roofing",
+    "Apex",
+    "Jake",
+    "Plano",
+    "storm",
+    "hail",
+    "HomeAdvisor"
+  ]
+}

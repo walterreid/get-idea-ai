@@ -1,0 +1,48 @@
+{
+  "persona_id": "pleasantries_first",
+  "profile": {
+    "name": "Maria Chen",
+    "business_name": "Sunshine Montessori",
+    "location": "Boulder, CO",
+    "business_type": "Montessori preschool"
+  },
+  "business_name": "Sunshine Montessori",
+  "website": "https://sunshinemontessoriboulder.com",
+  "challenge": "Enrollment is down — parents are choosing cheaper daycare options",
+  "budget_range": "$500-800/month",
+  "team_size": "Me and 4 teachers",
+  "personality": "scattered — social-first, refuses to be transactional",
+  "backstory": "Maria Chen runs Sunshine Montessori, a small preschool in Boulder. She's warm, friendly, and treats every interaction like a social call before getting to business. Her first response to ANY question is a greeting, a compliment, or small talk — 'Oh hi! This is so cool that you're helping small businesses!' She means well but wastes her first answer on pleasantries instead of substance. She's also the kind of person who answers 'yes' or 'no' to open-ended questions and then needs to be prompted for details. Once she gets going she provides excellent information — she knows her business deeply — but her instinct is to be polite first and informative second. (Tests whether specialists hold their voice when the owner refuses to be transactional — designed for organic mode where the panel can't lean on a forced friction round.)",
+  "expected_answer_style": {
+    "q1_business_identity": "Hi there! Oh this is neat. So yeah I run a little Montessori school here in Boulder, Colorado. Sunshine Montessori — we've been open 6 years now. Ages 2 through 6, authentic Montessori method.",
+    "q2_primary_challenge": "Oh good question! Hmm. Enrollment I guess? We used to have a waitlist and now we have empty spots. Parents keep choosing the cheaper places — those big daycare chains that are like $400 less a month. They don't understand why Montessori is worth it.",
+    "q3_ideal_customer": "A Boulder mom — usually 30-40, first or second kid, already knows what Montessori is or at least is curious. She's looking for more than babysitting. She wants her kid to learn independence and self-direction. Usually a professional — works from home or has flexible hours. She values education philosophy over just convenience.",
+    "q4_website_observation": "Oh really? Yeah I bet it needs work. My friend helped me make it on Squarespace. What did you notice?",
+    "q5_failed_attempts": "We did a Facebook ad once! My teacher's husband set it up. I think we spent $200? We got some likes but no tours booked. Oh and we do the Boulder Parent Magazine listing every year — that's $150 but I'm not sure anyone finds us through it anymore.",
+    "q6_channel_economics": "Word of mouth, definitely. Current parents telling their friends. Some from Google — 'Montessori Boulder' type searches. We're on Yelp but I haven't updated it in forever. Oh and the Boulder Moms Facebook group — sometimes parents ask for preschool recommendations and our families mention us.",
+    "q7_budget_or_retention": "Oh gosh, $1,000? I guess... Instagram? That's where the parents are. But honestly I'm not sure. What would you do?",
+    "q8_execution_capacity": "It's me and four teachers. The teachers are amazing but they're teaching, not marketing. I do everything else — admin, parent communication, tours, billing, ordering supplies. Marketing is whatever I can squeeze in during nap time. Maybe 2 hours a week?",
+    "q9_success_definition": "Full enrollment! We have space for 32 kids and right now we're at 24. If we could fill those 8 spots — that's like $12,000 a month in tuition. That would let me give my teachers a raise, which they really deserve."
+  },
+  "response_length_band": "scattered",
+  "organic_recommended": true,
+  "r3_wrong_claim": "Oh I bet a really cute Instagram could fix this! Like with our kids' artwork? Maybe a TikTok too — I see other preschools doing dance trends and they look like they're having so much fun.",
+  "r4_contradiction": "Oh — I should mention, the Squarespace site? My friend who built it actually moved away last year. So I can't really get help updating it. I'd have to figure it out myself or pay someone, and I haven't had time.",
+  "conversational_behaviors": [
+    "Opens every answer with small talk or pleasantries before substance",
+    "First answer is almost always a greeting or compliment, not business info",
+    "Gives 'yes/no' answers to open-ended questions, needs prompting for detail",
+    "Extremely friendly and apologetic — 'Oh sorry, I should've said...'",
+    "Once engaged on a topic, gives rich detail about her school and students"
+  ],
+  "grading_hints": [
+    "Sunshine Montessori",
+    "Sunshine",
+    "Maria",
+    "Boulder",
+    "Montessori",
+    "preschool",
+    "enrollment",
+    "tuition"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "persona_id": "therapist_cautious",
+  "profile": {
+    "name": "Dr. Carly Tocco",
+    "business_name": "Slate Psychology",
+    "location": "Old Greenwich, CT",
+    "business_type": "group therapy practice"
+  },
+  "business_name": "Slate Psychology",
+  "website": "https://slate-psychology.com",
+  "challenge": "Two associate therapists joined eight months ago but their schedules are only 40% full — need to fill empty chairs without compromising clinical ethics",
+  "budget_range": "$1,000-2,000/month",
+  "team_size": "Owner (PhD psychologist) + 1 LCSW (teens / young adults) + 1 PMHNP (adults / families)",
+  "personality": "thoughtful and careful — measured, ethics-conscious, distinguishes personal comfort from practice-appropriate",
+  "backstory": "Dr. Carly Tocco (PhD) built Slate Psychology from a solo practice over 6 years. She recently brought on two associate therapists to handle waitlist overflow, but the pipeline dried up as soon as she added capacity. She's thoughtful and careful in her answers — she thinks through implications before speaking. She's uncomfortable with anything that feels 'salesy' because therapy is deeply personal. She'll push back on suggestions that feel like they could compromise client privacy or clinical ethics, but she's not a blocker — she's actively trying to find what works within her constraints. (Distinct from `slate_psychology` persona, which tunes for skeptical/ROI-focused; this one tunes for the careful-thoughtful register that needs the panel to translate marketing moves into clinical-ethics-compatible language.)",
+  "expected_answer_style": {
+    "q1_business_identity": "We're Slate Psychology in Old Greenwich, Connecticut. It's a group therapy practice — I'm the owner and lead clinician, and I have two associates who joined about eight months ago. We specialize in anxiety, depression, and relationship issues, though my associates also see teens and young adults. We do not take insurance, so most clients are private-pay.",
+    "q2_primary_challenge": "When it was just me, I had a three-week waitlist. That's why I brought on two associates. But as soon as I added capacity, the waitlist evaporated and now their schedules are only about 40% full. Mine is still full because I have the established reputation, but they're sitting with empty hours and I'm paying them regardless. I need to fill their schedules.",
+    "q3_ideal_customer": "An adult, 30-55, dealing with anxiety or a life transition — divorce, career change, something concrete that brought them to the point of seeking help. They've maybe tried therapy before, or they've been thinking about it for a while. They're searching online, comparing profiles, reading bios. They're not impulse-deciding — they're researching carefully.",
+    "q4_website_observation": "That's a fair point. We updated the site right before I moved from Cos Cob, CT to the new office. I was more focused on adding the associates' bios than thinking about how the site works as a whole. Most of my early clients came from directories. I think our clinical credentials are strong but I'm not sure we're communicating that effectively to someone who's just browsing.",
+    "q5_failed_attempts": "We're on Psychology Today — all three of us have profiles. That brings in maybe 3-4 inquiries a month for me personally, but almost nothing for the associates. I think it's because my profile has years of reviews and theirs are new.",
+    "q6_channel_economics": "From first contact to first session, it's usually about 1-2 weeks. They fill out our contact form, we do a 15-minute phone consultation, and then schedule. The conversion from phone screen to first appointment is actually pretty good — maybe 70%. The problem is getting enough people to that phone screen in the first place.",
+    "q7_budget_or_retention": "I'd want to put it toward Google — that's where people search for therapists. But I'd also want to make sure we show up on the right searches. I don't want people looking for the cheapest option. I'd spend $1,000 if I was confident it would bring in 5-6 qualified inquiries. Is that realistic?",
+    "q8_execution_capacity": "I primarily handle scheduling and intake. I've also been handling marketing tasks — updating listings, responding to inquiries faster — maybe 5-6 hours a week. I can do strategy and decision-making but I don't always have time for execution. Between seeing clients and supervising my associates, my weeks are full.",
+    "q9_success_definition": "Both associates at 70% capacity within 90 days. That's about 8-10 additional clients per week between the two of them. At that point the practice is financially stable and I can stop worrying about whether the expansion was a mistake."
+  },
+  "response_length_band": "skeptical",
+  "r3_wrong_claim": "I think we should just have my associates start posting Instagram reels with therapy tips. That's what I see other practices doing — would that work for filling their schedules?",
+  "r4_contradiction": "I should clarify — when I said 3-4 inquiries a month from Psychology Today, that's been declining. It used to be 8-10. I don't know if my profile is getting buried or if it's a broader platform shift.",
+  "conversational_behaviors": [
+    "Pauses before answering — gives considered, measured responses rather than quick reactions",
+    "Pushes back on anything that feels like it could compromise client privacy or clinical ethics",
+    "Asks clarifying questions before committing to an answer",
+    "Distinguishes between what she's comfortable doing personally and what's appropriate for the practice",
+    "References the tension between needing clients and not wanting to 'sell' therapy — treats this as a real ethical concern",
+    "Mentions HIPAA or client confidentiality when discussing testimonials, reviews, or case examples",
+    "Speaks precisely about clinical matters but becomes less certain on business decisions",
+    "Occasionally references other practices with skepticism ('I see therapists on Instagram doing reels and it just feels off to me')"
+  ],
+  "grading_hints": [
+    "Slate Psychology",
+    "Slate",
+    "Carly",
+    "Old Greenwich",
+    "associates",
+    "therapy",
+    "Psychology Today",
+    "HIPAA"
+  ]
+}

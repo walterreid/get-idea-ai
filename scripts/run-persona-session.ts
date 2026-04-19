@@ -64,6 +64,21 @@ interface Options {
   pace: PacingConfig | null
   rolePlayerModel: string
   outDir?: string
+  /**
+   * --cycle <tag> — short identifier (e.g. "finance-rep", "gr7-followup",
+   * "adhoc"). Threaded into the bundle dir suffix and run_metadata.json.
+   * Defaults to "adhoc" when not supplied so every run carries a value.
+   */
+  cycle: string
+  /**
+   * --organic — disable the scripted R3 wrong-claim, the scripted R4
+   * contradiction, and the forced R5 closure. Lets the role-player drive
+   * every round. Built for personas (pleasantries_first, lagged_answerer)
+   * whose entire point is testing off-arc behavior — the scripted scaffold
+   * defeats those tests. Default off; existing scripted-arc behavior is
+   * unchanged when the flag is absent.
+   */
+  organic: boolean
 }
 
 function parseArgs(argv: string[]): Options {
@@ -80,6 +95,8 @@ function parseArgs(argv: string[]): Options {
     researchMode: 'sync',
     pace: { ...DEFAULT_PACING },
     rolePlayerModel: 'claude-sonnet-4-5',
+    cycle: 'adhoc',
+    organic: false,
   }
   for (let i = 0; i < args.length; i++) {
     const a = args[i]
@@ -103,10 +120,12 @@ function parseArgs(argv: string[]): Options {
     else if (a === '--role-player-model' && args[i + 1])
       opts.rolePlayerModel = args[++i]
     else if (a === '--out-dir' && args[i + 1]) opts.outDir = args[++i]
+    else if (a === '--cycle' && args[i + 1]) opts.cycle = args[++i]
+    else if (a === '--organic') opts.organic = true
   }
   if (!opts.personaPath) {
     console.error(
-      'Usage: --persona <path> [--rounds N] [--research-mode sync|async|off] [--no-research] [--no-pace] [--pace-min ms] [--pace-max ms] [--role-player-model name] [--out-dir dir]'
+      'Usage: --persona <path> [--rounds N] [--research-mode sync|async|off] [--no-research] [--no-pace] [--pace-min ms] [--pace-max ms] [--role-player-model name] [--out-dir dir] [--cycle <tag>] [--organic]'
     )
     process.exit(1)
   }
@@ -333,7 +352,11 @@ interface RoundPlan {
   scripted_text?: string | null
 }
 
-function planRounds(totalRounds: number, persona: Record<string, unknown>): RoundPlan[] {
+function planRounds(
+  totalRounds: number,
+  persona: Record<string, unknown>,
+  organic = false
+): RoundPlan[] {
   const plans: RoundPlan[] = []
 
   plans.push({
@@ -352,48 +375,89 @@ function planRounds(totalRounds: number, persona: Record<string, unknown>): Roun
     })
   }
 
+  // Organic mode: skip scripted stimuli at R3/R4 and the forced closure at R5.
+  // The role-player drives every round in character. Used for personas whose
+  // entire point is testing off-arc behavior (pleasantries_first refuses to
+  // be transactional; lagged_answerer answers a turn behind). Scripted R3/R4
+  // would inject the form-fill scaffold those personas exist to break.
   if (totalRounds >= 3) {
-    const r3 =
-      typeof persona.r3_wrong_claim === 'string' ? persona.r3_wrong_claim : null
-    plans.push({
-      round_number: 3,
-      kind: 'friction',
-      objective: r3
-        ? 'Scripted: persona.r3_wrong_claim injected verbatim.'
-        : 'No r3_wrong_claim on persona — role-player improvises a plausibly-wrong assertion to stress friction. If no natural wrong claim exists, ask for tactical specifics.',
-      scripted_text: r3,
-    })
+    if (organic) {
+      plans.push({
+        round_number: 3,
+        kind: 'friction',
+        objective:
+          'Stay fully in character. The panel just spoke — respond as your persona would, not as a "friction round" requires. If your persona refuses to be transactional, refuse. If your persona answers the previous turn rather than the current one, do that. The point is to stay true to the persona, not to push back.',
+      })
+    } else {
+      const r3 =
+        typeof persona.r3_wrong_claim === 'string' ? persona.r3_wrong_claim : null
+      plans.push({
+        round_number: 3,
+        kind: 'friction',
+        objective: r3
+          ? 'Scripted: persona.r3_wrong_claim injected verbatim.'
+          : 'No r3_wrong_claim on persona — role-player improvises a plausibly-wrong assertion to stress friction. If no natural wrong claim exists, ask for tactical specifics.',
+        scripted_text: r3,
+      })
+    }
   }
 
   if (totalRounds >= 4) {
-    const r4 =
-      typeof persona.r4_contradiction === 'string' ? persona.r4_contradiction : null
-    plans.push({
-      round_number: 4,
-      kind: 'user_truth',
-      objective: r4
-        ? 'Scripted: persona.r4_contradiction injected verbatim.'
-        : 'No r4_contradiction on persona — role-player improvises a user-truth reveal. If no natural reveal exists, state a budget or capacity constraint the panel hasn\'t heard yet.',
-      scripted_text: r4,
-    })
+    if (organic) {
+      plans.push({
+        round_number: 4,
+        kind: 'user_truth',
+        objective:
+          'Stay fully in character. Continue the conversation as your persona would naturally evolve it — surface a constraint, deflect, change the subject, or stay on the same point. No scripted contradiction; the persona drives.',
+      })
+    } else {
+      const r4 =
+        typeof persona.r4_contradiction === 'string' ? persona.r4_contradiction : null
+      plans.push({
+        round_number: 4,
+        kind: 'user_truth',
+        objective: r4
+          ? 'Scripted: persona.r4_contradiction injected verbatim.'
+          : 'No r4_contradiction on persona — role-player improvises a user-truth reveal. If no natural reveal exists, state a budget or capacity constraint the panel hasn\'t heard yet.',
+        scripted_text: r4,
+      })
+    }
   }
 
   if (totalRounds >= 5) {
-    plans.push({
-      round_number: 5,
-      kind: 'closure',
-      objective:
-        'Ask the panel for a summary of what they\'ve surfaced so far. Stay in character — this is a natural "so where does that leave me" moment, not a formal request.',
-    })
+    if (organic) {
+      plans.push({
+        round_number: 5,
+        kind: 'depth',
+        objective:
+          'Stay in character. Continue the conversation. Do NOT request a summary or recommendation — let the panel decide whether to synthesize on its own.',
+      })
+    } else {
+      plans.push({
+        round_number: 5,
+        kind: 'closure',
+        objective:
+          'Ask the panel for a summary of what they\'ve surfaced so far. Stay in character — this is a natural "so where does that leave me" moment, not a formal request.',
+      })
+    }
   }
 
   if (totalRounds >= 6) {
-    plans.push({
-      round_number: 6,
-      kind: 'followup',
-      objective:
-        'You\'ve heard the panel\'s summary or continued discussion. Ask the specificity-forcing question — in character: "OK, if I have to pick ONE thing to do this week, what is it?" Force the panel to commit to a single first move rather than a list.',
-    })
+    if (organic) {
+      plans.push({
+        round_number: 6,
+        kind: 'depth',
+        objective:
+          'Stay in character. Continue the conversation as it has evolved. No specificity-forcing question; the persona drives.',
+      })
+    } else {
+      plans.push({
+        round_number: 6,
+        kind: 'followup',
+        objective:
+          'You\'ve heard the panel\'s summary or continued discussion. Ask the specificity-forcing question — in character: "OK, if I have to pick ONE thing to do this week, what is it?" Force the panel to commit to a single first move rather than a list.',
+      })
+    }
   }
 
   return plans
@@ -456,10 +520,12 @@ async function main() {
   console.log(
     `[harness] persona=${personaId} rounds=${opts.rounds} research=${opts.researchMode} pace=${
       opts.pace ? `${opts.pace.min_ms}-${opts.pace.max_ms}ms` : 'off'
-    } role_player_model=${opts.rolePlayerModel}`
+    } role_player_model=${opts.rolePlayerModel} cycle=${opts.cycle}${
+      opts.organic ? ' [ORGANIC: scripted R3/R4 + forced R5 closure suppressed]' : ''
+    }`
   )
 
-  const roundPlans = planRounds(opts.rounds, personaRaw)
+  const roundPlans = planRounds(opts.rounds, personaRaw, opts.organic)
   const rounds: RoundRecord[] = []
 
   let state: DeliberationState | null = null
@@ -519,6 +585,8 @@ async function main() {
     // Closure rounds (R5+) force recommendation phase so we can exercise the
     // recommendationNode's Zansei-pattern synthesis. This is test-harness
     // behavior; in production the orchestrator decides when to synthesize.
+    // Organic mode never sets plan.kind === 'closure' (planRounds suppresses
+    // it), so this flag is correctly never true under --organic.
     const forceRecommendation = plan.kind === 'closure'
     const initialState = buildNextRoundState(state, userTurnText, forceRecommendation)
     const invokeT0 = Date.now()
@@ -636,9 +704,18 @@ async function main() {
       persona_id: personaId,
       source: 'thread',
       thread_id: null,
-      title: `Multi-round harness — ${personaId} (${opts.rounds} rounds, research=${opts.researchMode})`,
+      title: `Multi-round harness — ${personaId} (${opts.rounds} rounds, research=${opts.researchMode}${
+        opts.organic ? ', organic' : ''
+      })`,
       persona_file: opts.personaPath,
       exported_at: exportedAt,
+      cycle: opts.cycle,
+      run_conditions: {
+        rounds: opts.rounds,
+        research_mode: opts.researchMode,
+        organic: opts.organic,
+        role_player_model: opts.rolePlayerModel,
+      },
     },
     outDir: opts.outDir,
     legacyMessagesJsonAlias: true,
@@ -655,6 +732,8 @@ async function main() {
       research_mode: opts.researchMode,
       pace: opts.pace,
       role_player_model: opts.rolePlayerModel,
+      cycle: opts.cycle,
+      organic: opts.organic,
     },
     captured_at: exportedAt,
     rounds,

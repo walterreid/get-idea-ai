@@ -34,6 +34,20 @@ export interface PersonaResultBundleMeta {
   title?: string | null
   persona_file?: string | null
   exported_at: string
+  /**
+   * Optional cycle tag — short identifier (e.g. "finance-rep", "gr7-followup",
+   * "adhoc"). Surfaces in the bundle dir name as a suffix and in
+   * run_metadata.json. Lets you scan `test/results/` and tell which cycle each
+   * bundle belongs to. Defaults to nothing (no suffix) when omitted.
+   */
+  cycle?: string
+  /** Per-run conditions captured into run_metadata.json. Optional. */
+  run_conditions?: {
+    rounds?: number
+    research_mode?: 'sync' | 'async' | 'off'
+    organic?: boolean
+    role_player_model?: string
+  }
 }
 
 export interface WritePersonaResultBundleInput {
@@ -61,8 +75,17 @@ const TIMING_STUB = {
 } as const
 
 /**
- * Default directory: test/results/{persona_id}_{YYYYMMDD_HHMMSS}_{case_id}/
- * When case_id is omitted: test/results/{persona_id}_{YYYYMMDD_HHMMSS}/
+ * Default directory: test/results/{persona_id}_{YYYYMMDD_HHMMSS}[_{case_id}][_{cycle}]/
+ *
+ * Persona-first sort is preserved (matches Zansei's convention) so a flat
+ * directory listing groups runs of the same persona alphabetically and
+ * chronologically. The cycle suffix, when present, surfaces which work cycle
+ * a run belongs to without requiring you to open the bundle.
+ *
+ *   ai_consultant_20260418_164038                    — adhoc / no cycle
+ *   ai_consultant_20260418_164038_finance-rep        — Finance replication cycle
+ *   ai_consultant_20260418_164038_research_followthrough — fixture case_id, no cycle
+ *   ai_consultant_20260418_164038_research_followthrough_gr7-followup — both
  */
 export function defaultResultBundleDir(
   meta: PersonaResultBundleMeta,
@@ -72,7 +95,8 @@ export function defaultResultBundleDir(
   const base = join(cwd, 'test', 'results')
   const p = sanitizeDirPart(meta.persona_id)
   const c = meta.case_id ? `_${sanitizeDirPart(meta.case_id)}` : ''
-  return join(base, `${p}_${stamp}${c}`)
+  const cy = meta.cycle ? `_${sanitizeDirPart(meta.cycle)}` : ''
+  return join(base, `${p}_${stamp}${c}${cy}`)
 }
 
 export function writePersonaResultBundle(input: WritePersonaResultBundleInput): string {
@@ -136,6 +160,21 @@ export function writePersonaResultBundle(input: WritePersonaResultBundleInput): 
     grades_summary: `${input.grades.checks_passed}/${input.grades.checks_total}`,
   }
   writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf-8')
+
+  // Cycle + run-conditions sidecar. Cheap, but lets you `jq` across
+  // test/results/*/run_metadata.json to filter by cycle, organic mode,
+  // research mode, etc. without opening every bundle. Always written so
+  // the file's presence is uniform across bundles; absent fields are nulls.
+  const runMetadata = {
+    cycle: input.meta.cycle ?? null,
+    persona_id: input.meta.persona_id,
+    rounds: input.meta.run_conditions?.rounds ?? null,
+    research_mode: input.meta.run_conditions?.research_mode ?? null,
+    organic: input.meta.run_conditions?.organic ?? null,
+    role_player_model: input.meta.run_conditions?.role_player_model ?? null,
+    captured_at: input.meta.exported_at,
+  }
+  writeFileSync(join(dir, 'run_metadata.json'), JSON.stringify(runMetadata, null, 2), 'utf-8')
 
   const fullResult = {
     bundle: 'getidea-persona-result',
