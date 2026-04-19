@@ -1,0 +1,97 @@
+{
+  "_note": "Per-specialist case material for Operations. Used at workerNode (per specialty turn), not at recommendation. The specialist retrieves 2-3 cases whose `business_type_category` matches the inferred category, and weaves the execution-reality insight into the turn without naming the source — per CLAUDE.md GR#6 (\"use the case, don't cite it\"). Every case here exhibits Operations' domain discipline: name the specific execution gap — the person who doesn't exist to do the step, the single point of failure, the peak-capacity pinch — not a generic 'operations' concern. 'But who actually does this?' is the test question; each case answers it.",
+  "specialist": "operations",
+  "version": 1,
+  "cases": [
+    {
+      "id": "professional_services_solo_backup_failure",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "solo operator with no plan for what happens when they're sick, on vacation, or handling a family emergency",
+      "observation": "Solo management consultant with six active engagements billing ~$180K. Strong quality, happy clients, no backup. In year two she got appendicitis, was out of client contact for two weeks. Two clients started shopping for replacements during the silence. She kept both accounts eventually but it took quarters of rebuilding confidence. The operational gap: not a single piece of her work was documented in a way that anyone else could step in, and no communication plan existed for 'unavailable for 10+ days.' The mechanic 'but who actually does this?' applied to herself had never been asked.",
+      "what_worked": "Three concrete fixes post-recovery: (1) a single shared doc per client with current status, next three deliverables, and key contacts — updated weekly, takes 10 minutes; (2) a vetted peer consultant arrangement for emergency coverage — not to do her work, but to hold client relationships during an absence; (3) an auto-responder template with a specific 'who to contact' name. Low-cost, low-effort, material protection against a recurrence. The client-retention exposure she'd been running for two years was closed for roughly two hours of work.",
+      "what_wasted_money": "Two quarters of rebuilt-trust work after the incident — discounted engagements, extra deliverables, the soft cost of demonstrating reliability. None of it would have been needed if the absence had been handled.",
+      "one_line_lesson": "A solo operator with no backup plan is one illness away from client loss. The fix is usually fifteen minutes of documentation and a peer handshake, not a hire."
+    },
+    {
+      "id": "professional_services_onboarding_bottleneck_at_founder",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "growing practice where every new client onboarding requires the founder's personal time, creating a hard ceiling on growth",
+      "observation": "Three-therapist practice adding a fourth clinician. Founder-owner did every intake call personally — she was good at it, clients loved it, and it was the growth bottleneck. Intake was a 45-minute call plus 30 minutes of notes and matching-to-clinician judgment. At six new clients per week she was spending 8+ hours on intake, which limited both her clinical capacity and the practice's new-client intake capacity. Adding the fourth therapist increased service capacity but didn't change the intake bottleneck — the practice would run into the same wall at a slightly higher volume.",
+      "what_worked": "Named the operational structure rather than the volume: 'you're the bottleneck. Adding a fourth therapist doesn't change that — it just raises the ceiling by one person's worth of capacity. The actual change is a two-step intake: a 15-minute administrative screening from a rotation of associates, then a 20-minute clinician-match call from the founder for the cases that need her judgment.' Halved founder intake time; associates handled the routine matches. Practice added capacity without adding founder hours.",
+      "what_wasted_money": "A year of hiring conversations that focused on 'more clinicians' when the actual constraint was founder-time on intake. Each prior hire had slightly eased the ceiling but hadn't fundamentally changed the mechanic.",
+      "one_line_lesson": "The operational bottleneck is rarely where the business is spending its hiring energy. 'Who actually does this?' applied to the founder's calendar surfaces the real constraint."
+    },
+    {
+      "id": "local_services_dispatch_no_backup_tech",
+      "business_type_category": "local_services",
+      "challenge_pattern": "two-truck trade business with no plan when one tech is out, so a sick day becomes a booking-cancellation cascade",
+      "observation": "Two-truck HVAC company. Tech calls out sick — Owner takes his truck. Owner's own admin work (invoicing, customer callbacks) doesn't happen that day. Callbacks slip by 48 hours; new-lead conversion drops. Every sick day triggered a two-day admin-and-pipeline slowdown. The operational gap wasn't staffing ('we can't afford a third tech yet'); it was that the admin and field roles were stacked on the owner with no decoupling. A sick day in the field was also a sick day in the office.",
+      "what_worked": "A virtual assistant service (half-time, $800/month) handling customer callbacks, scheduling, and invoicing during business hours. Owner could take a truck on a sick day without the office stopping. VA cost was less than one day of callback slippage in lost new-customer revenue over a typical month. The 'what breaks if one thing goes wrong' question surfaced the real single point of failure — not the tech, the owner.",
+      "what_wasted_money": "Roughly 6-10 days/year of callback-cascade revenue loss before the VA was in place — sometimes a single hot-summer week could cost more than a month of VA service. The owner had been thinking about the problem as a staffing-cost issue when it was a backup-capacity issue.",
+      "one_line_lesson": "Single-points-of-failure in small operations are usually the owner, not the line staff. 'Who picks up the office when you're on the truck' is the question that surfaces the gap."
+    },
+    {
+      "id": "local_services_seasonal_winter_layoff_cycle",
+      "business_type_category": "local_services",
+      "challenge_pattern": "seasonal service business that lays off and rehires the same crew every year, losing capability and institutional memory each cycle",
+      "observation": "Family landscaping firm with a four-month heavy season, four-month moderate season, four-month dead season. Crew of seven in peak, zero in winter. Every spring, roughly two-thirds of the prior crew returned and one-third needed replacement. The incoming replacements took 4-6 weeks to reach productive capacity. That ramp time burned April-May — prime season. The operational cost wasn't the winter layoff; it was the loss-of-capability re-cost each spring.",
+      "what_worked": "Winter-work strategies to retain the core crew: (1) snow removal as a winter service (offered by most of the regional competitors, they'd been leaving it alone); (2) a reduced-hours retainer structure for the two most senior crew so they had income through winter at roughly 40% of peak-season hours; (3) early January training for returning crew on new-season equipment or techniques, paid. Retention rose to roughly 80% returning, and spring ramp dropped from 4-6 weeks to under 2. Productive April-May gained about three productive crew-weeks.",
+      "what_wasted_money": "Roughly $15-25K/year in peak-season productive time lost to ramp that wouldn't have been needed if the core crew had been retained. The winter-work revenue wasn't the point; the retention of capability was.",
+      "one_line_lesson": "The real cost of seasonal layoffs isn't the dead months; it's the lost institutional capability at the start of the next season. Operations-wise, winter retention is a first-quarter productivity investment."
+    },
+    {
+      "id": "restaurant_food_peak_hour_prep_shortfall",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "restaurant whose prep capacity breaks at Friday/Saturday peak but nobody has diagrammed where exactly it breaks",
+      "observation": "Neighborhood bistro doing solid Tuesday-Thursday but showing erratic performance Friday/Saturday peak — sometimes great, sometimes dish delays, sometimes dishes 86'd mid-service. Owner thought 'peak is peak, some nights are like that.' The actual pattern: one specific prep station (sauce + garnish) was bottlenecking. When volume hit ~90 covers/hour, the single line cook assigned to that station fell 15 minutes behind and never caught up — and that station's output was required for 6 of the 12 menu items. The mechanic was visible on a per-item-per-hour diagram; nobody had drawn it.",
+      "what_worked": "Ten minutes of diagram with the kitchen lead — which station touches which dish, what each station's max throughput is, where the convergence points are. Surfaced the sauce-garnish bottleneck immediately. Fix was split prep: two stations during Friday/Saturday peak, redirected from a station that had slack. No new hire. Friday/Saturday consistency materially improved; 86'd dishes dropped.",
+      "what_wasted_money": "Months of menu changes, staff shuffling, and general 'peak is hard' resignation. The constraint was a specific station-and-hour convergence; the fixes had been aimed at everything except it.",
+      "one_line_lesson": "Peak-hour failures in restaurants almost always have a specific bottleneck station. Ten minutes of flow diagramming finds it faster than months of 'try something different' shuffling."
+    },
+    {
+      "id": "restaurant_food_single_supplier_produce",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "restaurant relying on a single local farm for produce with no backup when the farm misses a delivery or has a crop failure",
+      "observation": "Farm-to-table restaurant with a beautiful single-farm relationship for produce. Owner had built the brand around the partnership, menu rotated with the farm. Mid-summer, the farm had an unexpected issue (flooding, then a staff injury) and missed two weeks of deliveries. Restaurant scrambled — some items got pulled entirely, some got swapped with grocery-store substitutes that didn't match the brand. Regulars noticed. The operational gap wasn't the relationship (which was good); it was the absence of any secondary supplier or seasonal-preserve backup.",
+      "what_worked": "A secondary supplier relationship with a regional produce-cooperative for the 6-8 ingredients that appeared in the largest number of dishes, not for routine use but for emergency fill-in at comparable quality. Plus a small freezer of house-made purees and stocks from peak-harvest produce that could stretch for 10-14 days of shortfall without changing menu voice. Total cost: modest freezer space and a standing account with the cooperative (no minimum). Next supply disruption, six months later, was invisible to customers.",
+      "what_wasted_money": "Roughly two weeks of quality-drift and some customer-experience erosion during the disruption. The brand had been built on the partnership; losing that story temporarily hurt more than the substitutions showed.",
+      "one_line_lesson": "A single-supplier story is a brand asset; a single-supplier dependency is an operational risk. The two are not the same thing, and small backups don't undermine the former."
+    },
+    {
+      "id": "fitness_wellness_instructor_1_illness_pattern",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "studio whose most popular class is taught by a single instructor with no trained backup — every time she's out, that class is canceled",
+      "observation": "Boutique barre studio where one 6am class (popular, packed, early morning regulars) was taught exclusively by one instructor. She got sick or needed personal time 5-8 times a year. Each time, the class was canceled; class emails went out at 9pm the night before; regular clients were frustrated. The operational gap was not-crosstrained staff: two other instructors could teach the class but had never been put in the rotation. Owners assumed 'clients love her, they only want her.' Clients loved the class as much as the instructor.",
+      "what_worked": "Cross-trained two existing instructors on the 6am class via three-month apprenticeship (shadow, then co-teach, then sub). Added them to the roster for genuine occasional rotation — not just as emergency backup. Primary instructor regained ability to take time off without canceling. Regulars adapted, noted the quality was consistent, and the class kept running. Churn from canceled classes dropped to zero.",
+      "what_wasted_money": "Years of member frustration, a handful of lost memberships directly attributable to 'class keeps getting canceled,' and substantial stress on the primary instructor (who felt unable to take time off).",
+      "one_line_lesson": "An over-reliance on a single instructor or therapist isn't a loyalty feature; it's a single-point-of-failure the owner hasn't priced. Cross-training the backup is usually three months of modest investment for years of reliability."
+    },
+    {
+      "id": "fitness_wellness_scheduling_tool_outgrown",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "studio using a scheduling tool (Google Calendar, a simple spreadsheet) that worked at 20 weekly classes but breaks at 60",
+      "observation": "Barre studio that had grown from 20 weekly classes to 60 across two locations. Scheduling was still managed in a shared Google Calendar with color-coded instructors and room assignments typed in titles. Owner's scheduling time had grown from 30 min/week to 6+ hours/week. Conflicts (double-booked rooms, instructor-availability errors) were happening every week; recovery from each conflict cost an hour of customer-service email. The tool wasn't wrong when they were small; it had been outgrown.",
+      "what_worked": "Migrated to Mindbody ($149/month at their size) — studio-specific scheduling with room management, instructor-availability, member auto-booking, and waitlist automation. Setup took two weeks including member-facing training. Owner's weekly scheduling time dropped to under an hour. Conflicts dropped to roughly zero. Member-facing booking improved (self-service via app instead of email back-and-forth). Monthly cost was recovered in reclaimed owner-time within the first month.",
+      "what_wasted_money": "Months of owner-time on manual scheduling at the scale where a real tool would have paid for itself. The Google Calendar was free; the hours-per-week of manual management were not.",
+      "one_line_lesson": "Free tools have a scale where they break. The break point is usually 'owner is spending significant weekly time on administration that a purpose-built tool would eliminate.' Watch for the break, not for the tool's nominal capability."
+    },
+    {
+      "id": "ecommerce_dtc_3pl_cutover_during_peak",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "e-commerce business attempting to migrate fulfillment (from self-ship to 3PL) during peak season, creating a compounded operational risk",
+      "observation": "Small skincare brand hitting 40+ orders/day during Q4 holiday peak. Owner was shipping from her garage; volume was killing her. She planned to cut over to a 3PL 'right before Thanksgiving so they could handle the holiday rush.' The operational math: inventory transfer, SKU mapping, integration testing, first-week-error-rate — typical 3PL onboarding takes 4-6 weeks to reach normal error rates. Cutting over at peak meant she was learning the 3PL's systems during her highest-volume period, with thousands of dollars of holiday orders at stake.",
+      "what_worked": "Named the operational timing mistake: 'peak-season migration compounds your two hardest things — new process and high volume — simultaneously. Cut over in February during your trough, learn the 3PL during low-stakes weeks, and arrive at Q4 with the new system already working.' Owner delayed the cutover, shipped the current holiday from the garage one more time (hard, but known-risk), and migrated in February. Next Q4 ran through the 3PL with no disruption.",
+      "what_wasted_money": "Would likely have been $10-30K of lost orders, customer-service escalation, and peak-season brand damage if the cutover had happened as originally planned. Delaying cost nothing; the owner's garage-shipping burden for one more Q4 was the trade-off.",
+      "one_line_lesson": "Operational transitions during peak season compound risk. Cut over during the trough, not the peak — the discomfort of delaying a migration is small compared to the cost of a botched cutover at high volume."
+    },
+    {
+      "id": "ecommerce_dtc_inventory_reorder_lead_time_missed",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "e-commerce business reordering inventory based on stock levels without accounting for manufacturing lead time",
+      "observation": "Small candle brand reordering SKUs when stock hit 30% of starting inventory. Worked fine when manufacturing turnaround was 2-3 weeks. Manufacturing turnaround quietly shifted to 6-8 weeks (supplier capacity change). Stockouts on the top three SKUs hit at the worst time — two weeks before Christmas — because the 30%-trigger reorder had gone out at a level that would have been comfortable at 2-week lead time and was catastrophic at 8. Owner thought she had 'just-in-time' inventory; she actually had a timing error the system didn't catch.",
+      "what_worked": "Recalibrated the reorder trigger to account for actual current lead time, not last year's: reorder at 'current monthly sell-through × (lead time in weeks / 4) + 30% safety.' Built into the bookkeeping app's inventory module (Shopify's built-in logic supports this). Stockouts stopped. Owner added a quarterly review of supplier lead times to her ops calendar; supplier disclosed slipping lead times proactively after she started asking.",
+      "what_wasted_money": "Two weeks of peak-Christmas stockouts on the brand's top three SKUs. Measurable revenue loss plus new-customer loss (Q4 shoppers who tried, got 'out of stock,' and bought from a competitor who restocked in time).",
+      "one_line_lesson": "Inventory reorder triggers based on stock level without accounting for lead time are silently wrong the moment lead time shifts. The fix is a formula that knows the lead time, not a percentage threshold."
+    }
+  ]
+}

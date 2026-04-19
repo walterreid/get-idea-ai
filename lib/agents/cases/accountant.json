@@ -1,0 +1,97 @@
+{
+  "_note": "Per-specialist case material for Accountant. Used at workerNode (per specialty turn), not at recommendation. The specialist retrieves 2-3 cases whose `business_type_category` matches the inferred category, and weaves the mechanics insight into the turn without naming the source — per CLAUDE.md GR#6 (\"use the case, don't cite it\"). Every case here exhibits Accountant's domain discipline: name the specific mechanics/structure/compliance piece that is wrong, missing, or about to become expensive — not 'will this make money' (Finance's territory) but 'where does the money go, how is it recorded, what are the tax implications.' A case that speculates on margin or channel mix drifts into Finance; Accountant owns the mechanics.",
+  "specialist": "accountant",
+  "version": 1,
+  "cases": [
+    {
+      "id": "professional_services_solo_to_llc_timing",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "solo consultant operating as sole-prop past the point where the liability exposure and SE tax burden have materially changed",
+      "observation": "Independent strategy consultant billing $180K in year two as a sole proprietor. No LLC, no separate business account, client contracts signed under personal name. The owner thought 'I'm solo, I don't need the paperwork.' The mechanics were costing real money: self-employment tax on net profit (~15.3% on top of income tax, no employer-side deduction), full personal liability on every engagement, and no deductibility of health insurance through the business. At $180K she was years past the point where LLC + S-Corp election would have saved materially through reasonable-salary-plus-distributions. The owner didn't know any of this because she'd never talked to a CPA.",
+      "what_worked": "Named the two mechanics concretely: (1) LLC with S-Corp election at her revenue tier typically saves $6-10K/year through the salary-plus-distribution structure, net of the payroll setup cost; (2) liability exposure on a solo professional-services business without LLC is personal-asset reach for any client dispute. Flagged both as 'talk to a CPA familiar with professional-service S-Corps' — not as definitive advice. Owner booked a CPA consultation within the week and restructured within 60 days.",
+      "what_wasted_money": "Roughly two years of SE tax paid at sole-prop rates when an S-Corp election would have saved materially each year. Not a dollar figure the owner could retroactively recover — but a dollar figure that could stop compounding forward.",
+      "one_line_lesson": "Entity structure is a mechanics decision, not an optional one. At certain revenue tiers, the default sole-prop setup is paying the IRS a premium for paperwork the owner didn't know to do."
+    },
+    {
+      "id": "professional_services_1099_vs_w2_misclassification",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "growing practice classifying long-term recurring contractors as 1099 when the working relationship has drifted into employee territory",
+      "observation": "Three-clinician therapy practice where two of the 'contractors' had worked exclusively for the practice for over a year, used the practice's intake system, followed the practice's treatment protocols, and worked hours set by the practice's scheduler. The owner believed 1099 classification was simpler and cheaper; the actual IRS and state-labor-department test (behavioral control, financial control, relationship type) read clearly as employee on both. A Department of Labor audit would have reclassified with retroactive payroll-tax, workers-comp, and unemployment-insurance exposure plus penalties.",
+      "what_worked": "Flagged the classification as mechanics-significant: not 'you should hire employees' (that's a business decision) but 'the relationship you already have is an employment relationship under IRS and DOL tests — the 1099 label doesn't change that, and the exposure is retroactive.' Recommended conversation with a CPA or payroll service to (a) verify classification and (b) plan the transition with proper tax registration, workers-comp, and onboarding. Practice converted within two months; no audit occurred, but the exposure stopped compounding.",
+      "what_wasted_money": "Eight months of potential back-tax and penalty exposure that a single classification review would have surfaced. The practice wasn't saving money with 1099 — it was accumulating a contingent liability.",
+      "one_line_lesson": "Worker classification is a test applied to the actual relationship, not a label chosen at signup. The IRS and state labor departments have opinions, and they are retroactive."
+    },
+    {
+      "id": "local_services_sales_tax_services_blindspot",
+      "business_type_category": "local_services",
+      "challenge_pattern": "service business in a state where certain services are taxable, but the owner has never collected sales tax because 'services aren't taxed' as a general belief",
+      "observation": "Cleaning service in a state where residential cleaning is not taxable but commercial cleaning IS. Owner had been running for three years without collecting sales tax on any work, not realizing the commercial side of the business (~$40K/year of the $160K total) was technically subject to sales tax. The state eventually audited, which they occasionally do for service businesses after multi-year filings miss the category. The bill was the unpaid sales tax (owed by the business), plus penalty, plus interest.",
+      "what_worked": "Named the mechanics clearly in a check-in: 'In your state, commercial cleaning is taxable and residential isn't — have you been collecting on commercial invoices?' The owner said no, didn't know. Flagged as urgency-moderate (not today, but before the next quarterly filing) with the specific action: register for a sales-tax permit, start collecting on commercial invoices going forward, and talk to a CPA about voluntary-disclosure options for the back period since the state offers reduced-penalty programs for self-reported gaps.",
+      "what_wasted_money": "Three years of back sales tax owed to the state without any corresponding collection from customers (the business ate the tax). Plus penalty and interest. The commercial-side pricing would have been fine if sales tax had been a line item on invoices from day one.",
+      "one_line_lesson": "Sales-tax rules on services are industry-specific and state-specific. 'Services aren't taxed' is wrong often enough that the only safe answer is to check the owner's specific state and service mix."
+    },
+    {
+      "id": "local_services_cash_jobs_bookkeeping_drift",
+      "business_type_category": "local_services",
+      "challenge_pattern": "contractor accepting cash payments informally alongside invoiced work, without a bookkeeping system that records them",
+      "observation": "Landscaping contractor where roughly 15% of small residential jobs were paid in cash — usually sub-$500 jobs, sometimes the owner's decision, sometimes the homeowner's. None of these payments were being recorded. The owner thought 'cash is cash, it's fine.' At tax time his CPA could see from the bank deposits that revenue didn't match what was being tracked — and asked about it. The owner was about to underreport revenue to the IRS, which is a criminal exposure, not an accounting issue.",
+      "what_worked": "Flagged the mechanics without judgment: 'cash jobs need to be recorded as revenue exactly the same as card or check payments. It's not a gray area with the IRS — underreporting is a problem that grows much worse if it keeps happening.' Specific fix: a simple receipt book or phone-app log for cash payments, with deposits to the business account. Not a cloud-accounting system; just a mechanism that captures the data. Within a month the owner had a workflow and his CPA had a number he could trust.",
+      "what_wasted_money": "Three years of understated revenue that would have been a material problem if audited. The owner's tax burden would have been somewhat higher; the criminal exposure was categorically worse than the tax.",
+      "one_line_lesson": "Cash payments are not a loophole; they are income that requires the same bookkeeping as every other payment. The IRS cares about the accuracy of the number, not the form of the payment."
+    },
+    {
+      "id": "restaurant_food_quarterly_estimated_first_year",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "new business owner who didn't know quarterly estimated taxes were required and got an unpleasant surprise in April",
+      "observation": "Food truck owner in first full year of operation. Strong season, $95K net profit, no payroll (solo operator). At tax time owed $28K in federal (income + self-employment) plus $4K state. Had saved $9K across the year — thought he was being responsible. Did not know that (a) being self-employed triggers quarterly-estimated-tax obligations, (b) missing those quarterly deadlines creates underpayment penalties on top of the tax bill, and (c) the 'set aside 25-30% of net profit' rule of thumb is the mechanism for being ready.",
+      "what_worked": "In a first-season check-in (not at April panic), named the mechanics: (1) quarterly estimates due April 15, June 15, September 15, January 15 next year — miss them and penalties apply; (2) set aside 25-30% of every deposit in a separate savings account for taxes, not in the operating account where it feels spendable; (3) a CPA or enrolled agent can set up the estimate schedule for the first year so the owner doesn't have to figure it out. Specific, actionable, before the problem becomes a crisis.",
+      "what_wasted_money": "Underpayment penalties (typically 3-8% of the underpaid amount) on top of the tax bill itself. Not catastrophic but avoidable. The real cost was scrambling in April when the business had revenue plans for the cash.",
+      "one_line_lesson": "Self-employment tax obligations run quarterly, not annually. Most new business owners find this out at the wrong moment — the right moment is month one, not April."
+    },
+    {
+      "id": "restaurant_food_food_cost_not_tracked",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "restaurant running without a food-cost system, so the books can't answer whether a menu item is profitable",
+      "observation": "Neighborhood bistro, two years in, with revenue tracked monthly but food cost recorded as a single lump number (inventory purchased). No per-item costing, no invoice-to-menu mapping. The owner thought his menu was balanced; he had no way to know. When a supplier raised prices on a core ingredient (lamb) by 35%, his top-selling dish had gone from ~32% food cost to ~44% food cost — which means after labor and overhead, the dish was running at loss or near-loss. He was selling more of his unprofitable dish.",
+      "what_worked": "Named the missing mechanics: 'you can't tell which menu items are making money right now because the books aren't structured to show it. A per-dish food-cost worksheet — doesn't need to be software, a spreadsheet is fine — would flag this kind of price shift immediately.' Flagged that restaurant-specific CPAs often include this as part of setup; it's not general bookkeeping. Owner implemented a monthly per-dish-cost review; within 60 days had raised the price on the lamb dish, dropped two unprofitable low-sellers, and rebalanced the menu.",
+      "what_wasted_money": "Six months of selling the lamb dish at near-loss margins while it was his volume leader. The pricing shift required knowing the cost; the cost required the bookkeeping structure that wasn't there.",
+      "one_line_lesson": "A restaurant's books either can answer 'which dish is profitable' or they can't. If they can't, menu decisions are being made in the dark, and the market doesn't warn you when the answers start changing."
+    },
+    {
+      "id": "fitness_wellness_membership_deferred_revenue",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "studio selling annual memberships and recording the full year as revenue in the month of sale rather than deferring",
+      "observation": "Yoga studio selling $1,200 annual memberships. Owner recorded each sale as $1,200 revenue in the month of sale. At year-end, books showed a $180K revenue year; cash-flow actual was more like $130K because many annual sales had happened in the first four months during a promotional push. Owner thought he'd had a great year and increased rent commitments and staffing accordingly. The mechanics: when you collect $1,200 for twelve months of service, only $100/month is actually earned — the rest is deferred revenue (a liability until delivered).",
+      "what_worked": "Explained the cash-vs-accrual distinction in plain language: 'you received the cash, but you haven't delivered the year of classes yet. In accounting terms, $1,100 of that is a promise you still owe them, not revenue you can commit to rent on.' Flagged that studios and subscription businesses specifically need accrual-aware bookkeeping to avoid this mistake. Owner adjusted expectations, held off on rent upgrade for another six months until actual monthly earned revenue confirmed the growth.",
+      "what_wasted_money": "Almost committed to a $4K/month rent upgrade based on a revenue number that overstated the earned-rate by 40%. Caught in time; would have been a serious cashflow problem six months in.",
+      "one_line_lesson": "Prepaid membership revenue isn't revenue until you deliver the service. Recording it as month-of-sale revenue makes subscription businesses look bigger than they are and creates decisions that cashflow can't support."
+    },
+    {
+      "id": "fitness_wellness_hire_1_payroll_setup",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "solo owner about to hire their first instructor with no understanding of what payroll actually requires",
+      "observation": "Boutique barre studio owner ready to hire her first part-time instructor. She'd budgeted $28/hour and thought 'that's my cost.' The mechanics she hadn't priced: employer-side FICA (~7.65%), federal and state unemployment insurance (~1-3% variable by state), workers' comp insurance (required; varies widely — fitness instructors are often moderate-risk, 1-3% of payroll), and payroll-service cost itself ($30-80/month typical). True fully-loaded cost was closer to $33-35/hour, not $28. Her margin-on-instructor-hours math was wrong.",
+      "what_worked": "Named each mechanic line-item in plain terms: 'your real cost per hour is the pay rate plus about 8% for payroll taxes plus 2-3% for workers-comp plus the flat monthly payroll-service fee. Budget more like $33 than $28, and figure on $40-80/month for a payroll service like Gusto.' Recommended she talk to a CPA or payroll service before making the offer to confirm specifics for her state. Owner adjusted her pricing-and-scheduling math before hiring, avoided a margin surprise.",
+      "what_wasted_money": "Would have been three to six months of running the instructor's hours at actual margins 15-20% below her planning margins, potentially committing to schedule blocks she couldn't sustain.",
+      "one_line_lesson": "Hire #1 is not just a pay-rate decision; it's the moment a business becomes an employer — with payroll taxes, workers-comp, unemployment insurance, and filing obligations that didn't exist at solo."
+    },
+    {
+      "id": "ecommerce_dtc_nexus_sales_tax_multi_state",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "online seller whose sales volume has crossed economic-nexus thresholds in multiple states without registering for sales-tax collection",
+      "observation": "Candle brand selling via their own site plus Shopify at ~$450K annual revenue. Shipping orders to all 50 states. The owner assumed 'we're small, sales tax is complicated, we'll deal with it later.' Since the 2018 Wayfair decision, most states have economic-nexus thresholds ($100K or 200 transactions is common) that require out-of-state sellers to register and collect. At her volume she had likely crossed the threshold in 15-20 states. Each state has its own registration, filing, and remittance process. The exposure was growing silently.",
+      "what_worked": "Flagged the mechanic clearly: 'sales-tax nexus for e-commerce is a post-Wayfair obligation in most states. At your volume you're almost certainly over thresholds in multiple states and the exposure compounds. This is not something to handle yourself — there are services (TaxJar, Avalara, or a CPA specializing in e-commerce) that automate the multi-state filing.' Not alarm, calibration. Urgency: address before the next filing period for the biggest states; medium-term for the tail. Owner signed up for a sales-tax-automation service within a month.",
+      "what_wasted_money": "Potential back-tax exposure in multiple states (similar to the cleaning-service case but multiplied by geography). State voluntary-disclosure programs often reduce the penalty if you come forward before they find you.",
+      "one_line_lesson": "E-commerce sales-tax obligations are driven by where your customers are, not where you are. At volume, you have nexus in states you've never visited — and each one files independently."
+    },
+    {
+      "id": "ecommerce_dtc_inventory_cost_reporting",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "product-business owner treating inventory purchases as current-period expenses, overstating cost in buy months and understating in sell months",
+      "observation": "Small apparel brand buying fabric in spring (March purchase: $22K), manufacturing through summer, selling through fall. Owner's books showed $22K expense in March (loss), no inventory cost in October when the products sold (profit overstated). Her books told a bouncing story month-to-month that didn't match the actual business cadence. The mechanic: inventory is a balance-sheet asset until sold; cost of goods sold hits the P&L when the product leaves, not when it's purchased. A CPA or e-commerce accountant would have set this up day one; her self-taught bookkeeping hadn't.",
+      "what_worked": "Explained the principle in plain language: 'what you paid for fabric isn't an expense yet; it's an asset sitting in your warehouse. It becomes an expense when the finished garment sells. Right now your March looks like a disaster and October looks like a windfall, and neither is accurate.' Recommended a bookkeeping review with an e-commerce-savvy CPA to restructure. Owner moved to QuickBooks Online with proper inventory accounting within the next quarter; her monthly books started telling a true story.",
+      "what_wasted_money": "Six months of making planning decisions based on P&L numbers that overstated profitability in sell months and understated in buy months. Could have overspent in a 'good' month and cut back in a 'bad' one, both wrong.",
+      "one_line_lesson": "For product businesses, inventory is an asset, not an expense. Books that don't treat it that way tell a month-to-month story that doesn't match the business — and decisions made from those books swing the wrong way."
+    }
+  ]
+}

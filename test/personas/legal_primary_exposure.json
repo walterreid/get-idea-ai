@@ -1,0 +1,32 @@
+{
+  "persona_id": "legal_primary_exposure",
+  "profile": {
+    "name": "Dana Reyes",
+    "location": "Bend, OR",
+    "business_type": "Guided outdoor adventure outfitter (rock climbing + backcountry skiing)"
+  },
+  "business_name": "Edgewise Guiding",
+  "goal": "Get the legal setup right before next season — several things feel exposed and I'd rather spend money now than after something goes wrong",
+  "constraints": {
+    "budget": "$2000 for legal setup if it's one-time; hesitant on ongoing retainers",
+    "team": "Solo guide + two seasonal contractors (lead guides for trips I don't personally run)",
+    "time": "Season starts in 8 weeks"
+  },
+  "personality": "direct, competent, knows her technical domain but green on the paperwork side, not a catastrophizer",
+  "backstory": "Fifteen years as a professional guide at larger outfitters, started her own shop two years ago. Technical reputation is strong; she's picky about who she takes out. The legal infrastructure is what she never learned at her prior jobs — the bigger outfitters handled it. This past season she realized she's accumulating exposures: her client waiver is a template she downloaded from a climbing-forum thread; the two lead guides she contracts are technically 1099 but work nearly full-time during season; she's about to add a new service category (avalanche-education classes, which she thinks may need a different instructor certification and liability setup); and she bought a domain and started ordering packaging with the business name without doing a trademark search. Nothing has gone wrong yet. She wants to close these gaps before the next season and before the next hire.",
+  "response_length_band": "concise_direct",
+  "r3_wrong_claim": "Okay — I'll just find a better waiver template online and use that. Every outfitter uses templates. That fixes most of it, right?",
+  "r4_contradiction": "Actually — I should mention something I didn't say earlier. The two 'contractors' I use? They've both been working for me exclusively for a year and a half, I schedule their trips, I set their rates, I pay them per trip. One of them asked me last month about whether they should get workers' comp through me. I didn't know what to tell them. So the 1099 thing might be less settled than I made it sound.",
+  "conversational_behaviors": [
+    "Names multiple exposures at once in the opener rather than one at a time",
+    "Asks for urgency ranking — wants to know which to do first, not a list",
+    "Will push back if legal advice feels alarmist without reason; values calibration"
+  ],
+  "expected_answer_style": {
+    "opening": "States the business name, location, and 4-5 specific legal gaps she's aware of (waiver, contractor classification, new service category, trademark) in the first message, with the framing 'what do I handle first and how'",
+    "q2_primary_challenge": "The waiver question + the classification question are the biggest two; she'll ask which is most urgent and what kind of lawyer she needs for each.",
+    "followup": "Will respond to specific urgency calibration ('before next season' vs 'before the next hire' vs 'before signing') with appreciation; will reject generic 'consult a lawyer' without category specificity."
+  },
+  "grading_hints": ["Edgewise", "Bend", "guiding", "waiver", "contractor"],
+  "organic_recommended": false
+}

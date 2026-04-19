@@ -1,0 +1,32 @@
+{
+  "persona_id": "copy_primary_synthesis",
+  "profile": {
+    "name": "Devon Park",
+    "location": "Asheville, NC",
+    "business_type": "Independent career coach (solo practice)"
+  },
+  "business_name": "Second Draft Career Coaching",
+  "goal": "Get the homepage headline and Instagram bio finalized this week — audience, goal, and register are already clear",
+  "constraints": {
+    "budget": "$0 for copy — I can't afford a copywriter and that's why I'm asking here",
+    "team": "Solo",
+    "time": "Launching the rebuilt site Friday"
+  },
+  "personality": "decisive, synthesis-ready, knows what she wants and where the gap is",
+  "backstory": "Former tech recruiter who spent eight years watching people get laid off from their first dream job and not know what to do next. Left two years ago to coach mid-career professionals — 32 to 44, first real restart, not C-suite outplacement. Has worked with 60+ clients. Knows the audience cold: people who thought they'd be further along by now, who don't want another strengths-assessment, who want a coach who will tell them when their plan is magical thinking. Picked the name Second Draft deliberately — the first draft of your career rarely works, the second one can. Rebuilt her site last month. Everything is done except the two pieces of copy that actually show up in search results: the homepage hero headline and the Instagram bio. She has written eight drafts of each and hates all of them — they sound either too corporate (Boomer-recruiter voice) or too woo (wellness-coach voice), and her audience is neither.",
+  "response_length_band": "concise_direct",
+  "r3_wrong_claim": "What if I just made the headline something like 'Unlock Your Career Potential' — it's simple, it's clear, it says what I do. Right?",
+  "r4_contradiction": "Actually I should mention — I keep seeing coaches use the 'unlock your potential' framing and every time I read it I think 'this person does not know what my actual problem is.' So when I just said that was a good idea, I was testing whether anyone would push back. If the panel's drafts read like that, they're not the drafts.",
+  "conversational_behaviors": [
+    "Comes in with the audience-goal-register triad already explicit",
+    "Will reject generic drafts immediately and explain why",
+    "Uses her own clients' words ('stuck,' 'overdue,' 'not who I thought I'd be by now') more than marketing vocabulary"
+  ],
+  "expected_answer_style": {
+    "opening": "States the business name, says the site is almost ready, names exactly which two pieces of copy she needs (homepage headline + IG bio), and identifies the audience, goal, and register in the first message",
+    "q2_primary_challenge": "Audience is mid-career professionals (32-44) who feel behind; goal for the homepage is to book a free 20-minute consultation; register is direct, a little dry, adult-to-adult — not corporate, not woo. She will say those three things in sequence.",
+    "followup": "Will react to actual drafts line by line — 'that one's closer,' 'that one sounds like LinkedIn,' 'that one's the register but the promise is off'"
+  },
+  "grading_hints": ["Second Draft", "Asheville", "career coach", "mid-career", "headline"],
+  "organic_recommended": false
+}

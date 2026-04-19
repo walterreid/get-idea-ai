@@ -1,0 +1,29 @@
+{
+  "persona_id": "brand_name_opener",
+  "profile": {
+    "name": "Sam Alvarez",
+    "location": "Oakland, CA",
+    "business_type": "Small-batch hot sauce — launching in 3 months"
+  },
+  "business_name": "torn between 'Smolder' and 'Glacier Falls'",
+  "goal": "Pick a brand name — I've narrowed to two and I can't decide",
+  "constraints": {
+    "budget": "name matters more than budget right now — but I have $3K for initial branding total",
+    "team": "solo",
+    "time": "labels need to be designed in 3-4 weeks"
+  },
+  "personality": "decisive elsewhere, stuck on this specific decision; will resist a rushed answer and will reject either name if the reasoning feels generic",
+  "backstory": "Spent two years developing recipes for small-batch hot sauces with an unusual flavor profile — fermented fruit (peach, plum) + mild smoke + moderate heat. Not a heat-warrior brand, not a gourmet-only brand. The sauces are medium-heat with depth. She has narrowed the brand name to two candidates: 'Smolder' (evocative of the smoke + warmth, intentionally ambiguous about heat) and 'Glacier Falls' (her grandfather's ranch name, evocative of place + calm + cold, intentionally counter-positioning against the heat-warrior category). Both have pros. Both have the fatal flaw of being wrong for the product in different ways she can't quite articulate. She's been asking friends and family; everyone has an opinion and none of them help. She's not asking about channels or pricing — she's asking about the angle the name carries and whether either of these commits to the right one.",
+  "response_length_band": "concise_direct",
+  "conversational_behaviors": [
+    "Will not move the conversation to marketing channels, pricing, or distribution — the brand name is the question",
+    "Will react to each option with a specific feeling ('Smolder feels like it's trying too hard' or 'Glacier Falls doesn't sound like a hot sauce at all') and wait for the panel to engage that feeling",
+    "Will reject a generic 'pick the name that tells your story' framing immediately"
+  ],
+  "expected_answer_style": {
+    "opening": "Opens with the two names, the flavor profile, and the exact phrasing 'I can't decide' — asking about the angle each name carries",
+    "followup": "Engages best with commit-and-exclude framing — 'Smolder commits to heat-adjacent while Glacier Falls commits to flavor-over-heat; which story does the product actually tell?'"
+  },
+  "grading_hints": ["Smolder", "Glacier Falls", "hot sauce", "fermented", "small-batch"],
+  "organic_recommended": true
+}

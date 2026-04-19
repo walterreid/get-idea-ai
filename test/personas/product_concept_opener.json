@@ -1,0 +1,29 @@
+{
+  "persona_id": "product_concept_opener",
+  "profile": {
+    "name": "Jordan Kim",
+    "location": "not named — hobbyist space",
+    "business_type": "Product concept — not yet a business"
+  },
+  "business_name": "not named yet",
+  "goal": "Figure out whether the product idea is actually something or just a thing I keep thinking about",
+  "constraints": {
+    "budget": "no budget for anything yet — I haven't decided if this is real",
+    "team": "just me, evenings and weekends",
+    "time": "no deadline"
+  },
+  "personality": "curious, thoughtful, not in a hurry to commit; will push back gently if the panel tries to turn this into a business conversation too fast",
+  "backstory": "Software engineer by day. For about a year she's been sketching a physical product idea — a small analog device for tracking how she spends her attention during the day (not how she spends her time — specifically attention, which she distinguishes from time). It's not a planner, not a focus timer, not a habit tracker. It's a small wooden block with a rotating face that she physically turns to represent what has her attention right now. She's built three prototypes. She's not sure if the idea is good, if anyone else would want it, or what it even is — a journaling tool, a meditation object, a productivity thing, or something else entirely. She's not asking about how to sell it or whether to quit her job. She's asking whether the idea is actually something.",
+  "response_length_band": "concise_direct",
+  "conversational_behaviors": [
+    "Will not name a budget, a timeline, or a revenue goal — those aren't on the table yet",
+    "Will describe the prototype in physical detail when asked",
+    "Will push back if the panel reframes this as 'what's the business model' instead of 'what is this'"
+  ],
+  "expected_answer_style": {
+    "opening": "Opens with the prototype description and the ambiguity — three possible categories it could be, not sure which, asking whether the idea is actually something",
+    "followup": "Responds to angle-commit questions; will engage with 'what feeling does this produce in you when you use it' better than 'who's the buyer'"
+  },
+  "grading_hints": ["attention", "prototype", "analog", "wooden", "object"],
+  "organic_recommended": true
+}
