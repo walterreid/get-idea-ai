@@ -63,16 +63,19 @@ function readCaseFile(specialistName: string): CaseFile | null {
 
 /**
  * Retrieve up to `topN` cases for a specialist, filtered by business type.
- * Returns [] if no case file exists for the specialist OR no business type
- * was inferred OR no cases match.
+ * Returns [] if no case file exists for the specialist OR no cases match.
  *
  * Strategy:
- *   1. Cases with matching business_type_category come first.
- *   2. If fewer than topN match, fill with cross-category cases to ensure
- *      the specialist always has SOMETHING to reach for — because a case
- *      about therapy-practice specialty-searches can still inform a retail
- *      specificity problem.
+ *   1. When businessType is non-null: cases with matching business_type_category
+ *      come first; fill with cross-category if fewer than topN match.
+ *   2. When businessType is null (concept-first openers — user named a
+ *      concept/idea but no business type): prefer cases tagged
+ *      'concept_first'; fall through to cross-category if fewer than topN.
  *   3. Stable order (by case id) within each bucket for reproducibility.
+ *
+ * Cross-category fallback ensures the specialist always has SOMETHING to
+ * reach for — because a case about therapy-practice specialty-searches can
+ * still inform a retail specificity problem.
  */
 export function loadCasesForSpecialist(
   specialistName: string,
@@ -85,7 +88,10 @@ export function loadCasesForSpecialist(
   const all = [...file.cases].sort((a, b) => a.id.localeCompare(b.id))
 
   if (!businessType) {
-    return all.slice(0, topN)
+    const conceptFirst = all.filter((c) => c.business_type_category === 'concept_first')
+    if (conceptFirst.length >= topN) return conceptFirst.slice(0, topN)
+    const others = all.filter((c) => c.business_type_category !== 'concept_first')
+    return [...conceptFirst, ...others].slice(0, topN)
   }
 
   const primary = all.filter((c) => c.business_type_category === businessType)

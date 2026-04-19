@@ -38,7 +38,13 @@ export type BusinessTypeCategory =
   | 'restaurant_food'
   | 'fitness_wellness'
   | 'ecommerce_dtc'
+  | 'concept_first'
 
+// `concept_first` is detected by ABSENCE, not presence — the user has named a
+// concept/idea but no business type. `inferBusinessType` returns null for these
+// cases; the case-loader treats null as the concept_first signal. The empty
+// arrays here only satisfy Record<BusinessTypeCategory, ...> exhaustiveness;
+// concept_first is never reached via keyword inference or channel lookup.
 const CATEGORY_KEYWORDS: Record<BusinessTypeCategory, string[]> = {
   local_services: [
     'plumber', 'plumbing', 'hvac', 'landscap', 'contractor', 'electrician',
@@ -64,6 +70,7 @@ const CATEGORY_KEYWORDS: Record<BusinessTypeCategory, string[]> = {
     'online shop', 'online brand', 'shopify', 'amazon store',
     'subscription box',
   ],
+  concept_first: [],
 }
 
 /**
@@ -139,6 +146,7 @@ const CATEGORY_CHANNELS: Record<BusinessTypeCategory, string[]> = {
     'google_search_ads',
     'referral_programs',
   ],
+  concept_first: [],
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
