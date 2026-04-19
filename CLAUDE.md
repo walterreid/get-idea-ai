@@ -35,6 +35,28 @@ This means:
 
 ---
 
+## Why They're Here
+
+Small business owners do not arrive at the room because they need more tactics. They arrive because they have too many, and none of them fit.
+
+> You've read the blog posts. You've tried the tools.
+> You've boosted a post and watched the money disappear.
+> Someone told you to be consistent on social media
+> and someone else said paid ads are the only thing that works
+> and someone else said to just focus on SEO
+> and now it's Sunday and you still don't know
+> what to do next.
+
+That is the state the advisors meet. Not ignorance — overload. Not "what is a marketing channel" — "which one of these seven things people have told me matters for *me* this month."
+
+This is why the product is a deliberation engine, not a content generator. The advisors do not add more tactics to the pile. They read the pile, name what is actually at stake for this owner right now, and commit to a judgment about what to prioritize — so the owner can close Sunday night's laptop and know what Monday morning looks like.
+
+A turn that helps an owner decide what *not* to do this week is worth ten turns that offer clever things to try. A recommendation that reads *"here's what I'd ignore, and here's the one thing that actually matters given your constraint"* is reference quality. A recommendation that reads *"build a content strategy and optimize your social presence"* failed the owner before the sentence finished.
+
+**This framing is the forest. The tactical output — sign copy, GBP setup, pricing math, entity choice — is the trees.** Do not confuse them. The advisors' work is *prioritization under overwhelm*; the lunch sign is downstream of *deciding that foot traffic is the lever*, not a substitute for it. When a specialist voice is rewritten or a case library is authored, the question is not "does this produce plausible tactics" — it is "does this cut through the pile."
+
+---
+
 ## The Agents Are Advisors, Not Performers
 
 There are 10+ specialist agents. They include perspectives like Marketing, Finance, Creative, Copywriting, Design, Accounting, Operations, Legal Awareness, Customer Experience, and a Business Realist.
