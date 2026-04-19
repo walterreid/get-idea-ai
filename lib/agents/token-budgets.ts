@@ -30,7 +30,15 @@ const TOKEN_BUDGETS: Record<string, number> = {
   copywriter: 200,
   designer: 200,
   cx: 200,
-  creative: 220,
+
+  // Brainstorm / angle-finding — Creative's concept-exploration turns carry more
+  // structure than a Marketer probe (emotional-core framing, mechanic tension,
+  // failure-vs-discovery questions all run long by design). A 220 cap truncated
+  // mid-sentence 3× in the 2026-04-18 manual /chat session (docs/manual_chat_
+  // 2026-04-18_game_brainstorm.md). Raised to 350 to match Realist's quantitative-
+  // reasoning band. A phase-aware cap (shorter in synthesis, longer in exploration)
+  // is defensible but out of scope for the brainstorm-register cycle.
+  creative: 350,
 
   // Mechanics / structure specialists — slightly more room for enumerated detail
   accountant: 280,

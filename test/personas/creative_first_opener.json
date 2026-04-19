@@ -1,0 +1,48 @@
+{
+  "persona_id": "creative_first_opener",
+  "profile": {
+    "name": "Mira",
+    "business_name": "—",
+    "location": "Portland, OR (but she's making this on her laptop, not in a shop)",
+    "business_type": "game concept / hobby project"
+  },
+  "business_name": "—",
+  "website": null,
+  "challenge": "Unsure whether the core mechanic of a game concept is actually fun for anyone besides her — not a marketing or business problem, a design-uncertainty problem",
+  "budget_range": "No budget — evenings and weekends only",
+  "team_size": "Just me",
+  "personality": "reflective, curious, mechanic-focused — more interested in whether the thing feels right to play than whether anyone would pay for it",
+  "backstory": "Mira is a software developer in her early thirties. She writes code for a living at a mid-sized company and has been thinking about a game idea on and off for about six months. She's not trying to start a studio or monetize anything — she likes making things, she's made a few small prototypes before that never went anywhere, and this one has stuck in her head enough that she wants to talk it through. She walks in framing it as a creative uncertainty — will this be fun? — not a business question. If the panel pushes her toward revenue, marketing, or 'who is your audience,' she deflects gently ('I'm not really thinking about that part yet') and steers back toward the mechanic. She's sophisticated enough to know the difference between a design question and a business question; the reason she came here is because her friends keep nodding politely when she describes the concept and she wants someone to actually engage with the idea. (Tests whether the orchestrator routes a concept-first opener to Creative on R1, and whether Creative holds the brainstorm register instead of pivoting to business validation.)",
+  "expected_answer_style": {
+    "q1_business_identity": "Hi — I have an idea for a little game I've been chewing on. It's not a business thing; I'm a developer, I just make stuff on evenings. The idea is a roguelike dungeon crawler where you move through the dungeon by placing dominos — each domino represents a step or connection, and when your dominos run out, you're stranded on that floor.",
+    "q2_primary_challenge": "I don't know if it's actually fun. The mechanic sounds interesting when I describe it to friends but I can't tell if they're being polite. The thing that worries me is that the mechanic might be too slow or too constraining — or maybe the opposite, maybe it's not constraining enough to feel meaningful. I'm trying to figure out if there's a version of this that feels right, or if the whole concept is a little off.",
+    "q3_ideal_customer": "Honestly I'm not thinking about that yet. If anyone plays it other than me and maybe a few friends on itch.io, that'd already be more than I expected. I guess if I had to describe it — players who like mechanic-first games, who don't mind reading, who'd play a weird little game because the mechanic is unusual. But I'm really not trying to build for an audience right now.",
+    "q4_website_observation": "I don't have a website. It's just notes in a Notion doc and a prototype I started in Godot that doesn't do much yet. The prototype places a single domino chain on a grid and that's about it.",
+    "q5_failed_attempts": "I've had maybe three game ideas before this one that didn't go anywhere. One was a time-loop puzzle game — too ambitious, I got lost in the design. One was a little word game — I made it, it was fine, I didn't care about it enough to keep going. One was a cozy farming thing — I realized partway through I was just copying Stardew Valley with fewer features. This one is the first where the mechanic itself keeps pulling me back in.",
+    "q6_channel_economics": "I'm not running a funnel or anything. If the game ever gets played by anyone it'll probably be because I post it on itch.io and maybe a Reddit thread. That's not really what I'm here to talk about — I'm trying to figure out if the mechanic works first.",
+    "q7_budget_or_retention": "There's no budget — I'm not spending money on this. It's all evenings and weekends on a laptop I already own. The constraint I actually care about is whether the idea is worth the time I'm putting into it. If the answer is 'this mechanic has a fatal flaw nobody has noticed,' I'd rather hear that now than three months from now.",
+    "q8_execution_capacity": "I can build it — I'm a working developer, I've used Godot before, I can do the art in Aseprite well enough for a small game. Execution isn't really the question. I'm maybe 10 hours a week on this, on and off. The question is whether the thing I'd be executing is actually worth making.",
+    "q9_success_definition": "If a handful of strangers played it on itch.io and said something like 'that mechanic made me think' — that'd be a win. I'm not measuring this in downloads or dollars. It's more about whether the idea, if I build it, lands in the way I think it could. And whether I learn something about design in the process."
+  },
+  "response_length_band": "scattered",
+  "organic_recommended": true,
+  "r3_wrong_claim": null,
+  "r4_contradiction": null,
+  "conversational_behaviors": [
+    "Opens as a maker, not a business owner — introduces the game concept before anything else",
+    "Talks in terms of mechanics, feel, design questions — not customers or revenue",
+    "When the panel pushes toward business framing (budget, audience, channel, go-to-market), gently deflects and steers back to the mechanic",
+    "Engages deeply when asked design questions about the concept itself — emotional core, failure-state feel, what the constraint produces",
+    "Sophisticated about the difference between design questions and business questions; not confused about the panel's role, just uninterested in the business side right now",
+    "Comfortable saying 'I don't know' and sitting with it"
+  ],
+  "grading_hints": [
+    "Mira",
+    "domino",
+    "dungeon",
+    "roguelike",
+    "Godot",
+    "mechanic",
+    "prototype"
+  ]
+}
