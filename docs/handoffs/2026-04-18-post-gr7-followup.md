@@ -194,3 +194,39 @@ Same five-piece pattern as Finance:
 - Reflex slash-command working in a fresh session unless the symlink + restart was done.
 - Async fires in the new cycle's bundles (none triggered).
 - A test that catches GR#7 regressions automatically (not yet built; hand-read only).
+
+---
+
+## Addendum (2026-04-18, post-cycle) — Walter's manual /chat session findings
+
+After the cycle shipped, Walter ran a manual `/chat` session through the production path (not the harness) with a creative-first opener: *"I want to make a game and I have an idea, but I don't know if it'll work."* Full annotated transcript + analysis: [docs/manual_chat_2026-04-18_game_brainstorm.md](../manual_chat_2026-04-18_game_brainstorm.md).
+
+**This is tuning, not a "bad conversation" report.** The session worked end-to-end. Two observations worth carrying forward:
+
+### Finding 1 — Slow to land in the brainstorm register on a creative-first opener
+
+Realist took the first three rounds, gating each on *"is this a business or a passion project?"* That's a fair question — but it took an explicit user redirect ("I'd actually just like to brainstorm") to get Creative summoned. Once Creative engaged, the brainstorm was strong. The tuning observation is the **3-round delay** to land in the register the user actually came for.
+
+This is **field evidence for the parked "brainstorm register" consideration** in BUILD.md Phase 7. Suggested follow-up cycle (after Realist replication): an orchestrator-prompt edit so creative/concept-first openers route to Creative or Designer for at least one turn before Realist's financial gate. Probably also a Creative `description_for_orchestrator` tightening to make it a stronger pull on creative-first walk-ins. Validate with a new persona — `creative_first_opener.json` — that walks in with a game/product/concept idea and explicitly does *not* mention business or revenue. **Not a new specialist** — the existing Creative + Ideation handle the register fine *once summoned*; the gap is routing.
+
+This is also a soft echo of GR#7: the panel had a default arc and the user had to redirect to escape it. Not a violation — but the kind of pattern GR#7 was named to make visible.
+
+### Finding 2 — Creative was truncated mid-sentence three times (token cap, not interrupt)
+
+Creative's first three brainstorming turns each ended mid-sentence with no completion. Confirmed root cause: [lib/agents/token-budgets.ts](../../lib/agents/token-budgets.ts) sets `creative: 220` tokens (~165 words). The cutoff turns ran 175–200 words — at and above the cap. The model produces a longer response than the cap allows, the LLM client slices wherever the budget runs out, and the result is mid-word truncation with no graceful completion.
+
+Walter did not interrupt. Notably, the orchestrator's routing-reason text on the third Creative turn read *"Creative was mid-sentence when you interrupted"* — that is **incorrect**; no interrupt event fired. The orchestrator appears to be inferring "must have been interrupted" from a downstream truncated message. Routing-reason text is product surface — claiming an interrupt that didn't happen is a small but real correctness bug.
+
+Two real fixes (both belong with the brainstorm-register cycle):
+1. **Raise Creative's cap** for brainstorm turns. Either bump to ~350 (matching Realist's quantitative-reasoning band), or build a deliberation-phase-aware cap (Creative gets 350 in exploration/synthesis, 220 elsewhere).
+2. **Tell the model its budget** — add an explicit sentence to the system prompt: *"Your turn is capped at roughly 165 words. Plan your response to land cleanly within that budget."* Lets the model self-edit.
+
+**Tertiary issue worth noting separately:** the orchestrator should not assert a user interrupted unless an interrupt event actually fired. Worth fixing whenever the orchestrator prompt is next touched (probably the brainstorm-register cycle).
+
+### Carries forward into open judgment-call flags
+
+- **Brainstorm-register routing gap** — new. Confirmed by manual session. Cycle slot: after Realist replication.
+- **Creative token-cap fights the brainstorm register** — new. Same cycle.
+- **Orchestrator misattributes truncation to user-interrupt** — new. Smaller fix; same cycle or earlier.
+
+The next session should still start with **Realist replication** as the primary task, but read the manual-chat doc before declaring the Realist cycle done — the brainstorm-register cycle is the natural next-after-Realist based on this evidence.
