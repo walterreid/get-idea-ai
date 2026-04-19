@@ -1,0 +1,133 @@
+{
+  "_note": "Per-specialist case material for the Business Realist. Used at workerNode (per specialty turn), not at recommendation. The specialist retrieves 2-3 cases whose `business_type_category` matches the inferred category, and weaves the structural insight into the turn without naming the source — per CLAUDE.md GR#6 (\"use the case, don't cite it\"). Cases here focus on structural flaws: market dynamics, dependency concentration, hiring assumptions, customer-problem mismatch, timing and ramp assumptions. Finance owns numeric flaws; Realist owns structural ones.",
+  "specialist": "realist",
+  "version": 1,
+  "cases": [
+    {
+      "id": "professional_services_hire_before_pipeline",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "growth plan requires a hire before the candidate pipeline or management bandwidth exists",
+      "observation": "Solo consultant with a growing client load planning to hire an associate to double capacity. The hire was positioned as the next step; the business plan skipped past it. No one had ever hired for this role before — the owner had never written a job description, never run an interview loop, never onboarded anyone, and the skill set they needed (sector-specific domain knowledge plus client-facing presence) drew from a pool of maybe a dozen qualified candidates in the region. The owner expected the hire to be ready to lead client work within 60 days.",
+      "what_worked": "Naming the candidate pipeline first: who are the actual five people who could do this job, where are they now, and why would they leave their current situation? Walking through that question revealed there were two plausible candidates, both employed, neither actively looking. The hire was not impossible — but the 60-day assumption was not grounded in any real pipeline, and the plan needed a different shape.",
+      "what_wasted_money": "Nothing — the structural question was raised before any commitment. The cost prevented would have been months of owner time recruiting for a role that couldn't be filled quickly, while turning down client work that needed the capacity.",
+      "one_line_lesson": "A hiring plan without a named candidate pool is a headcount wish, not a growth plan."
+    },
+    {
+      "id": "professional_services_founder_dependent_service",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "first clients succeeded because of founder's personal involvement; scaling plan assumes the service can be delegated before anyone knows what made it work",
+      "observation": "Marketing strategist with three successful clients who wanted to build an agency. The engagements had gone well — every client credited the founder's instinct and judgment in real-time workshops, their ability to read a room, their specific experience in the client's sector. The agency plan assumed associates could run similar engagements within one quarter of onboarding. The founder had never broken down what they actually did in those workshops into a form that could be taught.",
+      "what_worked": "Documenting the first three engagements in enough detail to answer: which parts of this are replicable and which parts are me specifically? The answer was uncomfortable — about 70% was judgment-dependent and the judgment had not been codified. The agency plan shifted to a longer founder-in-every-engagement phase while the playbook was being built, rather than scaling the org structure before the delivery structure existed.",
+      "what_wasted_money": "Two similar agency-building attempts by the founder in the prior decade, both of which had collapsed after six months when the associates produced work the clients found generic compared to the founder's. The structural flaw — uncodified methodology — had produced the same failure mode twice.",
+      "one_line_lesson": "Before delegating a service, the service has to be describable without the founder in the room. If it can't be taught yet, it can't be scaled yet."
+    },
+    {
+      "id": "professional_services_solving_one_degree_removed",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "owner builds a solution to the stated problem; the real constraint is one degree upstream",
+      "observation": "B2B consultant adding a lead-generation service to their practice because clients said they needed more leads. Invested six months building an outbound system — cadences, templates, prospect lists, tracking. Ran it for a quarter. Leads arrived; few converted. The close rate was 8%, where 25-30% was table stakes for the category. The problem was not the volume of leads — it was that the sales conversation after the lead arrived had no structure, no qualification, and no clear offer. The top-of-funnel was now full; the conversion funnel leaked.",
+      "what_worked": "Pausing the outbound spend and fixing the sales conversation first — a two-call structure, a qualification rubric, a crisp offer statement. Close rate moved to 22% within eight weeks on the existing lead volume before any outbound restart. The leads that had been arriving and leaking were suddenly converting. Adding outbound on top of a working conversion funnel produced the growth; the same outbound on the old conversion funnel had just produced better-documented failure.",
+      "what_wasted_money": "Six months of lead-generation investment into a funnel with no bottom. Every lead that arrived and didn't convert was a small proof that the problem was not the top of funnel.",
+      "one_line_lesson": "When leads aren't converting, the problem is almost never more leads."
+    },
+    {
+      "id": "professional_services_undefined_category_entry",
+      "business_type_category": "professional_services",
+      "challenge_pattern": "service category is new or fuzzy; buyers can't search for it, refer it, or recognize they need it",
+      "observation": "Fractional operations consultant entering the market in the period before 'fractional' had search weight or buyer vocabulary. Services were real and valuable; the business development problem was that buyers who needed what they offered didn't have a name for it, couldn't search for it, and couldn't explain it to a colleague who might refer it. The distribution plan — content, ads, LinkedIn presence — all assumed a buyer who recognized the category. That buyer was rare.",
+      "what_worked": "Dropping the category label and replacing it with an outcome the buyer already experienced as a problem: 'I help founders stop being the bottleneck in their own operations.' That framing didn't require the buyer to understand 'fractional' — it required only that they recognize the feeling. Referrals became possible because the description fit in a sentence the referrer could repeat. New clients started coming from second-degree connections within 90 days.",
+      "what_wasted_money": "Content explaining what fractional operations is — educating the market on a category before the market recognized it had a problem. Every piece reached the wrong audience (people who already understood and weren't buying) and missed the right one.",
+      "one_line_lesson": "When the category is new, name the buyer's problem, not the service. The category can be explained after they've already said 'yes, that's what I need.'"
+    },
+    {
+      "id": "local_services_incumbents_own_search_visibility",
+      "business_type_category": "local_services",
+      "challenge_pattern": "primary acquisition channel is search; incumbents have years of authority the new entrant can't close in the business plan's timeline",
+      "observation": "New residential cleaning service entering a metro market where the top three results for 'house cleaning [city]' had been the same companies for four to six years, each with 200+ Google reviews, verified GBP profiles, and optimized service pages. The business plan called for SEO as the primary acquisition channel and projected meaningful organic traffic within six months. The organic gap between a new listing and the incumbents — review count, citation volume, GBP authority, backlink profiles — was not something six months of SEO could close.",
+      "what_worked": "Accepting that search was not the first-mover channel and using neighbor referrals and Nextdoor as the actual launch channel. Offered a discount to the first 20 customers in exchange for a Google review. Built the review count to 40 before touching SEO spend. At 40 verified reviews, LSA eligibility opened and the cost-per-lead from Google Guaranteed was competitive. Six months was still the right timeline — but the first four months were building the review foundation, not chasing organic rankings that weren't reachable yet.",
+      "what_wasted_money": "Three months of SEO agency retainer during the launch period. The pages were fine; the authority wasn't there to rank for competitive terms. The spend was on optimization in a race where the entrant hadn't yet entered.",
+      "one_line_lesson": "SEO is a compounding channel. It rewards incumbents who've been compounding longer. A new entrant can't buy their way to the front of that line — they have to build the review and citation foundation that makes the compounding possible."
+    },
+    {
+      "id": "local_services_referral_only_before_base",
+      "business_type_category": "local_services",
+      "challenge_pattern": "sole acquisition channel is referrals; referral base doesn't exist yet at launch",
+      "observation": "Home organizer launching a solo practice. Service quality was real; she had one paying client from a personal connection and three enthusiastic testimonials from friends she'd helped for free. Business plan projected a steady client ramp from referrals within three months. No outreach plan, no channel beside organic word-of-mouth from a client base of one. Referrals are multiplicative — they compound from a base. A base of one doesn't compound, it either refers or doesn't, and the plan offered no path if that first referral chain didn't materialize.",
+      "what_worked": "Accepting that the first 10 clients could not come from referrals and building an active channel for the pre-base phase: Nextdoor posts targeted to specific neighborhoods, partnerships with two local real estate agents (who routinely needed organizers after estate transitions), and a limited direct offer to five apartment complexes with move-in services. The first 10 paying clients came from those active channels over eight weeks. After that, referrals did compound — but only once there was a real base to compound from.",
+      "what_wasted_money": "Eight weeks of inaction waiting for the first referral chain that didn't materialize. The opportunity cost was two months of runway burned on hope.",
+      "one_line_lesson": "Referrals are a retention-phase channel, not a launch channel. You need a base before they work."
+    },
+    {
+      "id": "local_services_single_anchor_concentration",
+      "business_type_category": "local_services",
+      "challenge_pattern": "majority of revenue comes from one client, one location, or one event type; concentration risk unnamed in the growth plan",
+      "observation": "IT support contractor whose largest client — a regional law firm — represented 65% of monthly revenue. The relationship was good; the client was happy; the owner was not worried. Expansion plan called for two more hires. One week before the first hire's start date, the law firm announced a merger and an in-house IT function effective 60 days hence. Revenue dropped to 35% of the prior month. The two hires would have been a commitment the business could no longer support.",
+      "what_worked": "The hire had not yet started; the decision was reversible. Reorienting the six-month plan around diversification — targeting a maximum of 40% revenue share for any single client — changed both the sales priority and the hiring timeline. Added three smaller clients over four months; revenue recovered to 90% of prior peak with no single client above 28%.",
+      "what_wasted_money": "Nothing irrecoverable, because the flag was raised before the commitment. The same scenario two weeks later — after the hire's first day — would have required a painful reversal.",
+      "one_line_lesson": "Revenue concentration is a hidden liability. When one client represents more than 40% of the base, the plan needs to name what happens the day that client leaves."
+    },
+    {
+      "id": "restaurant_food_lease_requires_mature_revenue",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "lease economics assume first-year revenue at or near mature capacity; ramp is much slower",
+      "observation": "New restaurant concept signing a lease in a mid-size city. Proforma showed month-three revenue at 70% of estimated mature capacity and month-six at 90%. The owner had not opened a restaurant before but had five years of FOH management experience and knew the concept well. Comparable opening data from similar concepts showed the actual ramp: month one at 15-25% of mature, month three at 35-45%, month six at 55-70%, and month twelve approaching parity — assuming the concept caught on. The lease required fixed monthly rent that the proforma's month-three number could cover; the actual ramp's month-three number could not.",
+      "what_worked": "Renegotiating the lease to include a graduated rent structure — below-market for the first four months, then stepped up to full rate at month five. The landlord preferred a tenant with a viable plan over a failed opening. The graduated structure made the real ramp survivable. When month-three revenue came in at 40% of mature capacity, the business was on plan — not in crisis.",
+      "what_wasted_money": "The alternate path — signing the original lease with the optimistic proforma — would have produced a cash emergency by month four, requiring distress decisions (discounting, rushed marketing, deferred vendor payments) that would have slowed the ramp and potentially ended the concept before it found its audience.",
+      "one_line_lesson": "New restaurant revenue ramps slowly. The lease was signed before the concept had a customer. Size the obligation to the ramp, not to the projection."
+    },
+    {
+      "id": "restaurant_food_concept_throughput_constraint",
+      "business_type_category": "restaurant_food",
+      "challenge_pattern": "the concept requires a throughput rate the physical space cannot support at projected revenue",
+      "observation": "Fast-casual concept whose unit economics modeled on 120 covers per lunch service in a 40-seat space. Peak service, every seat turned 3x in 90 minutes. The revenue model was arithmetically dependent on that turn rate. Operators with experience in similar formats noted that 3x in 90 minutes in a sit-down fast-casual requires sub-10-minute table turn times — achievable only with tablet ordering, a streamlined menu, and a very specific kitchen layout. The space had none of these. The physical constraints made the model's throughput number unreachable.",
+      "what_worked": "Running the throughput math against the specific space's physical constraints before signing: table count, kitchen pass configuration, ordering method, menu complexity. The honest ceiling was 75-80 covers per lunch service, not 120. The unit economics still worked at 80 covers — but the margin was thinner and the break-even month was later. The operator adjusted the capital plan accordingly and did not sign a lease sized for 120 covers.",
+      "what_wasted_money": "Concepts that signed with the 120-cover model and discovered the throughput ceiling six months in. Two options, both painful: redesign the space (costly, disruptive) or revise the economics downward after the lease is fixed.",
+      "one_line_lesson": "Before the lease, run the throughput math against the space's actual physical limits. A model that requires a turn rate the layout can't support is not a conservative estimate — it's a fiction."
+    },
+    {
+      "id": "fitness_wellness_pricing_below_break_even",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "accessible pricing produces a floor at or below break-even even at full enrollment",
+      "observation": "Yoga studio owner setting membership pricing at $79/month to make the studio accessible to the neighborhood. Rent, instructor wages, insurance, and platform fees totaled $11,200/month fixed. At $79/month, break-even required 142 active members. Studio capacity at comfortable density was 120. The pricing made break-even structurally unreachable without exceeding safe class capacity. The owner knew the rent and the head count; the pricing decision had been made on values without doing the math.",
+      "what_worked": "Running the break-even number at each price point before the studio opened. At $95/month, break-even dropped to 118 members — within capacity at comfortable density. The $16 difference per member per month was the margin between a studio that could survive and one that could not. The 'accessible' framing was reframed as: 'accessible at $95 and alive' beats 'accessible at $79 and closed in year two.'",
+      "what_wasted_money": "Nothing — the conversation happened before the studio opened. The studios that had this conversation after opening typically made two expensive adjustments: a repricing (which loses members), followed by aggressive acquisition spend to refill the roster at the higher price.",
+      "one_line_lesson": "Before setting a price on values, run the break-even. The number either works or it doesn't; values don't change the math."
+    },
+    {
+      "id": "fitness_wellness_attrition_is_the_structural_flaw",
+      "business_type_category": "fitness_wellness",
+      "challenge_pattern": "owner treats declining membership numbers as an acquisition problem; the structural problem is retention and churn",
+      "observation": "Boutique fitness studio consistently adding 25-30 new members per month through referrals and a steady Meta campaign. Membership count was not growing — hovering at 180-190 despite consistent new-member flow. The owner's diagnosis was that the acquisition budget needed to increase. A simple audit: month-over-month membership change divided by new members added implied a churn rate of roughly 22 members leaving per month. The floor was leaking almost as fast as the pipeline was filling it.",
+      "what_worked": "Shifting the question from 'how do we get more members in?' to 'why are 22 members leaving every month?' Exit survey of the last 40 departures: 60% cited schedule inconvenience (too few evening slots), 25% moved or left the area, 15% cited cost. The schedule problem was real and solvable — adding two evening classes per week stopped half the churn within 90 days. Membership count grew to 240 on the same acquisition budget because the floor stopped leaking.",
+      "what_wasted_money": "Six months of increased acquisition spend before the churn was measured. Every new member who arrived and left within 60 days was acquisition cost with no retention benefit.",
+      "one_line_lesson": "When a filled pipeline produces flat membership, the problem is always below the waterline. Measure churn before spending more on acquisition."
+    },
+    {
+      "id": "ecommerce_dtc_commodity_shelf_price_gap",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "product competes in a category where the market's price expectation is set by commodity players the brand cannot beat on cost",
+      "observation": "Small-batch candle brand with genuinely superior ingredients, beautiful packaging, and a coherent brand story, pricing at $38 per candle. The primary search results for candles in the gifting category were dominated by Anthropologie ($24), Target ($12), and Amazon ($8-14). The customer the brand needed — someone willing to pay a 3-5x premium for the quality story — existed, but was not searching for 'candles on Amazon.' They were searching for the brand because they had heard of it from a person they trusted. The discovery path and the distribution path were not aligned.",
+      "what_worked": "Exiting search-based acquisition almost entirely and investing in the trust channel: gifting editors, lifestyle bloggers with small but high-trust audiences, and corporate gifting coordinators who bought in quantity and did not price-compare against Amazon. Revenue per channel was smaller but margin was full-price. The brand wasn't competing on search — it was being found by the customer who already knew a commodity option existed and chose not to take it.",
+      "what_wasted_money": "Google Shopping and Meta ads targeting 'candles' and 'candles gift.' The audience finding the brand through those terms was the audience comparing it to Target. Cost per acquisition was high; the conversion rate was low because the brand's price made no sense against the alternatives the algorithm surfaced.",
+      "one_line_lesson": "A premium product in a commodity category is not discovered through the commodity's distribution channel. The brand has to reach the buyer who has already decided the commodity isn't enough."
+    },
+    {
+      "id": "ecommerce_dtc_single_supplier_dependency",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "entire product line depends on one manufacturer with no qualified backup",
+      "observation": "DTC apparel brand two years into strong growth, sourcing exclusively from one factory in Vietnam that produced all SKUs. The relationship was good; the quality was consistent; the production capacity was sufficient. The growth plan modeled on adding two new product categories. Both categories would be produced by the same factory. No alternatives had been qualified. When the factory's primary owner had a health crisis and production paused for six weeks, the brand had no path to fill orders. Back-order volume exceeded two months of sales.",
+      "what_worked": "In the aftermath: qualifying two backup factories — one for tops, one for bottoms — before resuming normal production with the primary. Neither was used immediately; both were production-ready and had passed quality checks. The next time a supply disruption occurred (a port delay, eighteen months later), the backup option existed and orders shipped on time.",
+      "what_wasted_money": "The back-order period cost approximately $180K in forfeited sales and roughly $40K in customer-service escalation and refund processing. Both were preventable with backup factory qualification that would have taken six weeks and cost almost nothing.",
+      "one_line_lesson": "A single-supplier business is not a supply chain — it's a dependency. The backup exists to be never used, but it has to exist."
+    },
+    {
+      "id": "ecommerce_dtc_plan_requires_everything_right",
+      "business_type_category": "ecommerce_dtc",
+      "challenge_pattern": "launch plan works if three independent variables all hit their targets; no contingency if any one misses",
+      "observation": "DTC supplement brand with a detailed launch plan: $15K in influencer seeding (expecting 3-4% conversion from engaged audiences), a product-launch email to a 12,000-person list the founder had built over two years (expecting a 1.5% purchase rate from the list), and $20K in Meta ads (expecting a $45 CAC). The plan's revenue projection for month one was the sum of those three channels at their target rates. Each target was plausible in isolation. But the plan only worked if all three hit simultaneously — if the influencer conversions were 1.5% instead of 3%, and the list bought at 0.8% instead of 1.5%, and the Meta CAC was $65 instead of $45, the month-one revenue was 40% of the projection and the ad spend had already gone out.",
+      "what_worked": "Running the pessimistic case: what did month one look like if each channel hit 50% of its target? At that scenario, the $20K in Meta ads was not supportable without the influencer and list revenue to fund it. The plan was restructured: influencer seeding first, list activation second, and Meta ads only after the first two channels had produced real conversion data. If the early data was at-target, Meta ads would get the full budget. If it was below target, the Meta spend would be smaller — or deferred entirely. The launch happened; month-one revenue was at the pessimistic estimate, not the optimistic one. The deferred Meta spend was preserved for month three, when the funnel was proven.",
+      "what_wasted_money": "In the original plan, the $20K Meta spend would have gone out regardless of early conversion signals. At 50%-of-target conversion, that spend would have generated approximately $8K in revenue at the optimistic CAC — a net loss of $12K in the worst-case scenario that was actually close to the real outcome.",
+      "one_line_lesson": "A plan that requires three independent variables to hit their targets simultaneously has three failure modes. Run the 50% case before committing the spend."
+    }
+  ]
+}
