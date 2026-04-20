@@ -1,0 +1,67 @@
+# Render blueprint — GetIdea.ai (Next.js 16 / Supabase)
+#
+# Deploy via Render Dashboard → New + → Blueprint → connect the
+# get-idea-ai repo → this file is detected automatically.
+#
+# Env vars below marked `sync: false` require manual entry in the
+# Render dashboard after the service is created. Values live in
+# Supabase project settings, Anthropic/OpenAI consoles, Serper/Jina
+# dashboards, and (optionally) LangSmith.
+#
+# Dev-only env vars (ADMIN_EMAIL, DEV_USER_PASSWORD) are deliberately
+# ABSENT here — the /dev/login route returns 404 when NODE_ENV is not
+# 'development', which Render enforces automatically in production
+# builds. Adding those vars to Render would not expose the route (the
+# guard holds), but keeping them out is principle-of-least-privilege.
+
+services:
+  - type: web
+    name: getidea-ai
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /auth
+    autoDeploy: true
+
+    envVars:
+      # Node version — pin to match local dev + package-lock. Render
+      # reads this at build time.
+      - key: NODE_VERSION
+        value: "20"
+
+      # Supabase — required. URL + anon key are public (NEXT_PUBLIC_*
+      # means they ship to the browser bundle); service role key is
+      # server-side only and MUST stay secret.
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # Anthropic + OpenAI — required for the deliberation engine.
+      # Anthropic powers the specialists and role-player; OpenAI is a
+      # secondary model option kept for redundancy.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+      # Web research — required for Phase 5 features (URL reader +
+      # Google search via Serper). Without these, research tool calls
+      # fail gracefully but the panel loses that capability.
+      - key: SERPER_API_KEY
+        sync: false
+      - key: JINA_API_KEY
+        sync: false
+
+      # LangSmith — optional but strongly recommended for production
+      # observability of orchestrator routing decisions.
+      - key: LANGCHAIN_TRACING_V2
+        value: "true"
+      - key: LANGCHAIN_API_KEY
+        sync: false
+      - key: LANGCHAIN_PROJECT
+        value: "getidea-orchestrator"
