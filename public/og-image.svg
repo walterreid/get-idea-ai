@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="GetIdea.ai — Bring it to the table. Ten advisors at the table.">
+  <!-- Phase 9.1 OG preview image. 1200x630 (Twitter/Facebook/LinkedIn/Slack standard).
+       Editorial register: cream background, Newsreader-style serif headline with
+       terracotta italic on the emphasis word, DM Sans-style uppercase overline,
+       ten agent-colored dots as the restrained "ten advisors" visual signature.
+       System fallback fonts used because SVG custom fonts don't render
+       reliably across social preview crawlers. -->
+
+  <!-- Cream background — matches the landing surface -->
+  <rect width="1200" height="630" fill="#F8F6F1"/>
+
+  <!-- Thin horizontal rule near the top — editorial masthead echo -->
+  <line x1="100" y1="96" x2="1100" y2="96" stroke="#DDD6CB" stroke-width="1"/>
+
+  <!-- Overline: GETIDEA.AI with terracotta dot punctuation -->
+  <g transform="translate(100, 82)">
+    <text
+      x="0"
+      y="0"
+      font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+      font-size="14"
+      font-weight="500"
+      letter-spacing="3"
+      fill="#78716C"
+    >GETIDEA</text>
+    <!-- Terracotta dot between GETIDEA and AI -->
+    <circle cx="85" cy="-5" r="2.5" fill="#B45230"/>
+    <text
+      x="96"
+      y="0"
+      font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+      font-size="14"
+      font-weight="500"
+      letter-spacing="3"
+      fill="#78716C"
+    >AI</text>
+  </g>
+
+  <!-- Main headline: Bring it to the TABLE. -->
+  <!-- Split into two tspans so terracotta italic sits on "table." only -->
+  <text
+    x="100"
+    y="290"
+    font-family="Georgia, 'Newsreader', 'Times New Roman', serif"
+    font-size="88"
+    font-weight="400"
+    fill="#1C1917"
+    letter-spacing="-0.01em"
+  >
+    <tspan>Bring it to the </tspan><tspan font-style="italic" fill="#B45230">table.</tspan>
+  </text>
+
+  <!-- Subtitle — two lines -->
+  <text
+    x="100"
+    y="380"
+    font-family="Georgia, 'Newsreader', 'Times New Roman', serif"
+    font-size="32"
+    font-weight="300"
+    fill="#44403C"
+    letter-spacing="-0.005em"
+  >Not more tactics. Judgment about</text>
+  <text
+    x="100"
+    y="424"
+    font-family="Georgia, 'Newsreader', 'Times New Roman', serif"
+    font-size="32"
+    font-weight="300"
+    fill="#44403C"
+    letter-spacing="-0.005em"
+  >which ones to ignore.</text>
+
+  <!-- Ten agent-colored dots + label — the restrained visual signature -->
+  <text
+    x="100"
+    y="515"
+    font-family="system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="500"
+    letter-spacing="2.5"
+    fill="#A8A29E"
+  >TEN ADVISORS AT THE TABLE</text>
+
+  <g transform="translate(100, 550)">
+    <!-- Marketer #C9943E · Finance #5B7B8A · Creative #C9712E · Copywriter #7A8B6F ·
+         Designer #8B6F8A · Accountant #6B7B7B · Operations #A07855 · Legal #5A5A5A ·
+         CX #B07A7A · Realist #5C6B4E -->
+    <circle cx="0" cy="0" r="10" fill="#C9943E"/>
+    <circle cx="35" cy="0" r="10" fill="#5B7B8A"/>
+    <circle cx="70" cy="0" r="10" fill="#C9712E"/>
+    <circle cx="105" cy="0" r="10" fill="#7A8B6F"/>
+    <circle cx="140" cy="0" r="10" fill="#8B6F8A"/>
+    <circle cx="175" cy="0" r="10" fill="#6B7B7B"/>
+    <circle cx="210" cy="0" r="10" fill="#A07855"/>
+    <circle cx="245" cy="0" r="10" fill="#5A5A5A"/>
+    <circle cx="280" cy="0" r="10" fill="#B07A7A"/>
+    <circle cx="315" cy="0" r="10" fill="#5C6B4E"/>
+  </g>
+</svg>

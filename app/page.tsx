@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { SiteHeader } from '@/components/marketing/SiteHeader'
 import { Recognition } from '@/components/marketing/Recognition'
 import { OfferStamp } from '@/components/marketing/OfferStamp'
 import { Reframing } from '@/components/marketing/Reframing'
@@ -42,12 +43,14 @@ export default async function RootPage() {
   const isSignedIn = Boolean(user)
 
   return (
-    <main
-      className="min-h-screen"
-      style={{ background: 'var(--warm-white)', color: 'var(--ink)' }}
-    >
-      {/* Beat 1: You arrive. */}
-      <Recognition />
+    <>
+      <SiteHeader />
+      <main
+        className="min-h-screen"
+        style={{ background: 'var(--warm-white)', color: 'var(--ink)' }}
+      >
+        {/* Beat 1: You arrive. */}
+        <Recognition />
 
       {/* Beat 2: What you need. (two-part: dark offer stamp + light reframe) */}
       <OfferStamp isSignedIn={isSignedIn} />
@@ -113,6 +116,7 @@ export default async function RootPage() {
           </span>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   )
 }
