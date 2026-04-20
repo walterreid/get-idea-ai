@@ -174,6 +174,45 @@ These are explicit "we made a call, a future phase should watch for the signal" 
 
 ---
 
+## PHASE 8 — Accounts, Admin, and Account Management
+
+**Status:** 8.1 SHIPPED (2026-04-19). 8.2–8.4 placeholders.
+**Read first:** CLAUDE.md (Rule #4 — calibrate to the user). Phase 7 archive for context on what the user surface currently is.
+
+This phase scaffolds ownership and management around the advisor-board experience that Phase 7 completed. The philosophy is the same as Phase 7's: the admin surface is an *advisor-voice* surface (owner attending to their own product), not a tool-voice dashboard. Phase 8.1 is foundation only — role column, dev-login, role helper. The consumer work (8.2+) lands later.
+
+### 8.1 Admin role + dev-login
+
+Foundation for account management: role column on profiles, dev-only password login for the admin account, role helper for future admin-route guards. Magic link remains the primary auth flow for all users including admin.
+
+- [x] `profiles.role` column with CHECK constraint (`'user' | 'admin'`), default `'user'`. Partial index on admin rows. Migration [supabase/migrations/002_add_admin_role.sql](supabase/migrations/002_add_admin_role.sql).
+- [x] Init script [scripts/init-admin.ts](scripts/init-admin.ts) — idempotent role + password setter. Finds `ADMIN_EMAIL` user, sets `role = 'admin'`, sets/generates `DEV_USER_PASSWORD`. Safe to re-run. Runs via `npm run admin:init`.
+- [x] Dev-login route [app/dev/login/route.ts](app/dev/login/route.ts) — NODE_ENV + env-var double-guard. Production returns 404; dev with env set signs in via `signInWithPassword` and redirects to `/chat`. No bypass code; real Supabase auth.
+- [x] Role helper [lib/auth/role.ts](lib/auth/role.ts) — `getCurrentUserRole()` / `isAdmin()`. Scaffolded; unused until 8.2.
+- [x] Guard test [scripts/test-dev-login-guard.ts](scripts/test-dev-login-guard.ts) — asserts 404 when `NODE_ENV !== 'development'`. Wired into `test:quality` as `test:dev-login-guard`. CI-enforced.
+
+### 8.2 Admin console UI
+
+- [ ] `/admin/*` route tree with server-side `isAdmin()` guard (returns 404 for non-admin to avoid leaking that admin pages exist).
+- [ ] User list view — reads `profiles` + `auth.users` via admin-scoped query.
+- [ ] Per-user thread list + message preview — uses admin-bypass RLS (see 8.3) or service-role data-access layer.
+- [ ] Delete-thread action — soft delete via existing `threads.status` column.
+- [ ] Trigger: "admin user cannot be deleted" — enforced at DB level so client-side mistakes can't orphan the system.
+
+### 8.3 Admin-bypass RLS policies
+
+- [ ] Extend each user-scoped table's RLS with an OR clause: `(auth.uid() = user_id OR auth.uid() IN (SELECT id FROM profiles WHERE role = 'admin'))` — enables admin read without a service-role client in the app layer.
+- [ ] Decision to make when landing: admin **read-all** is almost certainly right; admin **write-all** may not be — audit trails matter and admin-initiated writes to user data should be rare + explicit. Consider granting admin write only for the specific actions the console needs (e.g., soft-delete a thread) rather than full write access.
+
+### 8.4 User management
+
+- [ ] User self-service: display name edit, delete-account flow, email change.
+- [ ] Admin actions: promote/demote role, reset user password (bypass email), revoke sessions.
+- [ ] Trigger guards: cannot demote the last admin; cannot delete any admin user via the console (matches 8.2).
+- [ ] Audit log table for admin actions — append-only, signed by admin user ID + timestamp.
+
+---
+
 ## Principles That Apply to Every Phase
 
 These are not suggestions. They are constraints.

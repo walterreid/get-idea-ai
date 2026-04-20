@@ -396,6 +396,9 @@ get-idea-ai/
 │   │   │                         the full conversation, not just the most recent round.
 │   │   └── loader.ts           ← Loads + formats prior insights as orchestrator context string.
 │   │                             Also loads insight counts per thread for the sidebar badges.
+│   ├── auth/
+│   │   └── role.ts             ← Phase 8.1 scaffold — getCurrentUserRole() / isAdmin() helpers.
+│   │                             Reads profiles.role. Unused in 8.1; first consumers ship in 8.2.
 │   ├── supabase/
 │   │   ├── client.ts           ← Browser-side Supabase client (singleton)
 │   │   ├── server.ts           ← Server-side client using Next.js cookies()
@@ -429,16 +432,36 @@ get-idea-ai/
 │
 ├── supabase/
 │   └── migrations/
-│       └── 001_foundation.sql  ← Full schema: profiles, threads, messages, agent_configs,
-│                                  idea_insights. RLS policies. Triggers. Run this first.
+│       ├── 001_foundation.sql  ← Full schema: profiles, threads, messages, agent_configs,
+│       │                          idea_insights. RLS policies. Triggers. Run this first.
+│       └── 002_add_admin_role.sql ← Phase 8.1: adds profiles.role column (user | admin)
+│                                    with default 'user' + partial index. Safe against the
+│                                    handle_new_user trigger. Required by scripts/init-admin.ts
+│                                    and lib/auth/role.ts.
+│
+├── app/
+│   └── dev/
+│       └── login/
+│           └── route.ts        ← Phase 8.1: dev-only GET route. NODE_ENV + env-var
+│                                 double-guard; signs in ADMIN_EMAIL via signInWithPassword
+│                                 and redirects to /chat. Returns 404 in any non-dev env.
+│                                 Asserted by scripts/test-dev-login-guard.ts.
 │
 ├── scripts/
 │   ├── seed-agents.ts          ← Seeds all 10 specialist agents + Ideation host + orchestrator
 │   │                             into agent_configs.
 │   │                             Upserts on name — re-running overwrites all fields including prompts.
+│   ├── init-admin.ts           ← Phase 8.1: idempotent admin setup. Finds ADMIN_EMAIL user,
+│   │                             sets profiles.role='admin', sets/generates DEV_USER_PASSWORD.
+│   │                             Safe to re-run. `npm run admin:init`.
 │   ├── test-graph.ts           ← Integration tests: graph compilation, routing schema validation,
 │   │                             interrupt state reset, agent loading, no-hardcoding constraint.
 │   ├── test-grade.ts           ← Unit tests for grade-deliberation.ts (run via `test:grade`).
+│   ├── test-cases-json.ts      ← JSON validity + schema + ID uniqueness across lib/agents/cases/*.
+│   │                             Wired into test:quality. Closes the gap that let legal.json's
+│   │                             single-quote bug ship mid-session on 2026-04-19.
+│   ├── test-dev-login-guard.ts ← Asserts /dev/login returns 404 when NODE_ENV !== 'development'.
+│   │                             Wired into test:quality. CI-enforced.
 │   ├── run-fixture-grades.ts   ← Runs tripwire grader on all `test/fixtures/registry.json` cases (no DB).
 │   ├── grade-transcript-file.ts ← Grade a single exported messages file; used by capture bundle + manual QA.
 │   ├── capture-specialist-probe.ts ← Force one specialist to respond to a persona opener.
@@ -460,6 +483,8 @@ get-idea-ai/
 | `app/api/chat/route.ts` | The streaming backbone. Everything the user sees flows through here. |
 | `scripts/seed-agents.ts` | The source of truth for agent identities and prompts. Re-running overwrites. |
 | `supabase/migrations/001_foundation.sql` | The data model. Changes here require a migration, not a code edit. |
+| `supabase/migrations/002_add_admin_role.sql` | Phase 8.1: `profiles.role` column. Consumed by `lib/auth/role.ts`. |
+| `lib/auth/role.ts` | Role helpers (`getCurrentUserRole`, `isAdmin`). Phase 8.2+ route guards will import from here. |
 | `lib/test/grade-deliberation.ts` | Cheap automated checks on transcripts (tripwires aligned with **Reference quality** above). See `docs/testing.md` and `BUILD.md` §6.2. |
 | `docs/testing.md` | How to run persona + fixture grading, capture bundles, and the combined `test:quality` gate. Tracked alongside the `test/` tree; only `test/results/` is gitignored. |
 | `BUILD.md` / `BUILD-ARCHIVE-1.md` | Living build plan + historical archive. Shipped phases live in the archive; open/in-progress work stays in `BUILD.md`. |
