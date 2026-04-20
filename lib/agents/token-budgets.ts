@@ -23,32 +23,70 @@
 /** Default used when a specialist has no entry below. Safe middle ground. */
 const DEFAULT_MAX_TOKENS = 260
 
-/** Per-specialist caps. Approximations: 1 token ≈ 0.75 words. */
+/**
+ * Per-specialist caps. Approximations: 1 token ≈ 0.75 words.
+ *
+ * 2026-04-19 revision — **v2-structural-weight adjustment.** Caps were set during
+ * Phase 7.4 (2026-04-18) against pre-v2 voice patterns. The Phase 7.1/7.2/7.3
+ * replication cycles (creative-rep through trio-rep) added structural weight to
+ * every specialist prompt: lived-history opener + commit/budget/specific-flaw/
+ * write-vs-clarify/experience-gap discipline section + §7.2 divergence + §7.2
+ * evidence-bound + "use the case, don't cite it". Each addition is ~20-40 tokens
+ * of structural content the model pays for in every turn. Post-cycle scan of
+ * 44 bundles across 5 recent cycles showed:
+ *
+ *   - Legal at 280: 13/13 turns ≥85% of cap, 2 over 100% (truncation)
+ *   - Operations at 280: 8/8 turns ≥85% of cap, 2 over 100%
+ *   - Copywriter at 200: 7/8 turns ≥85% of cap, 1 over 100%
+ *   - Creative at 350: user-reported mid-sentence truncation on concept-first
+ *     commit-with-exclude turn (2026-04-19 manual /chat). Automated scan showed
+ *     8/14 turns ≥85%, 1 over 100%.
+ *   - CX at 200: 5 turns over 100% of cap across recent cycles.
+ *
+ * Caps raised to restore headroom for v2-structure turns to finish cleanly. The
+ * voice-discipline prompt rules ("two to three sentences default") remain the
+ * primary quality lever; caps stay as a hard guard against runaway verbosity.
+ * Phase-aware caps (shorter in synthesis, longer in exploration) remain
+ * deferred — no evidence yet that the flat-cap model is insufficient once the
+ * caps themselves are sized against v2 output.
+ */
 const TOKEN_BUDGETS: Record<string, number> = {
-  // Concise probing / observation specialists — ~150 words
+  // Concise probing specialists — raised to accommodate v2 structural weight
+  // (lived-history + commit + §7.2 rules). Marketer + Designer held at 200:
+  // no field truncation evidence, and Marketer fires on a broader surface
+  // than any other specialist — brevity there still earns its keep.
   marketer: 200,
-  copywriter: 200,
   designer: 200,
-  cx: 200,
+  copywriter: 260, // 200 → 260 (88% near-cap rate; drafting 3 versions + framing)
+  cx: 260, // 200 → 260 (5 turns over cap across cycles)
 
-  // Brainstorm / angle-finding — Creative's concept-exploration turns carry more
-  // structure than a Marketer probe (emotional-core framing, mechanic tension,
-  // failure-vs-discovery questions all run long by design). A 220 cap truncated
-  // mid-sentence 3× in the 2026-04-18 manual /chat session (docs/manual_chat_
-  // 2026-04-18_game_brainstorm.md). Raised to 350 to match Realist's quantitative-
-  // reasoning band. A phase-aware cap (shorter in synthesis, longer in exploration)
-  // is defensible but out of scope for the brainstorm-register cycle.
-  creative: 350,
+  // Brainstorm / angle-finding — Creative's concept-first commit-with-exclude
+  // turns have a structural-minimum that exceeds 350 when the owner's opener
+  // invites branch-by-branch argumentation (the 2026-04-19 shrine-mechanic
+  // truncation was exactly this shape). Raised 350 → 450 to match the
+  // upper end of observed v2 Creative output on concept-first openers.
+  creative: 450, // was 350; before that 220
 
-  // Mechanics / structure specialists — slightly more room for enumerated detail
-  accountant: 280,
-  operations: 280,
-  legal: 280,
+  // Mechanics / structure specialists — v2 added §7.2 rules + use-case
+  // examples on top of pre-existing enumerated content (urgency bands for
+  // Legal, calibrate-to-scale for Operations, Finance-distinction + plain-
+  // language for Accountant). Legal + Operations were at 100% near-cap
+  // post-cycle; raised to restore 20-25% headroom.
+  accountant: 360, // 280 → 360
+  operations: 360, // 280 → 360 (100% near-cap rate pre-raise)
+  legal: 360, // 280 → 360 (100% near-cap rate pre-raise)
 
-  // Quantitative reasoning — needs numbers + explanation
+  // Quantitative reasoning — needs numbers + explanation. Held at 320;
+  // post-cycle scan showed 53% near-cap and a few at/over 100%, but Finance
+  // output tends to be earned-by-numbers when long; the voice-discipline rule
+  // "one thing per turn" still carries the lever. Revisit if field evidence
+  // shows sustained truncation.
   finance: 320,
 
-  // Synthesis role — earns more length per turn when summoned
+  // Synthesis role — earns more length per turn when summoned. Held at 350;
+  // Realist hit 100% a few times in recent cycles (48% near-cap overall) but
+  // the "one flaw per turn" rule is doing the work. If future cycles show
+  // systematic truncation on specific-flaw-plus-evidence turns, raise to 420.
   realist: 350,
 
   // Orientation role — one or two sentences by design. Host, not advisor.
