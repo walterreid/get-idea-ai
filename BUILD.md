@@ -213,6 +213,53 @@ Foundation for account management: role column on profiles, dev-only password lo
 
 ---
 
+## PHASE 9 — Design System + Marketing Surface
+
+**Status:** 9.1 SHIPPED (2026-04-20). 9.2–9.5 placeholders.
+**Read first:** [DESIGN.md](DESIGN.md) (new, Phase 9.1). CLAUDE.md (product philosophy — The Table language + advisor voice).
+
+This phase adopts a new editorial design system (the "Zansei DNA" adapted for distributed-authority advisor-panel framing) across marketing and product surfaces. The canonical term for the advisor collective is **The Table**. The landing's five-beat persuasion arc (*you arrive → what you need → the table listens → who sits at the table → pull up a chair*) carries the argument.
+
+### 9.1 Design system rewrite + landing rebuild
+
+- [x] New [DESIGN.md](DESIGN.md) — wholesale rewrite. Merges prior chat guidance with the proposed editorial system. Canonical "The Table" term defined. Three column-width system (col-poem / col-prose / col-proof) documented. Creative agent color shift rationale.
+- [x] Token refactor in [app/globals.css](app/globals.css) — palette values shifted from warm-navy/paper to terracotta/cream+ink. Variable NAMES kept stable (audit showed 200+ references) to avoid cascading refactors. Added Zansei-named semantic aliases (cream, ink, terracotta, etc.) + dark-band tokens (stamp-bg, stamp-ink) + excerpt card tokens + column-width utility classes.
+- [x] Font swap in [app/layout.tsx](app/layout.tsx) — Lora → Newsreader, Plus Jakarta Sans → DM Sans. JetBrains Mono held. Newsreader italic explicitly imported (used for emphasis rules).
+- [x] Creative agent color shift `#B85C38` → `#C9712E` — de-collides with the new terracotta primary (`#B45230`). One CSS var change, propagates to chat immediately.
+- [x] Five marketing section components in [components/marketing/](components/marketing/): Recognition (Beat 1), OfferStamp (Beat 2 dark band), Reframing (Beat 2 pivot), Proof (Beat 3 advisor excerpt), Invitation (Beat 5 closing with inline AuthForm). RosterGrid retained from prior cycle with copy-only update for "The Table" language.
+- [x] [app/page.tsx](app/page.tsx) rewritten — composes the 5 beats, auth-aware CTAs preserved from prior cycle.
+
+### 9.2 Chat visual polish
+
+Token values already apply to chat as of 9.1 (chat uses the same `--color-*` variables). Chat won't look *wrong*, but component-level refinement is separate.
+
+- [ ] MessageBubble card treatment updated to match editorial register.
+- [ ] RecommendationBlock spacing + typography updated.
+- [ ] AgentRoster cards — refine avatar/monogram treatment.
+- [ ] Composer — subtle terracotta send-button hover, interrupt indicator copy pass.
+- [ ] Orchestrator + research annotations — typographic quietness pass.
+
+### 9.3 Column-width translation (chat)
+
+- [ ] Orchestrator annotations → `col-poem` width (left-anchored inside center panel).
+- [ ] User + advisor messages → `col-prose` width.
+- [ ] RecommendationBlock → `col-proof` width.
+- [ ] Research annotations → `col-poem` register.
+
+### 9.4 Advisor display names
+
+- [ ] Author name candidates (first-name-only, culturally-considered).
+- [ ] UI surfaces: chat roster, message bubble attribution, recommendation-block sign-off.
+- [ ] Backend prompts stay role-addressed; name is UI-only.
+
+### 9.5 Takeaway / deliverable shape (deferred)
+
+- [ ] Audit whether owners need a persistent residue between sessions (discussed earlier as a post-Phase-7 consideration).
+- [ ] If yes: decide between Idea Record evolution, starred-turns pattern, or shape-dependent deliverable.
+- [ ] If no: retire the thread.
+
+---
+
 ## Principles That Apply to Every Phase
 
 These are not suggestions. They are constraints.

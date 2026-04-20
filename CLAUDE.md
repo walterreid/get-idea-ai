@@ -447,6 +447,15 @@ get-idea-ai/
 │                                 and redirects to /chat. Returns 404 in any non-dev env.
 │                                 Asserted by scripts/test-dev-login-guard.ts.
 │
+├── components/
+│   └── marketing/              ← Phase 9.1: landing-surface section components.
+│       ├── Recognition.tsx     ← Beat 1 — three-column poem (col-poem + col-question + col-poem-end)
+│       ├── OfferStamp.tsx      ← Beat 2a — dark band offer + "Pull up a chair" CTA
+│       ├── Reframing.tsx       ← Beat 2b — pivot paragraph with italic terracotta emphasis
+│       ├── Proof.tsx           ← Beat 3 — advisor excerpt card (Iron & Flow)
+│       ├── RosterGrid.tsx      ← Beat 4 — 10 specialists + Ideation host footnote
+│       └── Invitation.tsx      ← Beat 5 — dark-band closing with inline AuthForm
+│
 ├── scripts/
 │   ├── seed-agents.ts          ← Seeds all 10 specialist agents + Ideation host + orchestrator
 │   │                             into agent_configs.
@@ -485,6 +494,8 @@ get-idea-ai/
 | `supabase/migrations/001_foundation.sql` | The data model. Changes here require a migration, not a code edit. |
 | `supabase/migrations/002_add_admin_role.sql` | Phase 8.1: `profiles.role` column. Consumed by `lib/auth/role.ts`. |
 | `lib/auth/role.ts` | Role helpers (`getCurrentUserRole`, `isAdmin`). Phase 8.2+ route guards will import from here. |
+| `DESIGN.md` | Phase 9.1 rewrite. Defines the editorial design system, the **The Table** canonical term (primary — over "room," "panel," or "board"), the three column-width rhetorical system (col-poem / col-prose / col-proof), the terracotta-only action-color rule, and the typography (Newsreader + DM Sans). Every landing and chat visual decision traces here. |
+| `app/globals.css` | Design tokens. Phase 9.1: variable names stable; values shifted to terracotta/cream+ink palette. Creative agent color `#C9712E` de-collides with the terracotta primary `#B45230`. |
 | `lib/test/grade-deliberation.ts` | Cheap automated checks on transcripts (tripwires aligned with **Reference quality** above). See `docs/testing.md` and `BUILD.md` §6.2. |
 | `docs/testing.md` | How to run persona + fixture grading, capture bundles, and the combined `test:quality` gate. Tracked alongside the `test/` tree; only `test/results/` is gitignored. |
 | `BUILD.md` / `BUILD-ARCHIVE-1.md` | Living build plan + historical archive. Shipped phases live in the archive; open/in-progress work stays in `BUILD.md`. |

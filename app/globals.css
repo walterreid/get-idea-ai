@@ -1,29 +1,65 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────
-   Design tokens — warm, professional, grounded
-   Light mode is the default. Dark mode is the room at evening.
+   Design tokens — warm, editorial, grounded
+   Phase 9.1 (2026-04-20): palette shifted from warm-navy/paper
+   to terracotta/cream+ink. Variable NAMES kept stable (audit
+   showed 200+ references across chat + landing). Only VALUES
+   change. New Zansei-named tokens added additively for
+   landing-specific components.
    ────────────────────────────────────────────────────────── */
 :root {
-  /* Base surfaces */
-  --color-base:        #FAF9F7;
-  --color-surface:     #F3F1EE;
-  --color-border:      #E2DDD8;
-  --color-border-soft: #EDE9E4;
+  /* ── Base surfaces ────────────────────────── */
+  --color-base:        #FDFCF9;  /* warm-white — primary page background */
+  --color-surface:     #F8F6F1;  /* cream — alternate section background */
+  --color-border:      #DDD6CB;  /* card border, thin divider */
+  --color-border-soft: #EDE9E4;  /* barely-there divider */
 
-  /* Text */
-  --color-text:        #2C2C2C;
-  --color-text-muted:  #6B6560;
-  --color-text-faint:  #9E9790;
+  /* ── Text ─────────────────────────────────── */
+  --color-text:        #1C1917;  /* ink — primary text */
+  --color-text-muted:  #44403C;  /* ink-soft — body reading color */
+  --color-text-faint:  #A8A29E;  /* ink-faint — the "poem" color */
 
-  /* Primary action — warm navy */
-  --color-primary:     #2A4B6F;
-  --color-primary-hover: #1E3851;
+  /* ── Primary action: terracotta ───────────── */
+  --color-primary:       #B45230;  /* the only action color */
+  --color-primary-hover: #9A3F22;  /* deeper, not brighter */
 
-  /* Agent identity colors — muted earth tones & jewel tones */
+  /* ── Zansei-named aliases (landing-facing) ── */
+  /* These are semantic aliases onto the tokens above so landing
+     components can use advisor-voice names (cream, ink, terracotta)
+     while chat components keep using --color-* names. */
+  --cream:              var(--color-surface);
+  --warm-white:         var(--color-base);
+  --ink:                var(--color-text);
+  --ink-soft:           var(--color-text-muted);
+  --ink-muted:          #78716C;              /* new — between soft and faint */
+  --ink-faint:          var(--color-text-faint);
+  --terracotta:         var(--color-primary);
+  --terracotta-hover:   var(--color-primary-hover);
+
+  /* ── Dark-band tokens (stamp + invitation) ── */
+  --stamp-bg:           #1C1917;  /* same as ink — dark band background */
+  --stamp-ink:          #F8F6F1;  /* same as cream — text on dark */
+
+  /* ── Advisor excerpt card ─────────────────── */
+  --excerpt-bg:         #F1EDE6;  /* slightly darker than cream */
+  --excerpt-border:     #DDD6CB;
+  --highlight:          rgba(180, 82, 48, 0.09);  /* terracotta @ 9% */
+
+  /* ── Rules ────────────────────────────────── */
+  --rule:               rgba(28, 25, 23, 0.1);
+
+  /* ── Column widths (editorial rhythm) ─────── */
+  --col-poem:     560px;
+  --col-prose:    620px;
+  --col-proof:    820px;
+
+  /* ── Agent identity colors — earth + jewel tones ─── */
   --agent-marketer:    #C9943E;
   --agent-finance:     #5B7B8A;
-  --agent-creative:    #B85C38;
+  --agent-creative:    #C9712E;  /* Phase 9.1: shifted from #B85C38 to de-collide
+                                    with terracotta primary. Burnt orange keeps
+                                    Creative distinct from CTAs. */
   --agent-copywriter:  #7A8B6F;
   --agent-designer:    #8B6F8A;
   --agent-accountant:  #6B7B7B;
@@ -33,13 +69,16 @@
   --agent-realist:     #5C6B4E;
   --agent-ideation:    #4A7278;
 
-  /* Typography */
-  --font-display: var(--font-lora);
-  --font-body:    var(--font-jakarta);
+  /* ── Typography ───────────────────────────── */
+  /* Phase 9.1 (2026-04-20): Lora → Newsreader, Plus Jakarta Sans → DM Sans.
+     Aliases keep chat components working unchanged (they reference
+     --font-display and --font-body, not the raw font variables). */
+  --font-display: var(--font-newsreader);
+  --font-body:    var(--font-dm-sans);
   --font-mono:    var(--font-jetbrains);
 }
 
-/* Dark mode — same room, evening light */
+/* Dark mode — same table at evening */
 .dark {
   --color-base:        #1C1B19;
   --color-surface:     #252420;
@@ -50,8 +89,8 @@
   --color-text-muted:  #A8A49E;
   --color-text-faint:  #6E6A63;
 
-  --color-primary:     #5B89B4;
-  --color-primary-hover: #7AA4CB;
+  --color-primary:     #D3693F;   /* lighter terracotta for dark-bg contrast */
+  --color-primary-hover: #DF7B55;
 }
 
 @theme inline {
@@ -93,16 +132,71 @@ html {
 body {
   background-color: var(--color-base);
   color: var(--color-text);
-  font-family: var(--font-body), 'Nunito Sans', system-ui, sans-serif;
+  font-family: var(--font-body), 'DM Sans', system-ui, sans-serif;
   line-height: 1.6;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-display), 'Lora', Georgia, serif;
+  font-family: var(--font-display), 'Newsreader', Georgia, serif;
   line-height: 1.25;
 }
 
-/* Smooth agent status transitions */
+/* ──────────────────────────────────────────────────────────
+   Editorial column widths — landing rhetorical rhythm
+   The contrast between narrow and wide IS the argument.
+   ────────────────────────────────────────────────────────── */
+
+.col-poem {
+  max-width: var(--col-poem);
+  margin-left: 40px;
+  margin-right: auto;
+  padding-right: 24px;
+}
+
+.col-poem-end {
+  max-width: var(--col-poem);
+  margin-left: auto;
+  margin-right: 40px;
+  padding-left: 24px;
+  text-align: right;
+}
+
+.col-question {
+  max-width: var(--col-proof);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.col-prose {
+  max-width: var(--col-prose);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.col-proof {
+  max-width: var(--col-proof);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+  .col-poem,
+  .col-poem-end {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    padding: 0 24px;
+  }
+  .col-question,
+  .col-prose,
+  .col-proof {
+    padding: 0 24px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Smooth agent status + message-in animations (chat)
+   ────────────────────────────────────────────────────────── */
 @keyframes status-pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.55; }
@@ -125,4 +219,28 @@ h1, h2, h3, h4 {
 
 .animate-status-pulse {
   animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Landing reveal on scroll — single animation pattern
+   Used via IntersectionObserver in landing section components.
+   ────────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

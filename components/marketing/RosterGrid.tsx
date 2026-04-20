@@ -119,11 +119,10 @@ export function RosterGrid() {
       <p
         className="mt-10 border-t border-border-soft pt-6 text-center text-sm italic text-text-muted"
         style={{
-          // Subtle Ideation-color tint on the separator via the underline color
           borderTopColor: 'var(--color-border-soft)',
         }}
       >
-        And one host —{' '}
+        And one host at the table —{' '}
         <span
           className="font-medium not-italic"
           style={{ color: 'var(--agent-ideation)' }}
