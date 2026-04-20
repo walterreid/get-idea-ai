@@ -79,6 +79,15 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Smooth anchor-scroll for intra-page nav (hero CTA → closing form). */
+  scroll-behavior: smooth;
+}
+
+/* Respect users who've opted out of animations — keep motion off for them. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {

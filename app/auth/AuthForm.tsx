@@ -6,9 +6,18 @@ import { clsx } from 'clsx'
 
 interface AuthFormProps {
   error?: string
+  /**
+   * Whether the email input should auto-focus on mount.
+   * Defaults to true (the /auth page wants this — the form is the
+   * primary element). Set to false when embedding the form below the
+   * fold on pages where the form isn't the first thing the user
+   * interacts with (e.g. the landing page), so it doesn't scroll-jump
+   * or pop the mobile keyboard.
+   */
+  autoFocus?: boolean
 }
 
-export function AuthForm({ error }: AuthFormProps) {
+export function AuthForm({ error, autoFocus = true }: AuthFormProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
     'idle'
@@ -101,7 +110,7 @@ export function AuthForm({ error }: AuthFormProps) {
             id="email"
             type="email"
             autoComplete="email"
-            autoFocus
+            autoFocus={autoFocus}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"

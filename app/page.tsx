@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { RosterGrid } from '@/components/marketing/RosterGrid'
+import { AuthForm } from '@/app/auth/AuthForm'
 
 /**
  * Root landing page — marketing surface.
@@ -34,7 +35,13 @@ export default async function RootPage() {
   } = await supabase.auth.getUser()
   const isSignedIn = Boolean(user)
 
-  const primaryHref = isSignedIn ? '/chat' : '/auth'
+  // Hero CTA:
+  //   - Signed in → go to the room
+  //   - Anon → anchor-scroll to the inline form at the bottom of the page
+  // The inline form avoids the page-navigation friction of the old /auth
+  // redirect while keeping /auth working as a standalone surface for
+  // direct links, shared URLs, and post-callback redirects.
+  const primaryHref = isSignedIn ? '/chat' : '#join'
   const primaryLabel = isSignedIn ? 'Continue to your room →' : 'Sign in to the room'
   const closingHeading = isSignedIn
     ? 'Pick up where you left off.'
@@ -138,8 +145,10 @@ export default async function RootPage() {
 
       <Divider />
 
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="px-6 py-24 sm:py-32">
+      {/* ── Closing section ──────────────────────────────────── */}
+      {/* id="join" is the anchor target for the hero CTA when anonymous.
+          Signed-in users get a continuation button instead of the form. */}
+      <section id="join" className="scroll-mt-24 px-6 py-24 sm:py-32">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-[2rem] leading-tight text-text sm:text-[2.5rem]">
             {closingHeading}
@@ -150,7 +159,16 @@ export default async function RootPage() {
               : 'You don’t have to arrive with a finished idea. A rough question is enough. The panel will listen before they push back.'}
           </p>
           <div className="mt-10">
-            <PrimaryLink href={primaryHref}>{primaryLabel}</PrimaryLink>
+            {isSignedIn ? (
+              <PrimaryLink href="/chat">Continue to your room →</PrimaryLink>
+            ) : (
+              <div className="mx-auto max-w-md text-left">
+                <AuthForm autoFocus={false} />
+                <p className="mt-4 text-center text-xs text-text-faint">
+                  We’ll email a sign-in link. No password required.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
